@@ -1,26 +1,31 @@
-import { Box, Button, Stack, TextField, Typography } from '@mui/material';
+import { Button, Stack, TextField, Typography } from '@mui/material';
 
 interface Props {
   setEmail: (value: string) => void,
   setPassword: (value: string) => void,
   handler: () => void,
   success: string,
-  error: string
+  error: string,
+  text: string,
+  setDisplayName?: (value: string) => void,
 }
 
 const SignInUp = ({
-  setEmail, setPassword, handler, success, error
+  setEmail, setPassword, handler, success, error, text, setDisplayName
 }: Props) => {
 
 
   return(
-    <Stack gap={1}>
-      <Box>
-        <Typography>
-          LETS SIGN UP
-        </Typography>
-      </Box>
-    
+    <Stack gap={1}>    
+      {setDisplayName && (
+        <TextField 
+          id="outlined-basic" 
+          label="Display Name" 
+          variant="outlined" 
+          onChange={(e) => setDisplayName(e.target.value)}
+        />
+      )}
+
       <TextField 
         id="outlined-basic" 
         label="Email" 
@@ -36,7 +41,7 @@ const SignInUp = ({
       />
     
       <Button variant="contained" onClick={handler}>
-        sign up
+        {text}
       </Button>
     
       <Typography color="success">

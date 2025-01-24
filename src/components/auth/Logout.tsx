@@ -7,7 +7,6 @@ const Logout = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      alert('Logged out successfully!');
     } catch (err: any) {
       console.error('Error logging out:', err.message);
     }

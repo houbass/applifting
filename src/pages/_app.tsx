@@ -4,13 +4,17 @@ import { useEffect, useState } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { Stack } from '@mui/material';
+import { useRouter } from 'next/router';
 
 // Components
 import Logout from '@/components/auth/Logout';
 
 export default function App({ Component, pageProps }: AppProps) {
 
+  const router = useRouter();
+
   // TODO types
+  // TODO add it to redux
   const [user, setUser] = useState<any>(null);
   
   useEffect(() => {
@@ -32,13 +36,25 @@ export default function App({ Component, pageProps }: AppProps) {
   console.log("--- user ---");
   console.log(user);
 
+  // Move it to HomePage
+  useEffect(() => {
+    if(user) {
+      router.push("/dashboard");
+    } else {
+      router.push("/");
+    }
+
+  }, [user])
+
 
   return (
   <>
-    <Stack flexDirection="row" justifyContent="space-between">
-      <p>Current user: {user?.displayName}</p>
-      <Logout />
-    </Stack>
+    {user && (
+      <Stack flexDirection="row" justifyContent="space-between">
+        <p>Current user: {user?.displayName}</p>
+        <Logout />
+      </Stack>
+    )}
 
     <Component {...pageProps} />
   </>

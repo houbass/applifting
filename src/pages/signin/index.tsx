@@ -1,10 +1,33 @@
+import { useState } from 'react';
 import Head from 'next/head'
 //import Image from 'next/image'
 import { Box, Stack, Typography } from '@mui/material';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '@/config/firebase';
 
 // Components
+import SignInUp from '@/components/auth/SignInUp';
+import GoogleSignUp from '@/components/auth/GoogleSingnUp';
 
 export default function Signin() {
+  
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
+
+  // TODO type
+  const handleSignIn = async () => {
+    setError('');
+
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+      setSuccess('Successfully signed in!')
+    } catch (err: any) {
+      setError(err.message);
+    }
+  };
+
   return (
     <>
       <Head>
@@ -16,12 +39,24 @@ export default function Signin() {
       </Head>
 
       <main>
-        <Stack>
+        <Stack gap={1}>
           <Box>
             <Typography>
               LETS SIGN IN
             </Typography>
           </Box>
+
+          <SignInUp 
+            setEmail={setEmail}
+            setPassword={setPassword}
+            handler={handleSignIn}
+            success={success}
+            error={error}
+            text="Sign In"
+          />
+
+          <GoogleSignUp />
+          
         </Stack>
       </main>
     </>

@@ -1,3 +1,5 @@
+
+
 import Head from 'next/head'
 //import Image from 'next/image'
 import Link from 'next/link';
@@ -6,7 +8,7 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 // Components
 
 
-export default function Home() {
+export default function Dashboard() {
   return (
     <>
       <Head>
@@ -19,17 +21,11 @@ export default function Home() {
 
       <main>
         <Stack gap={1}>
-          <Link href="/signin">
-          <Button variant="contained">
-              sign in
-            </Button>
-          </Link>
-
-          <Link href="/signup">
-            <Button variant="contained">
-              sign up
-            </Button>
-          </Link>
+          <Box>
+            <Typography>
+              Welcome On Dashboard
+            </Typography>
+          </Box>
         </Stack>
       </main>
     </>

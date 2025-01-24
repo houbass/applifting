@@ -1,19 +1,19 @@
 import Head from 'next/head'
-import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { useState } from 'react';
+import { Box, Typography } from '@mui/material';
 
 // Components
 import SignInUp from '@/components/auth/SignInUp';
 import GoogleSignUp from '@/components/auth/GoogleSingnUp';
 
-
 export default function Signup() {
-  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [displayName, setDisplayName] = useState('');
 
   // TODO type
   const handleSignUp = async () => {
@@ -22,7 +22,11 @@ export default function Signup() {
 
     try {
       // Firebase sign-up method
-      await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential  = await createUserWithEmailAndPassword(auth, email, password);
+      await updateProfile(userCredential.user, {
+        displayName: displayName,
+      });
+
       setSuccess('Account created successfully!');
     } catch (err: any) {
       setError(err.message); // Display error message
@@ -40,12 +44,20 @@ export default function Signup() {
       </Head>
 
       <main>
+        <Box>
+          <Typography>
+            LETS SIGN UP
+          </Typography>
+        </Box>
+
         <SignInUp 
           setEmail={setEmail}
           setPassword={setPassword}
           handler={handleSignUp}
           success={success}
           error={error}
+          text="Sign Up"
+          setDisplayName={setDisplayName}
         />
 
         <GoogleSignUp />
