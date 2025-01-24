@@ -1,30 +1,37 @@
 import '@/styles/globals.css';
 import type { AppProps } from 'next/app';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { Stack } from '@mui/material';
-import { useRouter } from 'next/router';
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser, selectUser } from '@/redux/slices/userSlice';
+import { store, persistor } from '@/redux/store';
+import { Provider } from 'react-redux';
+import { PersistGate } from 'redux-persist/integration/react';
 
 // Components
 import Logout from '@/components/auth/Logout';
 
-export default function App({ Component, pageProps }: AppProps) {
+function AppContent() {
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
 
-  const router = useRouter();
-
-  // TODO types
-  // TODO add it to redux
-  const [user, setUser] = useState<any>(null);
-  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
       if (currentUser) {
+
+        const userData = {
+          displayName: currentUser.displayName,
+          email: currentUser.email,
+          uid: currentUser.uid
+        }
+
         // User is logged in
-        setUser(currentUser);
+        dispatch(setUser(userData));
       } else {
         // User is logged out
-        setUser(null);
+        dispatch(setUser(null));
       }
     });
 
@@ -32,31 +39,30 @@ export default function App({ Component, pageProps }: AppProps) {
     return () => unsubscribe();
   }, []);
 
-
   console.log("--- user ---");
   console.log(user);
 
-  // Move it to HomePage
-  useEffect(() => {
-    if(user) {
-      router.push("/dashboard");
-    } else {
-      router.push("/");
-    }
+  return (
+    <>
+      {user && (
+        <Stack flexDirection="row" justifyContent="space-between">
+          <p>Current user: {user.displayName}</p>
+          <Logout />
+        </Stack>
+      )}
+    </>
+  );
+}
 
-  }, [user])
-
-
+export default function App({ Component, pageProps }: AppProps) {
   return (
   <>
-    {user && (
-      <Stack flexDirection="row" justifyContent="space-between">
-        <p>Current user: {user?.displayName}</p>
-        <Logout />
-      </Stack>
-    )}
-
-    <Component {...pageProps} />
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <AppContent />
+        <Component {...pageProps} />
+      </PersistGate>
+    </Provider>
   </>
   )
 }

@@ -4,11 +4,14 @@ import Head from 'next/head'
 //import Image from 'next/image'
 import Link from 'next/link';
 import { Box, Button, Stack, Typography } from '@mui/material';
-
+import { selectUser } from '@/redux/slices/userSlice';
+import { useSelector } from 'react-redux';
 // Components
 
 
 export default function Dashboard() {
+  const user  = useSelector(selectUser);
+
   return (
     <>
       <Head>
@@ -23,9 +26,32 @@ export default function Dashboard() {
         <Stack gap={1}>
           <Box>
             <Typography>
-              Welcome On Dashboard
+              Welcome On Dashboard {user?.displayName}
             </Typography>
           </Box>
+
+          <Stack flexDirection="row" gap={2}>
+            <Box>
+              <Link href="/createproject">
+                <Button 
+                  variant="contained"
+                >
+                  Create Collab Project
+                </Button>
+              </Link>
+            </Box>
+
+            <Box>
+              <Link href="/findproject">
+                <Button 
+                  variant="contained"
+                >
+                  Find Collab Project
+                </Button>
+              </Link>
+            </Box>
+          </Stack>
+
         </Stack>
       </main>
     </>

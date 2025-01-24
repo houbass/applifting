@@ -1,7 +1,7 @@
 import Head from 'next/head'
 //import Image from 'next/image'
 import Link from 'next/link';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Button, Stack } from '@mui/material';
 
 // Components
 
