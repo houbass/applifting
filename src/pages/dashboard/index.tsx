@@ -6,11 +6,16 @@ import Link from 'next/link';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { selectUser } from '@/redux/slices/userSlice';
 import { useSelector } from 'react-redux';
+import useHomeRedirect from '@/hooks/useHomeRedirect';
+
 // Components
 
 
 export default function Dashboard() {
+
   const user  = useSelector(selectUser);
+  
+  useHomeRedirect()
 
   return (
     <>

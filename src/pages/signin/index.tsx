@@ -4,6 +4,7 @@ import Head from 'next/head'
 import { Box, Stack, Typography } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/config/firebase';
+import useDashboardRedirect from '@/hooks/useDashboardRedirect';
 
 // Components
 import SignInUp from '@/components/auth/SignInUp';
@@ -27,6 +28,8 @@ export default function Signin() {
       setError(err.message);
     }
   };
+
+  useDashboardRedirect();
 
   return (
     <>

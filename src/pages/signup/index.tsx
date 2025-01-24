@@ -3,6 +3,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
+import useDashboardRedirect from '@/hooks/useDashboardRedirect';
 
 // Components
 import SignInUp from '@/components/auth/SignInUp';
@@ -32,6 +33,8 @@ export default function Signup() {
       setError(err.message); // Display error message
     }
   };
+
+  useDashboardRedirect();
 
   return (
     <>
