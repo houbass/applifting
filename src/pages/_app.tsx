@@ -6,9 +6,8 @@ import { auth } from '@/config/firebase';
 import { Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { setUser, setUserCheck, selectUser } from '@/redux/slices/userSlice';
-import { store, persistor } from '@/redux/store';
+import { store } from '@/redux/store';
 import { Provider } from 'react-redux';
-import { PersistGate } from 'redux-persist/integration/react';
 
 // Components
 import Logout from '@/components/auth/Logout';
@@ -60,10 +59,8 @@ export default function App({ Component, pageProps }: AppProps) {
   return (
   <>
     <Provider store={store}>
-      <PersistGate loading={null} persistor={persistor}>
         <AppContent />
         <Component {...pageProps} />
-      </PersistGate>
     </Provider>
   </>
   )

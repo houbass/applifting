@@ -9,12 +9,12 @@ import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
 import { AudioPreview, Message } from "@/components/types";
 
 // Utils
-import { scrollIn } from "../../../utils/utils";
+import { scrollIn } from "../../utils/utils";
 import { INSTRUMENTS, STYLES } from "@/constants/globalConstants";
 
 // Components
 import ChipField from "@/components/ChipField";
-import DragAndDropAudio from "../../../components/inputs/DragAndDropAudio";
+import DragAndDropAudio from "../inputs/DragAndDropAudio";
 import Snackbar from "@/components/alerts/Snackbar";
 
 

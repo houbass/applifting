@@ -61,7 +61,7 @@ const DragAndDropAudio = ({
       }
       reader.readAsArrayBuffer(file)
     }
-  }, [null])
+  }, [])
 
   const { getRootProps, getInputProps } = useDropzone({ 
     onDrop, 
