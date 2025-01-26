@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Box, Chip, Stack, Typography } from "@mui/material";
 
 interface Props {
@@ -28,10 +28,6 @@ const ChipField = ({
     );
     setCurrentList([...currentList, selected]);
   }
-
- 
-    
-
 
   return(
     <Stack>

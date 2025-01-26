@@ -2,60 +2,65 @@ import React, { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Box, Stack, Typography } from "@mui/material";
 import { FileUpload } from "@mui/icons-material";
-import { Message } from "../alerts/Snackbar";
+import { Message } from "@/components/types";
+
+// Types
+import { AudioPreview } from "@/components/types";
 
 // Components
 import AudioPlayer from "../audio/AudioPlayer";
 import Snackbar from "../alerts/Snackbar";
 
-export interface AudioPreview {
-  url: string
-  file: File
+interface Props {
+  audioPreview: AudioPreview | null
+  setAudioPreview: (state: AudioPreview | null) => void
 }
 
 const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB in bytes
 
-const DragAndDropAudio = () => {
+const DragAndDropAudio = ({
+  audioPreview,
+  setAudioPreview
+}: Props) => {
 
-  const [audioPreview, setAudioPreview] = useState<AudioPreview | null>(null);
+  //const [audioPreview, setAudioPreview] = useState<AudioPreview | null>(null);
   const [message, setMessage] = useState<Message | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
-
     const rejection = fileRejections[0];
-   if(rejection) {
-    const errorMessage = rejection.errors[0].message;
-    setMessage({
-      text: errorMessage,
-      type: "error"
-    });
+    if(rejection) {
+      const errorMessage = rejection.errors[0].message;
+      setMessage({
+        text: errorMessage,
+        type: "error"
+      });
 
-   } else {
-    const file = acceptedFiles[0];
-    const reader = new FileReader();
+    } else {
+      const file = acceptedFiles[0];
+      const reader = new FileReader();
 
-    reader.onabort = () => console.log('file reading was aborted');
-    reader.onerror = () => console.log('file reading has failed');
-    reader.onload = () => {
-      if (reader.result) {
-        // Create a preview URL using the file contents
-        const audioUrl = URL.createObjectURL(new Blob([reader.result], { type: file.type }));
-        setAudioPreview({
-          url: audioUrl,
-          file: file
-        });
+      reader.onabort = () => console.log('file reading was aborted');
+      reader.onerror = () => console.log('file reading has failed');
+      reader.onload = () => {
+        if (reader.result) {
+          // Create a preview URL using the file contents
+          const audioUrl = URL.createObjectURL(new Blob([reader.result], { type: file.type }));
+          setAudioPreview({
+            url: audioUrl,
+            file: file
+          });
 
-        /*
-        // You can still upload the file directly to Firebase
-        const storageRef = ref(storage, `audio/${file.name}`);
-        uploadBytes(storageRef, file).then(() => {
-          console.log('File uploaded successfully');
-        });
-        */
+          /*
+          // You can still upload the file directly to Firebase
+          const storageRef = ref(storage, `audio/${file.name}`);
+          uploadBytes(storageRef, file).then(() => {
+            console.log('File uploaded successfully');
+          });
+          */
+        }
       }
+      reader.readAsArrayBuffer(file)
     }
-    reader.readAsArrayBuffer(file)
-   }
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({ 

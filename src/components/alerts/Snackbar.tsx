@@ -1,10 +1,6 @@
 import { useEffect, useState } from "react"
 import { Snackbar as Snack, Alert, SnackbarCloseReason } from "@mui/material"
-
-export interface Message {
-  text: string,
-  type: "info" | "success" | "error"
-}
+import { Message } from "../types"
 
 interface Props {
   message: Message | null

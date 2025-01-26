@@ -3,7 +3,7 @@ import { Box, Stack, Typography } from "@mui/material";
 import useHomeRedirect from '@/hooks/useHomeRedirect';
 
 // Components
-import CreateProjectForm from "@/components/forms/CreateProjectForm";
+import CreateProjectForm from "@/pages/createproject/components/CreateProjectForm";
 
 const CreateProjectPage = () => {
 
