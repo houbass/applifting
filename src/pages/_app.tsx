@@ -39,7 +39,7 @@ function AppContent() {
 
     // Cleanup the listener on component unmount
     return () => unsubscribe();
-  }, [null]);
+  }, []);
 
   console.log("--- user ---");
   console.log(user);

@@ -9,7 +9,7 @@ import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
 import { AudioPreview, Message } from "@/components/types";
 
 // Utils
-import { scrollIn } from "../utils";
+import { scrollIn } from "../../../utils/utils";
 import { INSTRUMENTS, STYLES } from "@/constants/globalConstants";
 
 // Components
