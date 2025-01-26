@@ -61,7 +61,7 @@ const DragAndDropAudio = ({
       }
       reader.readAsArrayBuffer(file)
     }
-  }, [])
+  }, [null])
 
   const { getRootProps, getInputProps } = useDropzone({ 
     onDrop, 
@@ -92,7 +92,7 @@ const DragAndDropAudio = ({
             <Stack flexDirection="row" gap={1}>
               <FileUpload />
               <Typography  variant="overline">
-                Drag 'n' drop audio preview here, or click to select file.
+                Drag and drop audio preview here, or click to select file.
               </Typography>
             </Stack>
 
