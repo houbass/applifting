@@ -10,7 +10,7 @@ const CreateProjectPage = () => {
   useHomeRedirect();
 
   return (
-    <Stack alignItems="center">
+    <Stack alignItems="center" p={1}>
       <Typography>
         CREATE COLLAB PROJECT
       </Typography>
