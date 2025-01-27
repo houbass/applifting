@@ -1,8 +1,10 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Box, Stack, Typography } from "@mui/material";
 import { FileUpload } from "@mui/icons-material";
-import { Message } from "@/components/types";
+import { useDispatch } from "react-redux";
+import { setAlert } from "@/redux/slices/userSlice";
+import { MAX_FILE_SIZE } from "@/constants/globalConstants";
 
 // Types
 import { AudioPreview } from "@/components/types";
@@ -16,25 +18,23 @@ interface Props {
   setAudioPreview: (state: AudioPreview | null) => void
 }
 
-const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB in bytes
-
 const DragAndDropAudio = ({
   audioPreview,
   setAudioPreview
 }: Props) => {
 
-  //const [audioPreview, setAudioPreview] = useState<AudioPreview | null>(null);
-  const [message, setMessage] = useState<Message | null>(null);
+  // States
+  const dispatch = useDispatch();
 
+  // Utils
   const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
     const rejection = fileRejections[0];
     if(rejection) {
       const errorMessage = rejection.errors[0].message;
-      setMessage({
+      dispatch(setAlert({
         text: errorMessage,
         type: "error"
-      });
-
+      }))
     } else {
       const file = acceptedFiles[0];
       const reader = new FileReader();
@@ -49,14 +49,6 @@ const DragAndDropAudio = ({
             url: audioUrl,
             file: file
           });
-
-          /*
-          // You can still upload the file directly to Firebase
-          const storageRef = ref(storage, `audio/${file.name}`);
-          uploadBytes(storageRef, file).then(() => {
-            console.log('File uploaded successfully');
-          });
-          */
         }
       }
       reader.readAsArrayBuffer(file)
@@ -110,10 +102,7 @@ const DragAndDropAudio = ({
         />
       )}
 
-      <Snackbar 
-        message={message} 
-        setMessage={setMessage} 
-      />
+      <Snackbar />
     </>
   )
 }

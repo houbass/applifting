@@ -1,36 +1,41 @@
-import React, { useEffect, useState } from "react"
-import { Snackbar as Snack, Alert, SnackbarCloseReason } from "@mui/material"
-import { Message } from "../types"
+import React, { useEffect, useRef, useState } from "react"
+import { Snackbar as Snack, Alert } from "@mui/material"
+import { useSelector } from "react-redux";
+import { selectAlert } from "@/redux/slices/userSlice";
 
-interface Props {
-  message: Message | null
-  setMessage: (value: null) => void
-}
+const Snackbar = () => {
 
-const Snackbar = ({
-  message, setMessage
-}: Props) => {
+  // States
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const alert = useSelector(selectAlert);
+  const [open, setOpen] = useState(false);
+  const [firstRun, setFirstRun] = useState(true);
+  const text = alert?.text;
+  const type = alert?.type;
 
-  const [open, setOpen] = useState(false)
-  const text = message?.text;
-  const type = message?.type;
-
-  const handleClose = (
-    event?: React.SyntheticEvent | Event,
-    reason?: SnackbarCloseReason,
-  ) => {
-    if (reason === 'clickaway') {
-      return;
-    }
-
-    setOpen(false);
-    setMessage(null);
-  };
-
+  // Timer to close the alert after 3 seconds
   useEffect(() => {
-    if(text && text.length > 0)
-    setOpen(true);
-  }, [text])
+    setFirstRun(false);
+    if (text && text.length > 0 && !firstRun) {
+      setOpen(true);
+
+      // Clear any existing timer before starting a new one
+      if (timerRef.current) {
+        clearTimeout(timerRef.current);
+      }
+
+      timerRef.current = setTimeout(() => {
+        setOpen(false);
+      }, 3000);
+
+      // Cleanup function to clear the timer when component unmounts
+      return () => {
+        if (timerRef.current) {
+          clearTimeout(timerRef.current);
+        }
+      };
+    }
+  }, [alert]);
 
   return(
     <>
@@ -38,11 +43,8 @@ const Snackbar = ({
         <Snack
           open={open}
           anchorOrigin={{vertical: "top", horizontal: "center"}}
-          onClose={handleClose}
-          autoHideDuration={3000}
         >
           <Alert
-            onClose={handleClose}
             severity={type}
             variant="filled"
             sx={{ width: "100%" }}

@@ -1,12 +1,13 @@
-
 import React, { useRef, useState } from "react";
 import { Box, Button, Stack, TextField } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setAlert } from "@/redux/slices/userSlice";
 
 // Constants
 import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
 
 // Types
-import { AudioPreview, Message } from "@/components/types";
+import { AudioPreview } from "@/components/types";
 
 // Utils
 import { scrollIn } from "../../utils/utils";
@@ -17,8 +18,8 @@ import ChipField from "@/components/ChipField";
 import DragAndDropAudio from "../inputs/DragAndDropAudio";
 import Snackbar from "@/components/alerts/Snackbar";
 
-
 const CreateProjectForm = () => {
+  const dispatch = useDispatch();
 
   // Refs
   const projectNameRef = useRef<HTMLInputElement>(null);
@@ -31,39 +32,45 @@ const CreateProjectForm = () => {
   const [instrumentSelection, setInstrumentSelection] = useState<string[]>([]);
   const [styleSelection, setStyleSelection] = useState<string[]>([]);
   const [audioPreview, setAudioPreview] = useState<AudioPreview | null>(null);
-  const [message, setMessage] = useState<Message | null>(null);
   
   function validation() {
     if(projectName.length === 0 && projectNameRef.current) {
-      setMessage({
+      dispatch(setAlert({
         text: "Project name is required",
         type: "error"
-      })
+      }))
 
       scrollIn(projectNameRef.current);
     } else if (instrumentSelection.length === 0 && instrumentsRef.current) {
-      setMessage({
+      dispatch(setAlert({
         text: "Selecet what you looking for",
         type: "error"
-      })
+      }))
 
       scrollIn(instrumentsRef.current);
     } else if (styleSelection.length === 0 && styleRef.current) {
-      setMessage({
+      dispatch(setAlert({
         text: "Select what genre is your demo",
         type: "error"
-      })
+      }))
 
       scrollIn(styleRef.current);
     } else if (!audioPreview && audioRef.current) {
-      setMessage({
+      dispatch(setAlert({
         text: "Add your demo",
         type: "error"
-      })
+      }))
 
       scrollIn(audioRef.current); 
     } else {
       console.log("SEND IT TO DATABASE")
+      /*
+      // You can still upload the file directly to Firebase
+      const storageRef = ref(storage, `audio/${file.name}`);
+      uploadBytes(storageRef, file).then(() => {
+        console.log('File uploaded successfully');
+      });
+      */
     }
   }
 
@@ -133,10 +140,7 @@ const CreateProjectForm = () => {
         Submit
       </Button>
 
-      <Snackbar 
-        message={message} 
-        setMessage={setMessage}
-      />
+      <Snackbar />
     </Stack>
   )
 }

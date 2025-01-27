@@ -14,3 +14,5 @@ export const STYLES = [
   "funk", "uk garage", "disco", "electro", "future house", "rock", "chillout", "psy trance",
   "bass music", "boom bap", "jazz", "idm", "drumstep", "synth-pop", "drill"
 ];
+
+export const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB in bytes
