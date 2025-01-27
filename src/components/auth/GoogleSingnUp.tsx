@@ -1,5 +1,5 @@
 import React from 'react';
-import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider } from '@/config/firebase';
 import { Button, Box } from '@mui/material';
 
@@ -10,10 +10,14 @@ const GoogleSignUp = () => {
       // User information
       const user = result.user;
       console.log('User:', user);
-      alert(`Welcome, ${user.displayName}!`);
-    } catch (error: any) {
-      console.error('Error signing in with Google:', error.message);
-      alert('Error signing in. Please try again.');
+      //alert(`Welcome, ${user.displayName}!`);
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('Error signing in with Google:', error.message);
+        //alert('Error signing in. Please try again.');
+      } else {
+        console.error('Unexpected error', error);
+      }
     }
   };
 

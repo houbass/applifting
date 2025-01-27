@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import Head from 'next/head'
 //import Image from 'next/image'
 import { Box, Stack, Typography } from '@mui/material';
@@ -24,8 +24,13 @@ export default function Signin() {
     try {
       await signInWithEmailAndPassword(auth, email, password);
       setSuccess('Successfully signed in!')
-    } catch (err: any) {
-      setError(err.message);
+    } catch (err) { 
+      if (err instanceof Error) {
+        setError(err.message);
+        //alert('Error signing in. Please try again.');
+      } else {
+        console.error('Unexpected error', err);
+      }
     }
   };
 

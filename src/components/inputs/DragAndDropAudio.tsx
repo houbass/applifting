@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { useDropzone } from "react-dropzone";
+import { FileRejection, useDropzone } from "react-dropzone";
 import { Box, Stack, Typography } from "@mui/material";
 import { FileUpload } from "@mui/icons-material";
 import { Message } from "@/components/types";
@@ -26,7 +26,7 @@ const DragAndDropAudio = ({
   //const [audioPreview, setAudioPreview] = useState<AudioPreview | null>(null);
   const [message, setMessage] = useState<Message | null>(null);
 
-  const onDrop = useCallback((acceptedFiles: File[], fileRejections: any[]) => {
+  const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
     const rejection = fileRejections[0];
     if(rejection) {
       const errorMessage = rejection.errors[0].message;

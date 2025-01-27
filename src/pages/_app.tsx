@@ -1,7 +1,8 @@
 import '@/styles/globals.css';
+import React from 'react';
 import type { AppProps } from 'next/app';
 import { useEffect } from 'react';
-import { onAuthStateChanged } from 'firebase/auth';
+import { onAuthStateChanged, User } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { Stack } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
@@ -17,15 +18,15 @@ function AppContent() {
   const user = useSelector(selectUser);
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (currentUser: any) => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
 
       dispatch(setUserCheck(true));
 
       if (currentUser) {
         const userData = {
-          displayName: currentUser.displayName,
-          email: currentUser.email,
-          uid: currentUser.uid
+          displayName: currentUser.displayName as string,
+          email: currentUser.email as string,
+          uid: currentUser.uid as string
         }
         // User is logged in
         dispatch(setUser(userData));

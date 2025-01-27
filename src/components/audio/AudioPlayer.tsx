@@ -1,7 +1,9 @@
-import WavesurferPlayer from '@wavesurfer/react';
-import { useState } from 'react';
-import { CircularProgress, Box, Button, Stack } from '@mui/material';
-import { DeleteForever, PlayArrow, Pause } from '@mui/icons-material';
+
+import React, { useState } from "react";
+import { CircularProgress, Box, Button, Stack } from "@mui/material";
+import { DeleteForever, PlayArrow, Pause } from "@mui/icons-material";
+import WavesurferPlayer from "@wavesurfer/react";
+import WaveSurfer from "wavesurfer.js";
 
 interface Props {
   audioUrl: string
@@ -12,16 +14,18 @@ const AudioPlayer = ({
   audioUrl, setAudioPreview
 }: Props) => {
   
-  const [wavesurfer, setWavesurfer] = useState<any>(null)
+  const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
-  const onReady = (ws: any) => {
+  const onReady = (ws: WaveSurfer) => {
     setWavesurfer(ws)
     setIsPlaying(false)
   }
 
   const onPlayPause = () => {
-    wavesurfer && wavesurfer.playPause()
+    if(wavesurfer) {
+      wavesurfer.playPause()
+    }
   }
 
   return (
@@ -60,8 +64,8 @@ const AudioPlayer = ({
               width="100%"
               height={50}
               url={audioUrl}
-              waveColor='#ccc'
-              progressColor='#aaa'
+              waveColor="#ccc"
+              progressColor="#aaa"
               barWidth={2}
               barGap={2}
               onReady={onReady}

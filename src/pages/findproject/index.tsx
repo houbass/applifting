@@ -1,3 +1,4 @@
+import React from "react";
 import useHomeRedirect from '@/hooks/useHomeRedirect';
 
 const FindProject = () => {

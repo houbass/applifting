@@ -1,3 +1,4 @@
+import React from 'react';
 import Head from 'next/head'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth } from '@/config/firebase';
@@ -29,8 +30,12 @@ export default function Signup() {
       });
 
       setSuccess('Account created successfully!');
-    } catch (err: any) {
-      setError(err.message); // Display error message
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        console.error('Unexpected error', err);
+      }
     }
   };
 

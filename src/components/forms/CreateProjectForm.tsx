@@ -1,5 +1,5 @@
 
-import { useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { Box, Button, Stack, TextField } from "@mui/material";
 
 // Constants
@@ -34,34 +34,34 @@ const CreateProjectForm = () => {
   const [message, setMessage] = useState<Message | null>(null);
   
   function validation() {
-    if(projectName.length === 0) {
+    if(projectName.length === 0 && projectNameRef.current) {
       setMessage({
         text: "Project name is required",
         type: "error"
       })
 
-      projectNameRef.current && scrollIn(projectNameRef?.current);
-    } else if (instrumentSelection.length === 0) {
+      scrollIn(projectNameRef.current);
+    } else if (instrumentSelection.length === 0 && instrumentsRef.current) {
       setMessage({
         text: "Selecet what you looking for",
         type: "error"
       })
 
-      instrumentsRef.current && scrollIn(instrumentsRef.current);
-    } else if (styleSelection.length === 0) {
+      scrollIn(instrumentsRef.current);
+    } else if (styleSelection.length === 0 && styleRef.current) {
       setMessage({
         text: "Select what genre is your demo",
         type: "error"
       })
 
-      styleRef.current && scrollIn(styleRef.current);
-    } else if (!audioPreview) {
+      scrollIn(styleRef.current);
+    } else if (!audioPreview && audioRef.current) {
       setMessage({
         text: "Add your demo",
         type: "error"
       })
 
-      audioRef.current && scrollIn(audioRef.current); 
+      scrollIn(audioRef.current); 
     } else {
       console.log("SEND IT TO DATABASE")
     }

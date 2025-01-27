@@ -7,8 +7,12 @@ const Logout = () => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
-    } catch (err: any) {
-      console.error('Error logging out:', err.message);
+    } catch (err) {
+      if (err instanceof Error) {
+        console.error('Error logging out:', err.message);
+      } else {
+        console.error('Unexpected error', err);
+      }
     }
   };
 

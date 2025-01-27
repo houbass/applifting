@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Snackbar as Snack, Alert, SnackbarCloseReason } from "@mui/material"
 import { Message } from "../types"
 
@@ -45,7 +45,7 @@ const Snackbar = ({
             onClose={handleClose}
             severity={type}
             variant="filled"
-            sx={{ width: '100%' }}
+            sx={{ width: "100%" }}
           >
             {text}
           </Alert>
