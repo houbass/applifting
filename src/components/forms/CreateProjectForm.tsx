@@ -3,6 +3,9 @@ import { Box, Button, Stack, TextField } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
 
+// Hooks
+import useAudioFileUpload from "@/hooks/upload/useAudioFileUpload";
+
 // Constants
 import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
 
@@ -19,7 +22,15 @@ import DragAndDropAudio from "../inputs/DragAndDropAudio";
 import Snackbar from "@/components/alerts/Snackbar";
 
 const CreateProjectForm = () => {
+
+  // Hooks
   const dispatch = useDispatch();
+  const { handleUpload, isUploading, progress } = useAudioFileUpload();
+
+  console.log('--- handleUpload ---')
+  console.log(isUploading)
+  console.log(progress)
+
 
   // Refs
   const projectNameRef = useRef<HTMLInputElement>(null);
@@ -64,13 +75,11 @@ const CreateProjectForm = () => {
       scrollIn(audioRef.current); 
     } else {
       console.log("SEND IT TO DATABASE")
-      /*
-      // You can still upload the file directly to Firebase
-      const storageRef = ref(storage, `audio/${file.name}`);
-      uploadBytes(storageRef, file).then(() => {
-        console.log('File uploaded successfully');
-      });
-      */
+
+      if(audioPreview) {
+        handleUpload(audioPreview.file)
+      }
+      
     }
   }
 

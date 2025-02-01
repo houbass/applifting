@@ -1,0 +1,5 @@
+
+
+// Update cors origin
+cors.json
+gsutil cors set cors.json gs://collabro-281e7.firebasestorage.app
