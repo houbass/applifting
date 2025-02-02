@@ -1,5 +1,6 @@
-import React, { useRef, useState } from "react";
-import { Box, Button, Stack, TextField } from "@mui/material";
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Button, Stack, TextField, Modal, Typography, CircularProgress  } from "@mui/material";
+import CircularProgressWithLabel from "../progress/CircularProgressWithLabel";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
 
@@ -20,15 +21,18 @@ import { INSTRUMENTS, STYLES } from "@/constants/globalConstants";
 import ChipField from "@/components/ChipField";
 import DragAndDropAudio from "../inputs/DragAndDropAudio";
 
+const defaultFormData = {
+  projectName: '',
+  instrumentSelection: [],
+  styleSelection: [],
+  audioPreview: null
+}
+
 const CreateProjectForm = () => {
 
   // Hooks
   const dispatch = useDispatch();
-  const { handleUpload, isUploading, progress } = useAudioFileUpload();
-
-  console.log('--- handleUpload ---')
-  console.log(isUploading)
-  console.log(progress)
+  const { handleUpload, isUploading, progress, message } = useAudioFileUpload();
 
   // Refs
   const projectNameRef = useRef<HTMLInputElement>(null);
@@ -37,14 +41,16 @@ const CreateProjectForm = () => {
   const audioRef = useRef<HTMLInputElement>(null);
   
   // States
-  const [formData, setFormData] = useState<FormData>({
-    projectName: '',
-    instrumentSelection: [],
-    styleSelection: [],
-    audioPreview: null
-  }); 
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState<FormData>(defaultFormData); 
   const { projectName, instrumentSelection, styleSelection, audioPreview } = formData;
+
+  // Modal turnOn
+  useEffect(() => {
+    if(isUploading) {
+      setIsModalOpen(true)
+    }
+  }, [isUploading])
 
   // Utils
   function validation() {
@@ -83,6 +89,11 @@ const CreateProjectForm = () => {
         handleUpload(formData)
       }
     }
+  }
+
+  function onModalClose() {
+    setIsModalOpen(false);
+    setFormData(defaultFormData);
   }
 
   return (
@@ -151,6 +162,42 @@ const CreateProjectForm = () => {
       >
         Submit
       </Button>
+
+      <Modal open={isModalOpen}>
+        <Stack alignItems="center" justifyContent="center" height="100%">
+          <Stack 
+            alignItems="center"
+            justifyContent="center"
+            bgcolor="white" 
+            width={400} 
+            minHeight={300}
+            borderRadius={10}
+            gap={2}
+          >
+            {isUploading && (
+              <Box>
+                {progress === 0 || progress === 100 
+                ? <CircularProgress />
+                : <CircularProgressWithLabel value={progress} />
+                }
+              </Box>
+            )}
+
+            <Box minHeight={50} textAlign="center">
+              <Typography variant="overline">
+                {message}
+              </Typography>
+            </Box>
+
+            <Box>
+              <Button onClick={onModalClose}>
+                close
+              </Button>
+            </Box>
+            
+          </Stack>
+        </Stack> 
+      </Modal>
     </Stack>
   )
 }

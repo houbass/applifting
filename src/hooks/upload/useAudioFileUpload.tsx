@@ -2,28 +2,28 @@ import { useState } from "react";
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { db, storage } from "@/config/firebase";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "@/redux/slices/userSlice";
+import { setAlert } from "@/redux/slices/userSlice";
 
 // Types
 import { FormData } from "@/components/types";
 
-
 const useAudioFileUpload = () => {
+  const dispatch = useDispatch();
 
+  // States
   const [isUploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
+  const [message, setMessage] = useState('');
   const userInfo = useSelector(selectUser);
   const uid = userInfo?.uid;
   
-
+  // Utils
   const handleUpload = async ( formData: FormData ) => {
-
     const projectName = formData.projectName;
     const projectNameFormated = formData.projectName.toLowerCase().split(' ').join('_');
 
-    setUploading(true);
-    setProgress(0);
     try{
       if(formData.audioPreview?.file) {
         const audioRef = ref(storage, `audio/${uid}/${projectNameFormated}`);
@@ -37,7 +37,15 @@ const useAudioFileUpload = () => {
 
         if(isProjectExist) {
           console.error("PROJECT WITH THIS NAME ALREADY EXIST")
+          dispatch(setAlert({
+            text: 'PROJECT WITH THIS NAME ALREADY EXIST',
+            type: 'error'
+          }))
+          
         } else {
+          setUploading(true);
+          setProgress(0);
+          setMessage('Uploading audio file');
           uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -47,11 +55,12 @@ const useAudioFileUpload = () => {
             },
             (error) => {
               console.error("Upload error:", error);
-              alert("Upload failed.");
+              setMessage('Upload failed');
               setUploading(false);
             },
             async () => {
               // Get download URL after successful upload
+              setMessage('Saving to database')
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
     
               if(uid) {
@@ -70,7 +79,7 @@ const useAudioFileUpload = () => {
                 })
               }
               
-              alert("Audio uploaded successfully!");
+              setMessage('Project uploaded successfully')
               setUploading(false);
               setProgress(0);
             }
@@ -79,10 +88,16 @@ const useAudioFileUpload = () => {
       }
     } catch(err) {
       console.error(err);
+      setMessage('Upload failed');
     }
   };
 
-  return { handleUpload, isUploading, progress };
+  return { 
+    handleUpload, 
+    isUploading, 
+    progress, 
+    message
+  };
 }
 
 export default useAudioFileUpload;

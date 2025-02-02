@@ -11,7 +11,7 @@ interface Props {
 const ChipField = ({
   list, selection, setSelection, label
 }: Props) => {
-  
+  // TODO opravit
   const [currentList, setCurrentList] = useState<string[]>(list);
   currentList.sort();
   
