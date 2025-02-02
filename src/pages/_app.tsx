@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 
 // Components
 import Logout from '@/components/auth/Logout';
+import Snackbar from '@/components/alerts/Snackbar';
 
 function AppContent() {
   const dispatch = useDispatch();
@@ -21,6 +22,9 @@ function AppContent() {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
 
       dispatch(setUserCheck(true));
+
+      console.log('currentUser')
+      console.log(currentUser)
 
       if (currentUser) {
         const userData = {
@@ -62,6 +66,7 @@ export default function App({ Component, pageProps }: AppProps) {
     <Provider store={store}>
         <AppContent />
         <Component {...pageProps} />
+        <Snackbar />
     </Provider>
   </>
   )

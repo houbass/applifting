@@ -1,10 +1,11 @@
 import React from 'react';
 import Head from 'next/head'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
-import { auth } from '@/config/firebase';
+import { auth, db } from '@/config/firebase';
 import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import useDashboardRedirect from '@/hooks/useDashboardRedirect';
+import { setDoc, doc } from 'firebase/firestore';
 
 // Components
 import SignInUp from '@/components/auth/SignInUp';
@@ -27,6 +28,16 @@ export default function Signup() {
       const userCredential  = await createUserWithEmailAndPassword(auth, email, password);
       await updateProfile(userCredential.user, {
         displayName: displayName,
+      });
+
+      // Save custom data to Firestore (only after registration)
+      const uid = userCredential.user.uid
+      await setDoc(doc(db, "users", userCredential.user.uid), {
+        uid: uid,
+        follow: [],
+        followers: [],
+        likes: [],
+        projectIds: [] 
       });
 
       setSuccess('Account created successfully!');

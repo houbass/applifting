@@ -10,7 +10,7 @@ import useAudioFileUpload from "@/hooks/upload/useAudioFileUpload";
 import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
 
 // Types
-import { AudioPreview } from "@/components/types";
+import { FormData } from "@/components/types";
 
 // Utils
 import { scrollIn } from "../../utils/utils";
@@ -19,7 +19,6 @@ import { INSTRUMENTS, STYLES } from "@/constants/globalConstants";
 // Components
 import ChipField from "@/components/ChipField";
 import DragAndDropAudio from "../inputs/DragAndDropAudio";
-import Snackbar from "@/components/alerts/Snackbar";
 
 const CreateProjectForm = () => {
 
@@ -31,7 +30,6 @@ const CreateProjectForm = () => {
   console.log(isUploading)
   console.log(progress)
 
-
   // Refs
   const projectNameRef = useRef<HTMLInputElement>(null);
   const instrumentsRef = useRef<HTMLInputElement>(null);
@@ -39,11 +37,16 @@ const CreateProjectForm = () => {
   const audioRef = useRef<HTMLInputElement>(null);
   
   // States
-  const [projectName, setProjectName] = useState("");
-  const [instrumentSelection, setInstrumentSelection] = useState<string[]>([]);
-  const [styleSelection, setStyleSelection] = useState<string[]>([]);
-  const [audioPreview, setAudioPreview] = useState<AudioPreview | null>(null);
-  
+  const [formData, setFormData] = useState<FormData>({
+    projectName: '',
+    instrumentSelection: [],
+    styleSelection: [],
+    audioPreview: null
+  }); 
+
+  const { projectName, instrumentSelection, styleSelection, audioPreview } = formData;
+
+  // Utils
   function validation() {
     if(projectName.length === 0 && projectNameRef.current) {
       dispatch(setAlert({
@@ -77,9 +80,8 @@ const CreateProjectForm = () => {
       console.log("SEND IT TO DATABASE")
 
       if(audioPreview) {
-        handleUpload(audioPreview.file)
+        handleUpload(formData)
       }
-      
     }
   }
 
@@ -98,7 +100,8 @@ const CreateProjectForm = () => {
           id="outlined-basic" 
           label="Project Name" 
           variant="outlined" 
-          onChange={(e) => setProjectName(e.target.value)}
+          value={projectName}
+          onChange={(e) => setFormData({ ...formData , projectName: e.target.value })}
         />
       </Box>
     
@@ -111,7 +114,7 @@ const CreateProjectForm = () => {
         <ChipField
           list={INSTRUMENTS} 
           selection={instrumentSelection}
-          setSelection={setInstrumentSelection}
+          setSelection={(arr) => setFormData({ ...formData , instrumentSelection: arr })}
           label="What Are You Looking For?"
         />
       </Box>
@@ -125,7 +128,7 @@ const CreateProjectForm = () => {
         <ChipField 
           list={STYLES} 
           selection={styleSelection}
-          setSelection={setStyleSelection}
+          setSelection={(arr) => setFormData({ ...formData , styleSelection: arr })}
           label="Select Genre"
         />
       </Box>
@@ -138,7 +141,7 @@ const CreateProjectForm = () => {
       >
         <DragAndDropAudio 
           audioPreview={audioPreview}
-          setAudioPreview={setAudioPreview}
+          setAudioPreview={(data) => setFormData({ ...formData , audioPreview: data })}
         />
       </Box>
 
@@ -148,8 +151,6 @@ const CreateProjectForm = () => {
       >
         Submit
       </Button>
-
-      <Snackbar />
     </Stack>
   )
 }

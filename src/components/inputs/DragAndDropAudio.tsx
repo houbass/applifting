@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Box, Stack, Typography } from "@mui/material";
 import { FileUpload } from "@mui/icons-material";
@@ -11,7 +11,6 @@ import { AudioPreview } from "@/components/types";
 
 // Components
 import AudioPlayer from "../audio/AudioPlayer";
-import Snackbar from "../alerts/Snackbar";
 
 interface Props {
   audioPreview: AudioPreview | null
@@ -27,7 +26,7 @@ const DragAndDropAudio = ({
   const dispatch = useDispatch();
 
   // Utils
-  const onDrop = useCallback((acceptedFiles: File[], fileRejections: FileRejection[]) => {
+  const onDrop = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
     const rejection = fileRejections[0];
     if(rejection) {
       const errorMessage = rejection.errors[0].message;
@@ -53,7 +52,7 @@ const DragAndDropAudio = ({
       }
       reader.readAsArrayBuffer(file)
     }
-  }, [])
+  }
 
   const { getRootProps, getInputProps } = useDropzone({ 
     onDrop, 
@@ -101,8 +100,6 @@ const DragAndDropAudio = ({
           setAudioPreview={setAudioPreview}
         />
       )}
-
-      <Snackbar />
     </>
   )
 }
