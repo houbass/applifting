@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { AppBar, Badge, Box, IconButton, Stack, Typography } from '@mui/material';
-import { Settings, AccountCircle, Notifications, Email } from '@mui/icons-material';
+import { AccountBox, AddBox, Email, Notifications, Settings } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/slices/userSlice';
-import useGoToDashboard from '@/hooks/redirects/useGoToDashboard';
+import useRedirect from '@/hooks/redirects/useRedirect';
 
 // Components
 import UserSettingsPanel from './UserSettingsPanel';
@@ -12,7 +12,7 @@ const UserTopNavBar = () => {
 
   // Hooks
   const user = useSelector(selectUser);
-  const { goToDashboard } = useGoToDashboard();
+  const { goToDashboard, goToCreateProject } = useRedirect();
 
   // States
   const [settingsView, setSettingsView] = useState(false);
@@ -44,7 +44,16 @@ const UserTopNavBar = () => {
               </Box>
 
               <Stack alignItems="center" flexDirection="row">
-              <IconButton
+                <IconButton 
+                  size="small"
+                  onClick={goToCreateProject} 
+                  color="inherit"
+                  aria-label="Create Collab Project"
+                >
+                  <AddBox  fontSize="small" />
+                </IconButton>
+                
+                <IconButton
                   size="small"
                   aria-label="show 12 new messages"
                   color="inherit"
@@ -78,7 +87,7 @@ const UserTopNavBar = () => {
                   color="inherit"
                   aria-label="Account"
                 >
-                  <AccountCircle fontSize="small" />
+                  <AccountBox fontSize="small" />
                 </IconButton>
               </Stack>
             </Stack>

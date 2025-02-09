@@ -3,10 +3,19 @@ import { signOut } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import { Button, Box } from '@mui/material';
 
-const Logout = () => {
+interface Props {
+  toggleDrawer?: () => void
+}
+
+const Logout = ({
+  toggleDrawer
+}: Props) => {
   const handleLogout = async () => {
     try {
       await signOut(auth);
+      if(toggleDrawer) {
+        toggleDrawer();
+      }
     } catch (err) {
       if (err instanceof Error) {
         console.error('Error logging out:', err.message);

@@ -30,14 +30,9 @@ const UserSettingsPanel = ({
     event: React.MouseEvent<HTMLElement>,
     newAlignment: string,
   ) => {
-
-    //toggleColorMode(newAlignment as PaletteMode)
-    //setAlignment(newAlignment);
-
     if(newAlignment) {
       toggleColorMode(newAlignment as PaletteMode)
     }
-    console.log('--- newAlignment', newAlignment)
   };
 
   return (
@@ -90,7 +85,7 @@ const UserSettingsPanel = ({
             </ToggleButtonGroup>
           </Stack>
 
-          <Logout />
+          <Logout toggleDrawer={toggleDrawer} />
         </Stack>
       </Stack>
     </Drawer>
