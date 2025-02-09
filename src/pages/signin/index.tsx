@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { Box, Stack, Typography } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/config/firebase';
-import useDashboardRedirect from '@/hooks/useDashboardRedirect';
+import useDashboardRedirect from '@/hooks/redirects/useDashboardRedirect';
 
 // Components
 import SignInUp from '@/components/auth/SignInUp';

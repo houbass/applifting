@@ -76,6 +76,8 @@ const AudioPlayer = ({
 
           <Button 
             variant="contained"
+            size="small"
+            color="error"
             onClick={() => setAudioPreview(null)}
           >
             <DeleteForever />

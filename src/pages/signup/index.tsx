@@ -4,7 +4,7 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '@/config/firebase';
 import { useState } from 'react';
 import { Box, Typography } from '@mui/material';
-import useDashboardRedirect from '@/hooks/useDashboardRedirect';
+import useDashboardRedirect from '@/hooks/redirects/useDashboardRedirect';
 import { setDoc, doc } from 'firebase/firestore';
 
 // Components

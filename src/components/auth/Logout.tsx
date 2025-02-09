@@ -21,6 +21,7 @@ const Logout = () => {
       <Button 
         onClick={handleLogout}
         variant="contained"
+        size="small"
       >
         Log Out
       </Button>

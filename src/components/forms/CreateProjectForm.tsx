@@ -3,6 +3,7 @@ import { Box, Button, Stack, TextField, Modal, Typography, CircularProgress  } f
 import CircularProgressWithLabel from "../progress/CircularProgressWithLabel";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
+import { useTheme } from "@mui/material";
 
 // Hooks
 import useAudioFileUpload from "@/hooks/upload/useAudioFileUpload";
@@ -32,6 +33,7 @@ const CreateProjectForm = () => {
 
   // Hooks
   const dispatch = useDispatch();
+  const theme = useTheme();
   const { handleUpload, isUploading, progress, message } = useAudioFileUpload();
 
   // Refs
@@ -83,7 +85,6 @@ const CreateProjectForm = () => {
 
       scrollIn(audioRef.current); 
     } else {
-      console.log("SEND IT TO DATABASE")
 
       if(audioPreview) {
         handleUpload(formData)
@@ -168,7 +169,7 @@ const CreateProjectForm = () => {
           <Stack 
             alignItems="center"
             justifyContent="center"
-            bgcolor="white" 
+            bgcolor={theme.palette.background.paper} 
             width={400} 
             minHeight={300}
             borderRadius={10}
@@ -189,12 +190,17 @@ const CreateProjectForm = () => {
               </Typography>
             </Box>
 
-            <Box>
-              <Button onClick={onModalClose}>
-                close
-              </Button>
-            </Box>
-            
+            {!isUploading && (
+              <Box>
+                <Button 
+                  variant="contained" 
+                  onClick={onModalClose}
+                >
+                  close
+                </Button>
+              </Box>
+            )}
+
           </Stack>
         </Stack> 
       </Modal>

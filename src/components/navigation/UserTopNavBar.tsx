@@ -1,0 +1,97 @@
+import React, { useState } from 'react';
+import { AppBar, Badge, Box, IconButton, Stack, Typography } from '@mui/material';
+import { Settings, AccountCircle, Notifications, Email } from '@mui/icons-material';
+import { useSelector } from 'react-redux';
+import { selectUser } from '@/redux/slices/userSlice';
+import useGoToDashboard from '@/hooks/redirects/useGoToDashboard';
+
+// Components
+import UserSettingsPanel from './UserSettingsPanel';
+
+const UserTopNavBar = () => {
+
+  // Hooks
+  const user = useSelector(selectUser);
+  const { goToDashboard } = useGoToDashboard();
+
+  // States
+  const [settingsView, setSettingsView] = useState(false);
+
+  // Utils
+  function toggleDrawer() {
+    setSettingsView(!settingsView);
+  }
+
+  return (
+    <>
+      {user && (
+        <>
+          <AppBar position="static">
+            <Stack 
+              pl={2}
+              py={1}
+              flexDirection="row" 
+              alignItems="center"
+              justifyContent="space-between"  
+            >
+              <Box 
+                onClick={goToDashboard}
+                sx={{
+                  cursor: 'pointer'
+                }}
+              >
+                <Typography fontWeight={600}>COLLABRO</Typography>
+              </Box>
+
+              <Stack alignItems="center" flexDirection="row">
+              <IconButton
+                  size="small"
+                  aria-label="show 12 new messages"
+                  color="inherit"
+                >
+                  <Badge badgeContent={12} color="error">
+                    <Email fontSize="small" />
+                  </Badge>
+                </IconButton>
+
+                <IconButton
+                  size="small"
+                  aria-label="show 17 new notifications"
+                  color="inherit"
+                >
+                  <Badge badgeContent={17} color="error">
+                    <Notifications fontSize="small" />
+                  </Badge>
+                </IconButton>
+
+                <IconButton 
+                  size="small"
+                  onClick={toggleDrawer} 
+                  color="inherit"
+                  aria-label="Settings"
+                >
+                  <Settings  fontSize="small" />
+                </IconButton>
+
+                <IconButton 
+                  size="small"
+                  color="inherit"
+                  aria-label="Account"
+                >
+                  <AccountCircle fontSize="small" />
+                </IconButton>
+              </Stack>
+            </Stack>
+          </AppBar>
+
+          <UserSettingsPanel 
+            settingsView={settingsView}
+            toggleDrawer={toggleDrawer}
+          />
+        </>
+      )}
+    </>
+  );
+}
+
+export default UserTopNavBar;

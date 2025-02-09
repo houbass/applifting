@@ -16,3 +16,6 @@ export const STYLES = [
 ];
 
 export const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB in bytes
+
+export const PAGE_PADDING_X = 2;
+export const PAGE_PADDING_TOP = "60px";

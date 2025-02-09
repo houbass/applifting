@@ -5,6 +5,7 @@ import { FileUpload } from "@mui/icons-material";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
 import { MAX_FILE_SIZE } from "@/constants/globalConstants";
+import { useTheme } from "@mui/material";
 
 // Types
 import { AudioPreview } from "@/components/types";
@@ -24,6 +25,8 @@ const DragAndDropAudio = ({
 
   // States
   const dispatch = useDispatch();
+  const theme = useTheme();
+
 
   // Utils
   const onDrop = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -68,8 +71,8 @@ const DragAndDropAudio = ({
       {!audioPreview && (
         <Box 
           {...getRootProps()} 
-          p={3}
-          bgcolor="lightgray"
+          p={2}
+          bgcolor={theme.palette.action.hover}
           display="flex"
           alignItems="center"
           justifyContent="center"

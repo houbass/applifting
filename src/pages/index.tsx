@@ -2,7 +2,7 @@ import React from 'react';
 import Head from 'next/head'
 import Link from 'next/link';
 import { Button, Stack } from '@mui/material';
-import useDashboardRedirect from '@/hooks/useDashboardRedirect';
+import useDashboardRedirect from '@/hooks/redirects/useDashboardRedirect';
 
 
 export default function Home() {

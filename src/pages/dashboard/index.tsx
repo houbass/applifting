@@ -1,21 +1,20 @@
 
 
 import React from "react";
-import Head from 'next/head'
-//import Image from 'next/image'
+import Head from 'next/head';
 import Link from 'next/link';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { selectUser } from '@/redux/slices/userSlice';
 import { useSelector } from 'react-redux';
-import useHomeRedirect from '@/hooks/useHomeRedirect';
-
-// Components
-
+import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
+import { PAGE_PADDING_X, PAGE_PADDING_TOP } from "@/constants/globalConstants";
 
 export default function Dashboard() {
 
+  // States
   const user  = useSelector(selectUser);
   
+  // Redirect when logout
   useHomeRedirect()
 
   return (
@@ -29,7 +28,7 @@ export default function Dashboard() {
       </Head>
 
       <main>
-        <Stack gap={1}>
+        <Stack gap={1} px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
           <Box>
             <Typography>
               Welcome On Dashboard {user?.displayName}
