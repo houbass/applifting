@@ -35,19 +35,19 @@ export default function Dashboard() {
           py={PAGE_PADDING_TOP}
         >
           <Stack maxWidth={MAX_WIDTH} width="100%">
-            <Box>
-              <Typography>
-                Welcome On Dashboard {user?.displayName}
-              </Typography>
-            </Box>
 
-            <Stack flexDirection="row" gap={2}>
-              <Box>
+            <Stack 
+              gap={2} 
+              flexDirection="row" 
+              justifyContent="center"
+            >
+              <Box pt={2}>
                 <Link href="/createproject" passHref legacyBehavior>
                   <Button 
                     variant="contained"
+                    color="error"
                   >
-                    Create Collab Project
+                    Create Collab
                   </Button>
                 </Link>
               </Box>
