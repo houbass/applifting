@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { AppBar, Badge, Box, IconButton, Stack, Typography } from '@mui/material';
+import { AppBar, Badge, Box, IconButton, Stack, Typography, Tooltip } from '@mui/material';
 import { AccountBox, AddBox, Email, Notifications, Settings } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/slices/userSlice';
@@ -44,51 +44,61 @@ const UserTopNavBar = () => {
               </Box>
 
               <Stack alignItems="center" flexDirection="row">
-                <IconButton 
-                  size="small"
-                  onClick={goToCreateProject} 
-                  color="inherit"
-                  aria-label="Create Collab Project"
-                >
-                  <AddBox  fontSize="small" />
-                </IconButton>
+                <Tooltip title="Create Project" disableInteractive>
+                  <IconButton 
+                    size="small"
+                    onClick={goToCreateProject} 
+                    color="inherit"
+                    aria-label="Create Collab Project"
+                  >
+                    <AddBox  fontSize="small" />
+                  </IconButton>
+                </Tooltip>
                 
-                <IconButton
-                  size="small"
-                  aria-label="show 12 new messages"
-                  color="inherit"
-                >
-                  <Badge badgeContent={12} color="error">
-                    <Email fontSize="small" />
-                  </Badge>
-                </IconButton>
+                <Tooltip title="Messages" disableInteractive>
+                  <IconButton
+                    size="small"
+                    aria-label="show 12 new messages"
+                    color="inherit"
+                  >
+                    <Badge badgeContent={12} color="error">
+                      <Email fontSize="small" />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
 
-                <IconButton
-                  size="small"
-                  aria-label="show 17 new notifications"
-                  color="inherit"
-                >
-                  <Badge badgeContent={17} color="error">
-                    <Notifications fontSize="small" />
-                  </Badge>
-                </IconButton>
+                <Tooltip title="Notifications" disableInteractive>
+                  <IconButton
+                    size="small"
+                    aria-label="show 17 new notifications"
+                    color="inherit"
+                  >
+                    <Badge badgeContent={17} color="error">
+                      <Notifications fontSize="small" />
+                    </Badge>
+                  </IconButton>
+                </Tooltip>
 
-                <IconButton 
-                  size="small"
-                  onClick={toggleDrawer} 
-                  color="inherit"
-                  aria-label="Settings"
-                >
-                  <Settings  fontSize="small" />
-                </IconButton>
+                <Tooltip title="Settings" disableInteractive>
+                  <IconButton 
+                    size="small"
+                    onClick={toggleDrawer} 
+                    color="inherit"
+                    aria-label="Settings"
+                  >
+                    <Settings  fontSize="small" />
+                  </IconButton>
+                </Tooltip>
 
-                <IconButton 
-                  size="small"
-                  color="inherit"
-                  aria-label="Account"
-                >
-                  <AccountBox fontSize="small" />
-                </IconButton>
+                <Tooltip title="Profile" disableInteractive>
+                  <IconButton 
+                    size="small"
+                    color="inherit"
+                    aria-label="Account"
+                  >
+                    <AccountBox fontSize="small" />
+                  </IconButton>
+                </Tooltip>
               </Stack>
             </Stack>
           </AppBar>

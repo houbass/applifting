@@ -7,6 +7,7 @@ import { useTheme } from "@mui/material";
 
 // Hooks
 import useAudioFileUpload from "@/hooks/upload/useAudioFileUpload";
+import useRedirect from "@/hooks/redirects/useRedirect";
 
 // Constants
 import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
@@ -33,6 +34,7 @@ const CreateProjectForm = () => {
 
   // Hooks
   const dispatch = useDispatch();
+  const { goToDashboard } = useRedirect();
   const theme = useTheme();
   const { handleUpload, isUploading, progress, message } = useAudioFileUpload();
 
@@ -95,6 +97,7 @@ const CreateProjectForm = () => {
   function onModalClose() {
     setIsModalOpen(false);
     setFormData(defaultFormData);
+    goToDashboard();
   }
 
   return (
