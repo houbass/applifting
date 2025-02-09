@@ -50,6 +50,7 @@ const ChipField = ({
                 <Chip 
                   color="primary"
                   label={item}
+                  onClick={() => instrumentDelete(item)}
                   onDelete={() => instrumentDelete(item)}
                 />
               </Box>
