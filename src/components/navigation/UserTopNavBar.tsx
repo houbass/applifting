@@ -28,7 +28,7 @@ const UserTopNavBar = () => {
         <>
           <AppBar position="fixed">
             <Stack 
-              pl={2}
+              px={2}
               py={1}
               flexDirection="row" 
               alignItems="center"
