@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { 
+  Box,
   Drawer, 
   Divider, 
   IconButton, 
@@ -41,7 +42,7 @@ const UserSettingsPanel = ({
       open={settingsView}
       onClose={toggleDrawer}
     >
-      <Stack>
+      <Stack height="100%">
         <Stack 
           flexDirection="row" 
           alignItems="center"
@@ -61,7 +62,12 @@ const UserSettingsPanel = ({
 
         <Divider />
 
-        <Stack p={2} gap={2}>
+        <Stack 
+          p={2} 
+          gap={2} 
+          height="100%"
+          justifyContent="space-between"
+        >
           <Stack>
             <Typography variant="overline">
               mode
@@ -85,7 +91,9 @@ const UserSettingsPanel = ({
             </ToggleButtonGroup>
           </Stack>
 
-          <Logout toggleDrawer={toggleDrawer} />
+          <Box>
+            <Logout toggleDrawer={toggleDrawer} />
+          </Box>
         </Stack>
       </Stack>
     </Drawer>

@@ -1,5 +1,3 @@
-
-
 import React from "react";
 import Head from 'next/head';
 import Link from 'next/link';
@@ -42,7 +40,7 @@ export default function Dashboard() {
 
             <Stack flexDirection="row" gap={2}>
               <Box>
-                <Link href="/createproject">
+                <Link href="/createproject" passHref legacyBehavior>
                   <Button 
                     variant="contained"
                   >
@@ -52,7 +50,7 @@ export default function Dashboard() {
               </Box>
 
               <Box>
-                <Link href="/findproject">
+                <Link href="/findproject" passHref legacyBehavior>
                   <Button 
                     variant="contained"
                   >

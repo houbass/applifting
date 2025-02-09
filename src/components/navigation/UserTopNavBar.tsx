@@ -4,6 +4,7 @@ import { AccountBox, AddBox, Email, Notifications, Settings } from '@mui/icons-m
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/slices/userSlice';
 import Link from 'next/link';
+import { common } from '@mui/material/colors';
 
 // Components
 import UserSettingsPanel from './UserSettingsPanel';
@@ -34,7 +35,7 @@ const UserTopNavBar = () => {
               justifyContent="space-between"  
             >
               <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-                <Typography color='textPrimary' fontWeight={600}>
+                <Typography color={common.white} fontWeight={600}>
                   COLLABRO
                 </Typography>
               </Link>

@@ -21,13 +21,13 @@ export default function Home() {
 
       <main>
         <Stack gap={1}>
-          <Link href="/signin">
-          <Button variant="contained">
+          <Link href="/signin" passHref legacyBehavior>
+            <Button variant="contained">
               sign in
             </Button>
           </Link>
 
-          <Link href="/signup">
+          <Link href="/signup" passHref legacyBehavior>
             <Button variant="contained">
               sign up
             </Button>
