@@ -26,7 +26,7 @@ const UserTopNavBar = () => {
     <>
       {user && (
         <>
-          <AppBar position="static">
+          <AppBar position="fixed">
             <Stack 
               pl={2}
               py={1}
