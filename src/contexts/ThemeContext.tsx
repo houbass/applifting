@@ -1,6 +1,6 @@
+import React, { createContext, ReactNode, useMemo } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline, PaletteMode } from "@mui/material";
-import { createContext, ReactNode, useMemo } from "react";
 import useLocalStorageState from 'use-local-storage-state'
 
 // Define context type
