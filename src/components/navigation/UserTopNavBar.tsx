@@ -35,7 +35,7 @@ const UserTopNavBar = () => {
               justifyContent="space-between"  
             >
               <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-                <Typography color={common.white} fontWeight={600}>
+                <Typography color={common.white} fontWeight={600} variant="overline" fontSize={14}>
                   COLLABRO
                 </Typography>
               </Link>
@@ -48,7 +48,7 @@ const UserTopNavBar = () => {
                       color="inherit"
                       aria-label="Create Collab Project"
                     >
-                      <AddBox  fontSize="small" />
+                      <AddBox />
                     </IconButton>
                   </Tooltip>
                 </Link>
@@ -60,7 +60,7 @@ const UserTopNavBar = () => {
                     color="inherit"
                   >
                     <Badge badgeContent={12} color="error">
-                      <Email fontSize="small" />
+                      <Email />
                     </Badge>
                   </IconButton>
                 </Tooltip>
@@ -72,7 +72,7 @@ const UserTopNavBar = () => {
                     color="inherit"
                   >
                     <Badge badgeContent={17} color="error">
-                      <Notifications fontSize="small" />
+                      <Notifications />
                     </Badge>
                   </IconButton>
                 </Tooltip>
@@ -84,7 +84,7 @@ const UserTopNavBar = () => {
                     color="inherit"
                     aria-label="Settings"
                   >
-                    <Settings  fontSize="small" />
+                    <Settings />
                   </IconButton>
                 </Tooltip>
 
@@ -94,7 +94,7 @@ const UserTopNavBar = () => {
                     color="inherit"
                     aria-label="Account"
                   >
-                    <AccountBox fontSize="small" />
+                    <AccountBox />
                   </IconButton>
                 </Tooltip>
               </Stack>

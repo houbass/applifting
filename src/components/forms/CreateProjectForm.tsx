@@ -160,12 +160,15 @@ const CreateProjectForm = () => {
         />
       </Box>
 
-      <Button 
-        variant="contained" 
-        onClick={validation}
-      >
-        Submit
-      </Button>
+      <Box mt={1} >
+        <Button 
+          fullWidth
+          variant="contained" 
+          onClick={validation}  
+        >
+          Submit
+        </Button>
+      </Box>
 
       <Modal open={isModalOpen}>
         <Stack alignItems="center" justifyContent="center" height="100%">

@@ -51,7 +51,7 @@ const UserSettingsPanel = ({
           pl={2}
           py={1}
         >
-          <Typography fontWeight={600}>
+          <Typography fontWeight={600} variant="overline">
             Settings
           </Typography>
 
