@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
-import { AppBar, Badge, Box, IconButton, Stack, Typography, Tooltip } from '@mui/material';
+import { AppBar, Badge, IconButton, Stack, Typography, Tooltip } from '@mui/material';
 import { AccountBox, AddBox, Email, Notifications, Settings } from '@mui/icons-material';
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/slices/userSlice';
-import useRedirect from '@/hooks/redirects/useRedirect';
 import Link from 'next/link';
 
 // Components
@@ -13,7 +12,6 @@ const UserTopNavBar = () => {
 
   // Hooks
   const user = useSelector(selectUser);
-  const { goToDashboard } = useRedirect();
 
   // States
   const [settingsView, setSettingsView] = useState(false);
@@ -35,18 +33,15 @@ const UserTopNavBar = () => {
               alignItems="center"
               justifyContent="space-between"  
             >
-              <Box 
-                onClick={goToDashboard}
-                sx={{
-                  cursor: 'pointer'
-                }}
-              >
-                <Typography fontWeight={600}>COLLABRO</Typography>
-              </Box>
+              <Link href="/dashboard" style={{ textDecoration: 'none' }}>
+                <Typography color='textPrimary' fontWeight={600}>
+                  COLLABRO
+                </Typography>
+              </Link>
 
               <Stack alignItems="center" flexDirection="row">
-                <Tooltip title="Create Project" disableInteractive>
-                  <Link href="/createproject" passHref legacyBehavior>
+                <Link href="/createproject" passHref legacyBehavior>
+                  <Tooltip title="Create Project" disableInteractive>
                     <IconButton 
                       size="small"
                       color="inherit"
@@ -54,8 +49,8 @@ const UserTopNavBar = () => {
                     >
                       <AddBox  fontSize="small" />
                     </IconButton>
-                  </Link>
-                </Tooltip>
+                  </Tooltip>
+                </Link>
                 
                 <Tooltip title="Messages" disableInteractive>
                   <IconButton
