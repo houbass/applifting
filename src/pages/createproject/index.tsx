@@ -1,6 +1,6 @@
 
 import React from "react";
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack } from "@mui/material";
 import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
 import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from "@/constants/globalConstants";
 
