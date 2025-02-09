@@ -7,7 +7,7 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import { selectUser } from '@/redux/slices/userSlice';
 import { useSelector } from 'react-redux';
 import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
-import { PAGE_PADDING_X, PAGE_PADDING_TOP } from "@/constants/globalConstants";
+import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from "@/constants/globalConstants";
 
 export default function Dashboard() {
 
@@ -28,35 +28,40 @@ export default function Dashboard() {
       </Head>
 
       <main>
-        <Stack gap={1} px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
-          <Box>
-            <Typography>
-              Welcome On Dashboard {user?.displayName}
-            </Typography>
-          </Box>
-
-          <Stack flexDirection="row" gap={2}>
+        <Stack 
+          alignItems="center" 
+          px={PAGE_PADDING_X} 
+          py={PAGE_PADDING_TOP}
+        >
+          <Stack maxWidth={MAX_WIDTH}>
             <Box>
-              <Link href="/createproject">
-                <Button 
-                  variant="contained"
-                >
-                  Create Collab Project
-                </Button>
-              </Link>
+              <Typography>
+                Welcome On Dashboard {user?.displayName}
+              </Typography>
             </Box>
 
-            <Box>
-              <Link href="/findproject">
-                <Button 
-                  variant="contained"
-                >
-                  Find Collab Project
-                </Button>
-              </Link>
-            </Box>
+            <Stack flexDirection="row" gap={2}>
+              <Box>
+                <Link href="/createproject">
+                  <Button 
+                    variant="contained"
+                  >
+                    Create Collab Project
+                  </Button>
+                </Link>
+              </Box>
+
+              <Box>
+                <Link href="/findproject">
+                  <Button 
+                    variant="contained"
+                  >
+                    Find Collab Project
+                  </Button>
+                </Link>
+              </Box>
+            </Stack>
           </Stack>
-
         </Stack>
       </main>
     </>

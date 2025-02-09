@@ -3,9 +3,10 @@ import Head from 'next/head'
 import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { auth, db } from '@/config/firebase';
 import { useState } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Stack } from '@mui/material';
 import useDashboardRedirect from '@/hooks/redirects/useDashboardRedirect';
 import { setDoc, doc } from 'firebase/firestore';
+import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from '@/constants/globalConstants';
 
 // Components
 import SignInUp from '@/components/auth/SignInUp';
@@ -18,7 +19,6 @@ export default function Signup() {
   const [success, setSuccess] = useState('');
   const [displayName, setDisplayName] = useState('');
 
-  // TODO type
   const handleSignUp = async () => {
     setError('');
     setSuccess('');
@@ -63,24 +63,27 @@ export default function Signup() {
       </Head>
 
       <main>
-        <Box>
-          <Typography>
-            LETS SIGN UP
-          </Typography>
-        </Box>
+        <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
+          <Stack gap={1} maxWidth={MAX_WIDTH} width="100%">
+            <Box>
+              <Typography>
+                LETS SIGN UP
+              </Typography>
+            </Box>
 
-        <SignInUp 
-          setEmail={setEmail}
-          setPassword={setPassword}
-          handler={handleSignUp}
-          success={success}
-          error={error}
-          text="Sign Up"
-          setDisplayName={setDisplayName}
-        />
+            <SignInUp 
+              setEmail={setEmail}
+              setPassword={setPassword}
+              handler={handleSignUp}
+              success={success}
+              error={error}
+              text="Sign Up"
+              setDisplayName={setDisplayName}
+            />
 
-        <GoogleSignUp />
-
+            <GoogleSignUp />
+          </Stack>
+        </Stack>
       </main>
     </>
   )

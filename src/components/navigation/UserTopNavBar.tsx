@@ -4,6 +4,7 @@ import { AccountBox, AddBox, Email, Notifications, Settings } from '@mui/icons-m
 import { useSelector } from 'react-redux';
 import { selectUser } from '@/redux/slices/userSlice';
 import useRedirect from '@/hooks/redirects/useRedirect';
+import Link from 'next/link';
 
 // Components
 import UserSettingsPanel from './UserSettingsPanel';
@@ -12,7 +13,7 @@ const UserTopNavBar = () => {
 
   // Hooks
   const user = useSelector(selectUser);
-  const { goToDashboard, goToCreateProject } = useRedirect();
+  const { goToDashboard } = useRedirect();
 
   // States
   const [settingsView, setSettingsView] = useState(false);
@@ -45,14 +46,15 @@ const UserTopNavBar = () => {
 
               <Stack alignItems="center" flexDirection="row">
                 <Tooltip title="Create Project" disableInteractive>
-                  <IconButton 
-                    size="small"
-                    onClick={goToCreateProject} 
-                    color="inherit"
-                    aria-label="Create Collab Project"
-                  >
-                    <AddBox  fontSize="small" />
-                  </IconButton>
+                  <Link href="/createproject" passHref legacyBehavior>
+                    <IconButton 
+                      size="small"
+                      color="inherit"
+                      aria-label="Create Collab Project"
+                    >
+                      <AddBox  fontSize="small" />
+                    </IconButton>
+                  </Link>
                 </Tooltip>
                 
                 <Tooltip title="Messages" disableInteractive>

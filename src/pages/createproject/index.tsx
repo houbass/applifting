@@ -2,7 +2,7 @@
 import React from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
-import { PAGE_PADDING_X, PAGE_PADDING_TOP } from "@/constants/globalConstants";
+import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from "@/constants/globalConstants";
 
 // Components
 import CreateProjectForm from "@/components/forms/CreateProjectForm";
@@ -13,13 +13,16 @@ const CreateProjectPage = () => {
   useHomeRedirect();
 
   return (
-    <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
-      <Typography>
-        CREATE COLLAB PROJECT
-      </Typography>
-      <Box width="100%" maxWidth={600}>
-        <CreateProjectForm />
-      </Box>
+    <Stack 
+      alignItems="center" 
+      px={PAGE_PADDING_X} 
+      py={PAGE_PADDING_TOP}
+    >
+      <Stack maxWidth={MAX_WIDTH}>
+        <Box width="100%">
+          <CreateProjectForm />
+        </Box>
+      </Stack>
     </Stack>
   )
 }

@@ -1,5 +1,7 @@
 
 
+export const MAX_WIDTH = 600;
+
 export const SCROLL_MARGIN_TOP = "80px";
 
 export const INSTRUMENTS = [

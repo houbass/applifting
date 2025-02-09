@@ -39,7 +39,7 @@ const GoogleSignUp = () => {
 
   return (
     <Box>
-      <Button variant="contained" onClick={handleGoogleSignUp}>
+      <Button fullWidth variant="contained" onClick={handleGoogleSignUp}>
         Sign Up with Google
       </Button>
     </Box>

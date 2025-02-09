@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import Head from 'next/head'
-//import Image from 'next/image'
 import { Box, Stack, Typography } from '@mui/material';
 import { signInWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '@/config/firebase';
 import useDashboardRedirect from '@/hooks/redirects/useDashboardRedirect';
+import { PAGE_PADDING_TOP, PAGE_PADDING_X, MAX_WIDTH } from '@/constants/globalConstants';
 
 // Components
 import SignInUp from '@/components/auth/SignInUp';
@@ -17,7 +17,6 @@ export default function Signin() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  // TODO type
   const handleSignIn = async () => {
     setError('');
 
@@ -47,24 +46,25 @@ export default function Signin() {
       </Head>
 
       <main>
-        <Stack gap={1}>
-          <Box>
-            <Typography>
-              LETS SIGN IN
-            </Typography>
-          </Box>
+        <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
+          <Stack gap={1} maxWidth={MAX_WIDTH} width="100%">
+            <Box>
+              <Typography>
+                LETS SIGN IN
+              </Typography>
+            </Box>
 
-          <SignInUp 
-            setEmail={setEmail}
-            setPassword={setPassword}
-            handler={handleSignIn}
-            success={success}
-            error={error}
-            text="Sign In"
-          />
+            <SignInUp 
+              setEmail={setEmail}
+              setPassword={setPassword}
+              handler={handleSignIn}
+              success={success}
+              error={error}
+              text="Sign In"
+            />
 
-          <GoogleSignUp />
-          
+            <GoogleSignUp />
+          </Stack>
         </Stack>
       </main>
     </>
