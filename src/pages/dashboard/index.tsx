@@ -7,6 +7,9 @@ import { useSelector } from 'react-redux';
 import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
 import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from "@/constants/globalConstants";
 
+// Components
+import Timeline from "@/components/content/Timeline";
+
 export default function Dashboard() {
 
   // States
@@ -31,7 +34,7 @@ export default function Dashboard() {
           px={PAGE_PADDING_X} 
           py={PAGE_PADDING_TOP}
         >
-          <Stack maxWidth={MAX_WIDTH}>
+          <Stack maxWidth={MAX_WIDTH} width="100%">
             <Box>
               <Typography>
                 Welcome On Dashboard {user?.displayName}
@@ -48,17 +51,9 @@ export default function Dashboard() {
                   </Button>
                 </Link>
               </Box>
-
-              <Box>
-                <Link href="/findproject" passHref legacyBehavior>
-                  <Button 
-                    variant="contained"
-                  >
-                    Find Collab Project
-                  </Button>
-                </Link>
-              </Box>
             </Stack>
+
+            <Timeline />
           </Stack>
         </Stack>
       </main>

@@ -7,7 +7,7 @@ import WaveSurfer from "wavesurfer.js";
 
 interface Props {
   audioUrl: string
-  setAudioPreview: (value: null) => void
+  setAudioPreview?: (value: null) => void
 }
 
 const AudioPlayer = ({
@@ -74,14 +74,16 @@ const AudioPlayer = ({
             />
           </Box>
 
-          <Button 
-            variant="contained"
-            size="small"
-            color="error"
-            onClick={() => setAudioPreview(null)}
-          >
-            <DeleteForever />
-          </Button>
+          {setAudioPreview && (
+            <Button 
+              variant="contained"
+              size="small"
+              color="error"
+              onClick={() => setAudioPreview(null)}
+            >
+              <DeleteForever />
+            </Button>
+          )}
 
         </Stack>
       </Stack>

@@ -70,7 +70,8 @@ const useAudioFileUpload = () => {
                   url: downloadURL,
                   uid: uid,
                   instruments: formData.instrumentSelection,
-                  style: formData.styleSelection 
+                  style: formData.styleSelection,
+                  timeStamp: Date.now(),
                 })
     
                 const userRef = doc(db, "users", uid)

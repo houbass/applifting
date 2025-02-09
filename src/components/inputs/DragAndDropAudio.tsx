@@ -76,7 +76,6 @@ const DragAndDropAudio = ({
           display="flex"
           alignItems="center"
           justifyContent="center"
-          height={120}
           sx={{
             cursor: 'pointer'
           }}
