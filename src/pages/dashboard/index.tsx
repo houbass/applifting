@@ -1,9 +1,7 @@
 import React from "react";
 import Head from 'next/head';
 import Link from 'next/link';
-import { Box, Button, Stack, Typography } from '@mui/material';
-import { selectUser } from '@/redux/slices/userSlice';
-import { useSelector } from 'react-redux';
+import { Box, Button, Stack } from '@mui/material';
 import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
 import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from "@/constants/globalConstants";
 
@@ -11,9 +9,6 @@ import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from "@/constants/globalC
 import Timeline from "@/components/content/Timeline";
 
 export default function Dashboard() {
-
-  // States
-  const user  = useSelector(selectUser);
   
   // Redirect when logout
   useHomeRedirect()
