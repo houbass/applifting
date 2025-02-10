@@ -26,7 +26,7 @@ const NewAudioPlayer = ({
     audioRef.current?.play();
   }
 
-  function handleMetaData(e: any) {
+  function handleMetaData(e: React.ChangeEvent<HTMLAudioElement>) {
     setTotalTime(Math.round(e.target.duration))
   }
 
