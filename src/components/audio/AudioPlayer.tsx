@@ -1,6 +1,6 @@
 
 import React, { useState } from "react";
-import { CircularProgress, Box, Button, Stack } from "@mui/material";
+import { Box, Button, Stack, Skeleton } from "@mui/material";
 import { DeleteForever, PlayArrow, Pause } from "@mui/icons-material";
 import WavesurferPlayer from "@wavesurfer/react";
 import WaveSurfer from "wavesurfer.js";
@@ -30,25 +30,27 @@ const AudioPlayer = ({
 
   return (
     <>
-      <Stack position="relative" alignItems="center">
+      <Stack position="relative" alignItems="center" >
         {!wavesurfer && (
-          <Box position="absolute">
-            <CircularProgress />
+          <Box 
+            pl="70px" 
+            pr={1}
+            top={-16} 
+            width="100%" 
+            position="absolute" 
+          >
+            <Skeleton height={80} sx={{margin: "0"}}/>
           </Box>
         )}
 
         <Stack 
           width="100%"
           flexDirection="row" 
-          gap={2}  
-          visibility={
-            wavesurfer
-            ? "visible"
-            : "hidden"
-          }
+          gap={1}  
+
         >
           <Button 
-            variant="text"
+            variant="contained"
             onClick={onPlayPause}
           >
             
@@ -71,6 +73,7 @@ const AudioPlayer = ({
               onReady={onReady}
               onPlay={() => setIsPlaying(true)}
               onPause={() => setIsPlaying(false)}
+              backend="MediaElement"
             />
           </Box>
 

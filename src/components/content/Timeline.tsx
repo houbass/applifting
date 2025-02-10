@@ -3,7 +3,7 @@ import { Box, Chip, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material";
 
 // Components
-import AudioPlayer from "../audio/AudioPlayer";
+import NewAudioPlayer from "../audio/NewAudioPlayer";
 
 const Timeline = () => {
   const theme = useTheme();
@@ -57,12 +57,16 @@ const Timeline = () => {
       
       {url.map((item, index) => {
         return (
-          <Stack key={item.name + item.auth + index} bgcolor={theme.palette.action.hover}>
+          <Stack borderRadius={2} pl={1} key={item.name + item.auth + index} bgcolor={theme.palette.action.hover}>
             <Stack >
               <Typography variant="overline">
                 {item.name + ' - ' + item.auth}
               </Typography>
-              <AudioPlayer audioUrl={item.url} />
+
+              <Box pr={1}>
+                <NewAudioPlayer url={item.url} />
+              </Box>
+              
             </Stack>
 
             <Stack mt={1} flexDirection="row" justifyContent="space-between">
