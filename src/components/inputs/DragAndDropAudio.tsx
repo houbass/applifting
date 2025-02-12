@@ -12,6 +12,8 @@ import { AudioPreview } from "@/components/types";
 
 // Components
 import AudioPlayer from "../audio/AudioPlayer";
+import AudioVisualization from "../audio/AudioVisualization";
+import NewCanvasPlayer from "../audio/NewCanvasPlayer";
 
 interface Props {
   audioPreview: AudioPreview | null
@@ -96,12 +98,28 @@ const DragAndDropAudio = ({
         </Box>
       )}
 
+
       {audioPreview?.url && (
         <AudioPlayer
           audioUrl={audioPreview.url}
           setAudioPreview={setAudioPreview}
         />
       )}
+
+
+      {audioPreview?.url && (
+        <AudioVisualization
+          url={audioPreview.url}
+        />
+      )}
+
+      {audioPreview?.url && (
+        <NewCanvasPlayer
+          url={audioPreview.url}
+        />
+      )}
+
+
     </>
   )
 }
