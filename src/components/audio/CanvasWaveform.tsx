@@ -131,6 +131,12 @@ const CanvasWaveform = ({
     setCurrentTime(pickedTime)
   }
 
+  function onMouseLeave() {
+    if(isInteracting) {
+      setIsInteracting(false)
+    }
+  }
+
   function onTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
     console.log(e.touches)
     if(!canvasTimerRef.current) return;
@@ -160,6 +166,7 @@ const CanvasWaveform = ({
               onClick={() => setIsInteracting(false)} 
               onMouseDown={onMouseDown}
               onMouseMove={onMouseMove}
+              onMouseLeave={onMouseLeave}
               onTouchMove={onTouchMove}
               ref={canvasTimerRef} 
               width={containerWidth} 
