@@ -47,7 +47,6 @@ const AudioPlayer = ({
           width="100%"
           flexDirection="row" 
           gap={1}  
-
         >
           <Button 
             variant="contained"

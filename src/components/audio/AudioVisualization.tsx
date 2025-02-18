@@ -1,21 +1,18 @@
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 const AudioVisualization = ({
   url
 }: { url: string }) => {
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
-  const [audioContext, setAudioContext] = useState<AudioContext | null>(null);
   const [analyser, setAnalyser] = useState<AnalyserNode | null>(null);
   const [bufferLength, setBufferLength] = useState<number>(0);
   const [dataArray, setDataArray] = useState<Uint8Array>(new Uint8Array(0));
 
-  console.log('--- dataArray', dataArray)
-
   useEffect(() => {
     if (!audioRef.current) return;
 
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const ctx = new (window.AudioContext || (window as typeof window & { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
     const analyserNode = ctx.createAnalyser();
     const source = ctx.createMediaElementSource(audioRef.current);
     
@@ -26,9 +23,6 @@ const AudioVisualization = ({
     const bufferLength = analyserNode.frequencyBinCount;
     const dataArray = new Uint8Array(bufferLength);
 
-    console.log('--- bufferLength', bufferLength)
-
-    setAudioContext(ctx);
     setAnalyser(analyserNode);
     setBufferLength(bufferLength);
     setDataArray(dataArray);
@@ -73,7 +67,7 @@ const AudioVisualization = ({
       }
 
       ctx.strokeStyle = "#ff5500";
-      ctx.lineWidth = 2;
+      ctx.lineWidth = 3;
       ctx.stroke();
     }
 
@@ -87,7 +81,7 @@ const AudioVisualization = ({
   return (
     <div className="audio-player">
       <audio ref={audioRef} controls src={url}></audio>
-      <canvas ref={canvasRef} width={600} height={200}></canvas>
+      <canvas ref={canvasRef} width={60} height={60}></canvas>
     </div>
   );
 }

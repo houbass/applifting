@@ -2,18 +2,21 @@ import React from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Box, Stack, Typography } from "@mui/material";
 import { FileUpload } from "@mui/icons-material";
-import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
 import { MAX_FILE_SIZE } from "@/constants/globalConstants";
-import { useTheme } from "@mui/material";
 
 // Types
 import { AudioPreview } from "@/components/types";
 
+// Hooks
+import { useDispatch } from "react-redux";
+import { useTheme } from "@mui/material";
+import useGetAudioWaveform from "@/hooks/audioProcess/useGetAudioWaveform";
+
 // Components
 import AudioPlayer from "../audio/AudioPlayer";
 import AudioVisualization from "../audio/AudioVisualization";
-import NewCanvasPlayer from "../audio/NewCanvasPlayer";
+import MyAudioPlayer from "../audio/MyAudioPlayer";
 
 interface Props {
   audioPreview: AudioPreview | null
@@ -29,6 +32,9 @@ const DragAndDropAudio = ({
   const dispatch = useDispatch();
   const theme = useTheme();
 
+  // get audio waveform data for canvas
+  const url = audioPreview?.url
+  const data = useGetAudioWaveform(url)
 
   // Utils
   const onDrop = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -113,13 +119,12 @@ const DragAndDropAudio = ({
         />
       )}
 
-      {audioPreview?.url && (
-        <NewCanvasPlayer
-          url={audioPreview.url}
+      {data && (
+        <MyAudioPlayer
+          data={data}
+          setAudioPreview={setAudioPreview}
         />
       )}
-
-
     </>
   )
 }
