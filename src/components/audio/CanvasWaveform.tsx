@@ -19,6 +19,7 @@ const CanvasWaveform = ({
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
   const [isInteracting, setIsInteracting] = useState(false);
 
+  // TODO total time with data
   const totalTime = 260000; // ms
   const [currentTime, setCurrentTime] = useState<number>(150000);
 
@@ -92,7 +93,7 @@ const CanvasWaveform = ({
       ctx.beginPath();
 
       // Time field
-      ctx.fillStyle = "rgba(0, 0, 0, 0.2)";
+      ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
       ctx.fillRect(0, 0, x, canvasHeight);
   
       // Time line
@@ -116,30 +117,32 @@ const CanvasWaveform = ({
     setContainerWidth(thisWidth)
   }
 
-  const debouncedMouseMove = useCallback(debounce(onMouseMove, 10), [isInteracting])
   function onMouseMove(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
-    if(!isInteracting || !containerRef.current) return;
-
-    // TODO set new time here, maybe debounce
+    if(!isInteracting) return;
     const pickedX = e.nativeEvent.offsetX;
-    const canvasWidth = containerRef.current.offsetWidth;
-    const pickedTime = getPickedTime(pickedX, canvasWidth);
-
-    setCurrentTime(pickedTime)
+    const pickedTime = getPickedTime(pickedX) || 0;
+    setCurrentTime(pickedTime);
   }
 
   function onMouseDown(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
     setIsInteracting(true)
-
     const pickedX = e.nativeEvent.offsetX;
-    if(!containerRef.current) return;
-    const canvasWidth = containerRef.current.offsetWidth;
-    const pickedTime = getPickedTime(pickedX, canvasWidth);
-
+    const pickedTime = getPickedTime(pickedX) || 0;
     setCurrentTime(pickedTime)
   }
 
-  function getPickedTime(pickedX: number, canvasWidth: number) {
+  function onTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
+    console.log(e.touches)
+    if(!canvasTimerRef.current) return;
+    const rect = canvasTimerRef.current.getBoundingClientRect();
+    const pickedX = e.touches[0].clientX - rect.left;
+    const pickedTime = getPickedTime(pickedX) || 0;
+    setCurrentTime(pickedTime)
+  }
+
+  function getPickedTime(pickedX: number) {
+    if(!containerRef.current) return;
+    const canvasWidth = containerRef.current.offsetWidth;
     const ratio = pickedX / canvasWidth;
     return totalTime * ratio;
   }
@@ -156,7 +159,8 @@ const CanvasWaveform = ({
             <canvas 
               onClick={() => setIsInteracting(false)} 
               onMouseDown={onMouseDown}
-              onMouseMove={debouncedMouseMove}
+              onMouseMove={onMouseMove}
+              onTouchMove={onTouchMove}
               ref={canvasTimerRef} 
               width={containerWidth} 
               height={height} 
