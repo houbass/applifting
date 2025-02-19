@@ -1,72 +1,73 @@
-import React from "react";
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, CircularProgress, Chip, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "@/config/firebase";
+
+// Types
+import { AudioCollectionItem } from "@/components/types";
 
 // Components
-import NewAudioPlayer from "../audio/NewAudioPlayer";
+import MyAudioPlayer from "../audio/MyAudioPlayer";
 
 const Timeline = () => {
   const theme = useTheme();
-  const url = [
-    {
-      name: "Check My Bitchees",
-      auth: "David Haslhoof",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Faa?alt=media&token=f3d5ad99-6eaf-4c61-b227-ca4c637d3c24",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass"]
-    },
-    {
-      name: "While You Sleep",
-      auth: "On Sun",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Fdw?alt=media&token=e8495e96-3c17-4c64-9695-e866b8b4b0e6",
-      instruments: ["guitar", "bass"],
-      styles: ["house"]
-    },
-    {
-      name: "Check My Bitchees",
-      auth: "David Haslhoof",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Faa?alt=media&token=f3d5ad99-6eaf-4c61-b227-ca4c637d3c24",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass"]
-    },
-    {
-      name: "While You Sleep",
-      auth: "On Sun",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Fdw?alt=media&token=e8495e96-3c17-4c64-9695-e866b8b4b0e6",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass", "bass music"]
-    },
-    {
-      name: "Check My Bitchees",
-      auth: "David Haslhoof",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Faa?alt=media&token=f3d5ad99-6eaf-4c61-b227-ca4c637d3c24",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass"]
-    },
-    {
-      name: "While You Sleep",
-      auth: "On Sun",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Fdw?alt=media&token=e8495e96-3c17-4c64-9695-e866b8b4b0e6",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass", "bass music"]
-    },
-  ]
+  const bgColor = theme.palette.action.hover;
+
+  // States
+  const [data, setData] = useState<AudioCollectionItem[] | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Fetch data
+  useEffect(() => {
+    if(!data) {
+      fetchCollection();
+    }
+  }, []);
+
+  // Utils
+  const fetchCollection = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "audio"));
+      const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setData(items as AudioCollectionItem[]);
+    } catch (error) {
+      console.error("Error fetching documents: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  if(loading) {
+    return (
+      <Stack justifyContent="center" alignItems="center" height="200px">
+        <CircularProgress />
+      </Stack>
+    )
+  }
 
   return (
     <Stack pt={3} gap={1}>
-      
-      {url.map((item, index) => {
+      {data?.map((item, index) => {
         return (
-          <Stack borderRadius={2} pl={1} key={item.name + item.auth + index} bgcolor={theme.palette.action.hover}>
+          <Stack 
+            borderRadius={2} 
+            pl={1} 
+            key={item.projectName + item.userName + index} 
+            bgcolor={bgColor}
+          >
             <Stack >
               <Typography variant="overline">
-                {item.name + ' - ' + item.auth}
+                {item.projectName + ' - ' + item.userName}
               </Typography>
 
-              <Box pr={1}>
-                <NewAudioPlayer url={item.url} />
-              </Box>
-              
+
+              <MyAudioPlayer 
+                url={item.url}
+                waveformData={item.waveform}
+                duration={item.duration}
+              />
             </Stack>
 
             <Stack mt={1} flexDirection="row" justifyContent="space-between">
@@ -86,7 +87,7 @@ const Timeline = () => {
               </Box>
 
               <Box textAlign="right"> 
-                {item.styles.map(style => {
+                {item.style.map(style => {
                   return (
                     <Box 
                       key={style}

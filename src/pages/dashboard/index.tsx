@@ -30,7 +30,6 @@ export default function Dashboard() {
           py={PAGE_PADDING_TOP}
         >
           <Stack maxWidth={MAX_WIDTH} width="100%">
-
             <Stack 
               gap={2} 
               flexDirection="row" 
