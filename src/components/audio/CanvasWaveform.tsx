@@ -5,11 +5,14 @@ import { debounce } from "lodash";
 
 interface Props {
   data: number[];
+  currentTime: number;
+  duration: number;
+  changeTime: (value: number) => void;
   height?: number;
 }
 
 const CanvasWaveform = ({
-  data, height = 50
+  data, currentTime, duration, changeTime, height = 50, 
 }: Props) =>{
 
   // States
@@ -20,8 +23,10 @@ const CanvasWaveform = ({
   const [isInteracting, setIsInteracting] = useState(false);
 
   // TODO total time with data
-  const totalTime = 260000; // ms
-  const [currentTime, setCurrentTime] = useState<number>(150000);
+  //const [currentTime, setCurrentTime] = useState<number>(0);
+
+  const timePassColor = "rgba(0, 0, 0, 0.4)";
+  const timePassLineColor = 'red'
 
   // Resizing
   useEffect(() => {
@@ -82,7 +87,7 @@ const CanvasWaveform = ({
     const canvasWidth = canvas.width;
     const canvasHeight = canvas.height;
 
-    const timeRatio = currentTime / totalTime;
+    const timeRatio = currentTime / duration;
     const x = canvasWidth * timeRatio;
 
     const ctx = canvas.getContext("2d");
@@ -94,16 +99,18 @@ const CanvasWaveform = ({
 
       // Time field
       // TODO mineral colors
-      ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
+      ctx.fillStyle = timePassColor;
       ctx.fillRect(0, 0, x, canvasHeight);
   
       // Time line
-      ctx.strokeStyle = "red";
-      ctx.lineWidth = 2;
-      ctx.beginPath(); 
-      ctx.moveTo(x, 0);
-      ctx.lineTo(x, canvasHeight);
-      ctx.stroke();
+      if(currentTime > 0) {
+        ctx.strokeStyle = timePassLineColor;
+        ctx.lineWidth = 2;
+        ctx.beginPath(); 
+        ctx.moveTo(x, 0);
+        ctx.lineTo(x, canvasHeight);
+        ctx.stroke();
+      }
     }
 
     drawTimer();
@@ -122,14 +129,14 @@ const CanvasWaveform = ({
     if(!isInteracting) return;
     const pickedX = e.nativeEvent.offsetX;
     const pickedTime = getPickedTime(pickedX) || 0;
-    setCurrentTime(pickedTime);
+    changeTime(pickedTime)
   }
 
   function onMouseDown(e: React.MouseEvent<HTMLCanvasElement, MouseEvent>) {
     setIsInteracting(true)
     const pickedX = e.nativeEvent.offsetX;
     const pickedTime = getPickedTime(pickedX) || 0;
-    setCurrentTime(pickedTime)
+    changeTime(pickedTime)
   }
 
   function onMouseLeave() {
@@ -139,19 +146,18 @@ const CanvasWaveform = ({
   }
 
   function onTouchMove(e: React.TouchEvent<HTMLCanvasElement>) {
-    console.log(e.touches)
     if(!canvasTimerRef.current) return;
     const rect = canvasTimerRef.current.getBoundingClientRect();
     const pickedX = e.touches[0].clientX - rect.left;
     const pickedTime = getPickedTime(pickedX) || 0;
-    setCurrentTime(pickedTime)
+    changeTime(pickedTime)
   }
 
   function getPickedTime(pickedX: number) {
     if(!containerRef.current) return;
     const canvasWidth = containerRef.current.offsetWidth;
     const ratio = pickedX / canvasWidth;
-    return totalTime * ratio;
+    return duration * ratio;
   }
 
   return (

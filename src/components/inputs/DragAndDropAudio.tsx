@@ -14,8 +14,6 @@ import { useTheme } from "@mui/material";
 import useGetAudioWaveform from "@/hooks/audioProcess/useGetAudioWaveform";
 
 // Components
-import AudioPlayer from "../audio/AudioPlayer";
-import AudioVisualization from "../audio/AudioVisualization";
 import MyAudioPlayer from "../audio/MyAudioPlayer";
 
 interface Props {
@@ -27,8 +25,6 @@ const DragAndDropAudio = ({
   audioPreview,
   setAudioPreview
 }: Props) => {
-  
-  console.log('audioPreview', audioPreview);
 
   // States
   const dispatch = useDispatch();
@@ -120,23 +116,11 @@ const DragAndDropAudio = ({
         </Box>
       )}
 
-
-      {audioPreview?.url && (
-        <AudioPlayer
-          audioUrl={audioPreview.url}
-          setAudioPreview={setAudioPreview}
-        />
-      )}
-
-      {audioPreview?.url && (
-        <AudioVisualization
-          url={audioPreview.url}
-        />
-      )}
-
-      {waveformData && (
+      {waveformData && url && (
         <MyAudioPlayer
+          url={url}
           waveformData={waveformData}
+          duration={audioPreview.duration}
           setAudioPreview={setAudioPreview}
         />
       )}

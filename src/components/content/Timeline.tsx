@@ -8,10 +8,11 @@ import { db } from "@/config/firebase";
 import { AudioCollectionItem } from "@/components/types";
 
 // Components
-import NewAudioPlayer from "../audio/NewAudioPlayer";
+import MyAudioPlayer from "../audio/MyAudioPlayer";
 
 const Timeline = () => {
   const theme = useTheme();
+  const bgColor = theme.palette.action.hover;
 
   // States
   const [data, setData] = useState<AudioCollectionItem[] | null>(null);
@@ -54,17 +55,19 @@ const Timeline = () => {
             borderRadius={2} 
             pl={1} 
             key={item.projectName + item.userName + index} 
-            bgcolor={theme.palette.action.hover}
+            bgcolor={bgColor}
           >
             <Stack >
               <Typography variant="overline">
                 {item.projectName + ' - ' + item.userName}
               </Typography>
 
-              <Box pr={1}>
-                <NewAudioPlayer url={item.url} />
-              </Box>
-              
+
+              <MyAudioPlayer 
+                url={item.url}
+                waveformData={item.waveform}
+                duration={item.duration}
+              />
             </Stack>
 
             <Stack mt={1} flexDirection="row" justifyContent="space-between">

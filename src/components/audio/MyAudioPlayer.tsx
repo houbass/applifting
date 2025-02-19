@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Button, Stack } from '@mui/material';
 import { DeleteForever, PlayArrow, Pause } from "@mui/icons-material";
 
@@ -6,23 +6,67 @@ import { DeleteForever, PlayArrow, Pause } from "@mui/icons-material";
 import CanvasWaveform from './CanvasWaveform';
 
 interface Props {
+  url: string;
   waveformData: number[];
+  duration: number;
   setAudioPreview?: (value: null) => void
 }
 
 const MyAudioPlayer = ({
-  waveformData, setAudioPreview
+  url, waveformData, duration, setAudioPreview
 }: Props) => {
 
   // States
-  const [isPlaying, setIsPlaying] = useState(false)
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const timerRef = useRef< NodeJS.Timeout | null >(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
 
+  // Interval
+  // TODO make it as animation handler directly in Canvas
+  useEffect(() => {
+    timerRef.current = null;
+    if(isPlaying) {
+      timerRef.current = setInterval(() => {
+        if(currentTime >= duration && audioRef.current) {
+          audioRef.current.pause();
+          setIsPlaying(false);
+          return
+        }
+
+        const thisTime = audioRef.current?.currentTime || 0
+        setCurrentTime(thisTime)
+      }, 100)
+    }
+
+    return() => {
+      if(timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+    }
+  }, [isPlaying, currentTime])
 
   // Utils
-  const onPlayPause = () => {
-    // TODO handle play / pause
-    console.log('play / pause');
-    setIsPlaying(!isPlaying);
+  function playPause() {
+    if(isPlaying) {
+      audioRef.current?.pause();
+      setIsPlaying(false);
+      return
+    }
+
+    if(currentTime >= duration) {
+      setCurrentTime(0);
+      audioRef.current?.play();
+    }
+
+    audioRef.current?.play();
+  }
+
+  function changeTime(value: number ) {
+    if(audioRef.current?.currentTime) {
+      audioRef.current.currentTime = Number(value);
+      setCurrentTime(Number(value));
+    }
   }
 
 
@@ -34,7 +78,7 @@ const MyAudioPlayer = ({
     >
       <Button 
         variant="contained"
-        onClick={onPlayPause}
+        onClick={playPause}
       >
         
         {isPlaying 
@@ -43,7 +87,13 @@ const MyAudioPlayer = ({
         }
       </Button>
 
-      <CanvasWaveform data={waveformData} height={50}/>
+      <CanvasWaveform 
+        data={waveformData} 
+        currentTime={currentTime}
+        duration={duration}
+        changeTime={changeTime}
+        height={50}
+      />
 
       {setAudioPreview && (
         <Button 
@@ -56,6 +106,14 @@ const MyAudioPlayer = ({
         </Button>
       )}
 
+
+      <audio 
+        ref={audioRef} 
+        onPlay={() => setIsPlaying(true)}
+      >
+        <source src={url} type="audio/mpeg" />
+        Your browser does not support the audio element.
+      </audio>
     </Stack>
   )
 }

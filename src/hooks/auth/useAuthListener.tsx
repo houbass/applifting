@@ -12,10 +12,7 @@ const useAuthListener = () => {
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
         dispatch(setUserCheck(true));
-  
-        console.log('currentUser')
-        console.log(currentUser)
-  
+    
         if (currentUser) {
           const userData = {
             displayName: currentUser.displayName as string,
