@@ -1,6 +1,11 @@
-import React from "react";
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import React, { useEffect, useState } from "react";
+import { Box, CircularProgress, Chip, Stack, Typography } from "@mui/material";
 import { useTheme } from "@mui/material";
+import { getDocs, collection } from "firebase/firestore";
+import { db } from "@/config/firebase";
+
+// Types
+import { AudioCollectionItem } from "@/components/types";
 
 // Components
 import NewAudioPlayer from "../audio/NewAudioPlayer";
@@ -8,28 +13,52 @@ import NewAudioPlayer from "../audio/NewAudioPlayer";
 const Timeline = () => {
   const theme = useTheme();
 
+  // States
+  const [data, setData] = useState<AudioCollectionItem[] | null>(null);
+  const [loading, setLoading] = useState(true);
   
-  const url = [
-    
-    {
-      name: "Check My Bitchees",
-      auth: "David Haslhoof",
-      url: "",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass"]
-    },
-    
-  ]
+  // Fetch data
+  useEffect(() => {
+    if(!data) {
+      fetchCollection();
+    }
+  }, []);
+
+  // Utils
+  const fetchCollection = async () => {
+    try {
+      const querySnapshot = await getDocs(collection(db, "audio"));
+      const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setData(items as AudioCollectionItem[]);
+    } catch (error) {
+      console.error("Error fetching documents: ", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  if(loading) {
+    return (
+      <Stack justifyContent="center" alignItems="center" height="200px">
+        <CircularProgress />
+      </Stack>
+    )
+  }
 
   return (
     <Stack pt={3} gap={1}>
-      
-      {url?.map((item, index) => {
+      {data?.map((item, index) => {
         return (
-          <Stack borderRadius={2} pl={1} key={item.name + item.auth + index} bgcolor={theme.palette.action.hover}>
+          <Stack 
+            borderRadius={2} 
+            pl={1} 
+            key={item.projectName + item.userName + index} 
+            bgcolor={theme.palette.action.hover}
+          >
             <Stack >
               <Typography variant="overline">
-                {item.name + ' - ' + item.auth}
+                {item.projectName + ' - ' + item.userName}
               </Typography>
 
               <Box pr={1}>
@@ -55,7 +84,7 @@ const Timeline = () => {
               </Box>
 
               <Box textAlign="right"> 
-                {item.styles.map(style => {
+                {item.style.map(style => {
                   return (
                     <Box 
                       key={style}

@@ -12,3 +12,16 @@ export interface FormData {
   styleSelection: string[],
   audioPreview: AudioPreview | null
 }
+
+export interface AudioCollectionItem {
+  id: string;
+  duration: number;
+  instruments: string[];
+  projectName: string;
+  style: string[];
+  timeStamp: number;
+  uid: string;
+  waveform: number[];
+  url: string;
+  userName: string;
+}
