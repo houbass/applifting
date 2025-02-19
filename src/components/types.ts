@@ -2,6 +2,8 @@
 export interface AudioPreview {
   url: string
   file: File
+  duration: number
+  waveform?: number[]
 }
 
 export interface FormData {

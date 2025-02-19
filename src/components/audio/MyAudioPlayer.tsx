@@ -6,12 +6,12 @@ import { DeleteForever, PlayArrow, Pause } from "@mui/icons-material";
 import CanvasWaveform from './CanvasWaveform';
 
 interface Props {
-  data: number[];
+  waveformData: number[];
   setAudioPreview?: (value: null) => void
 }
 
 const MyAudioPlayer = ({
-  data, setAudioPreview
+  waveformData, setAudioPreview
 }: Props) => {
 
   // States
@@ -43,7 +43,7 @@ const MyAudioPlayer = ({
         }
       </Button>
 
-      <CanvasWaveform data={data} height={50}/>
+      <CanvasWaveform data={waveformData} height={50}/>
 
       {setAudioPreview && (
         <Button 

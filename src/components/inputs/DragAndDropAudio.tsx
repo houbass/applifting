@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { FileRejection, useDropzone } from "react-dropzone";
 import { Box, Stack, Typography } from "@mui/material";
 import { FileUpload } from "@mui/icons-material";
@@ -27,14 +27,26 @@ const DragAndDropAudio = ({
   audioPreview,
   setAudioPreview
 }: Props) => {
+  
+  console.log('audioPreview', audioPreview);
 
   // States
   const dispatch = useDispatch();
   const theme = useTheme();
 
   // get audio waveform data for canvas
-  const url = audioPreview?.url
-  const data = useGetAudioWaveform(url)
+  const url = audioPreview?.url;
+  const waveformData = useGetAudioWaveform(url);
+
+  // Update audioPreview with waveform data
+  useEffect(() => {
+    if(waveformData && audioPreview) {
+      setAudioPreview({
+        ...audioPreview,
+        waveform: waveformData
+      });
+    }
+  }, [waveformData])
 
   // Utils
   const onDrop = (acceptedFiles: File[], fileRejections: FileRejection[]) => {
@@ -55,10 +67,14 @@ const DragAndDropAudio = ({
         if (reader.result) {
           // Create a preview URL using the file contents
           const audioUrl = URL.createObjectURL(new Blob([reader.result], { type: file.type }));
-          setAudioPreview({
-            url: audioUrl,
-            file: file
-          });
+          const audio = new Audio(audioUrl);
+          audio.onloadedmetadata = () => {
+            setAudioPreview({
+              url: audioUrl,
+              file: file,
+              duration: audio.duration
+            });
+          };
         }
       }
       reader.readAsArrayBuffer(file)
@@ -112,16 +128,15 @@ const DragAndDropAudio = ({
         />
       )}
 
-
       {audioPreview?.url && (
         <AudioVisualization
           url={audioPreview.url}
         />
       )}
 
-      {data && (
+      {waveformData && (
         <MyAudioPlayer
-          data={data}
+          waveformData={waveformData}
           setAudioPreview={setAudioPreview}
         />
       )}

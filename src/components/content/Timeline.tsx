@@ -7,55 +7,24 @@ import NewAudioPlayer from "../audio/NewAudioPlayer";
 
 const Timeline = () => {
   const theme = useTheme();
+
+  
   const url = [
+    
     {
       name: "Check My Bitchees",
       auth: "David Haslhoof",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Faa?alt=media&token=f3d5ad99-6eaf-4c61-b227-ca4c637d3c24",
+      url: "",
       instruments: ["guitar", "bass"],
       styles: ["drum and bass"]
     },
-    {
-      name: "While You Sleep",
-      auth: "On Sun",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Fdw?alt=media&token=e8495e96-3c17-4c64-9695-e866b8b4b0e6",
-      instruments: ["guitar", "bass"],
-      styles: ["house"]
-    },
-    {
-      name: "Check My Bitchees",
-      auth: "David Haslhoof",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Faa?alt=media&token=f3d5ad99-6eaf-4c61-b227-ca4c637d3c24",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass"]
-    },
-    {
-      name: "While You Sleep",
-      auth: "On Sun",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Fdw?alt=media&token=e8495e96-3c17-4c64-9695-e866b8b4b0e6",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass", "bass music"]
-    },
-    {
-      name: "Check My Bitchees",
-      auth: "David Haslhoof",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Faa?alt=media&token=f3d5ad99-6eaf-4c61-b227-ca4c637d3c24",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass"]
-    },
-    {
-      name: "While You Sleep",
-      auth: "On Sun",
-      url: "https://firebasestorage.googleapis.com/v0/b/collabro-281e7.firebasestorage.app/o/audio%2F1d4i8yny3YVQvck8apxXGUU7jFq1%2Fdw?alt=media&token=e8495e96-3c17-4c64-9695-e866b8b4b0e6",
-      instruments: ["guitar", "bass"],
-      styles: ["drum and bass", "bass music"]
-    },
+    
   ]
 
   return (
     <Stack pt={3} gap={1}>
       
-      {url.map((item, index) => {
+      {url?.map((item, index) => {
         return (
           <Stack borderRadius={2} pl={1} key={item.name + item.auth + index} bgcolor={theme.palette.action.hover}>
             <Stack >

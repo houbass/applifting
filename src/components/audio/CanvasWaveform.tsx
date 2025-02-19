@@ -93,6 +93,7 @@ const CanvasWaveform = ({
       ctx.beginPath();
 
       // Time field
+      // TODO mineral colors
       ctx.fillStyle = "rgba(0, 0, 0, 0.4)";
       ctx.fillRect(0, 0, x, canvasHeight);
   

@@ -87,8 +87,7 @@ const CreateProjectForm = () => {
 
       scrollIn(audioRef.current); 
     } else {
-
-      if(audioPreview) {
+      if(audioPreview && audioPreview.waveform) {
         handleUpload(formData)
       }
     }
