@@ -88,15 +88,17 @@ const UserTopNavBar = () => {
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip title="Profile" disableInteractive>
-                  <IconButton 
-                    size="small"
-                    color="inherit"
-                    aria-label="Account"
-                  >
-                    <AccountBox />
-                  </IconButton>
-                </Tooltip>
+                <Link href={`/profile/${user.uid}`} passHref legacyBehavior>
+                  <Tooltip title="Profile" disableInteractive>
+                    <IconButton 
+                      size="small"
+                      color="inherit"
+                      aria-label="Account"
+                    >
+                      <AccountBox />
+                    </IconButton>
+                  </Tooltip>
+                </Link>
               </Stack>
             </Stack>
           </AppBar>

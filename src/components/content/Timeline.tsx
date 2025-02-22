@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Box, CircularProgress, Chip, Stack, Typography } from "@mui/material";
-import { useTheme } from "@mui/material";
+import Link from "next/link";
+import { Box, CircularProgress, Chip, Stack, Typography, useTheme } from "@mui/material";
+
+// Firebase
 import { getDocs, collection } from "firebase/firestore";
 import { db } from "@/config/firebase";
 
@@ -10,9 +12,12 @@ import { AudioCollectionItem } from "@/components/types";
 // Components
 import MyAudioPlayer from "../audio/MyAudioPlayer";
 
+// TODO make on scroll fetching
 const Timeline = () => {
   const theme = useTheme();
   const bgColor = theme.palette.action.hover;
+  const textColor = theme.palette.text.primary;
+  const primaryColor = theme.palette.primary.main;
 
   // States
   const [data, setData] = useState<AudioCollectionItem[] | null>(null);
@@ -56,10 +61,25 @@ const Timeline = () => {
             pl={1} 
             key={item.projectName + item.userName + index} 
             bgcolor={bgColor}
-          >
+          >  
             <Stack >
               <Typography variant="overline">
-                {item.projectName + ' - ' + item.userName}
+                {item.projectName + ' - '}
+                <Link href={`/profile/${item.uid}`} style={{ textDecoration: 'none' }} >
+                  
+                  <Typography 
+                    color={textColor} 
+                    variant="overline"
+                    sx={{
+                      '&:hover' : {
+                        color: primaryColor
+                      }
+                    }}
+                  >
+                    {item.userName}
+                  </Typography>
+
+                </Link>
               </Typography>
 
 
