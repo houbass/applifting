@@ -49,6 +49,6 @@
     }
   },
   "lint-staged": {
-    "**/*.{ts,tsx}": "eslint --fix"
+    "**/*.{ts,tsx}": "npm run lint"
   }
 }

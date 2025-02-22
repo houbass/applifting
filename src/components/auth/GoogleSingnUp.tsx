@@ -1,8 +1,13 @@
 import React from 'react';
+import { Button, Box } from '@mui/material';
+
+// Firebase
 import { signInWithPopup } from 'firebase/auth';
 import { auth, googleProvider, db } from '@/config/firebase';
-import { Button, Box } from '@mui/material';
 import { doc, getDoc, setDoc } from 'firebase/firestore';
+
+// Utils
+import { getSearchNameArr } from './utils';
 
 const GoogleSignUp = () => {
   const handleGoogleSignUp = async () => {
@@ -10,6 +15,7 @@ const GoogleSignUp = () => {
       const userCredential = await signInWithPopup(auth, googleProvider);
       // User information
       const user = userCredential.user;
+      const displayName = user.displayName;
 
       // Check if user already exists in Firestore
       const userRef = doc(db, "users", user.uid);
@@ -23,14 +29,15 @@ const GoogleSignUp = () => {
           follow: [],
           followers: [],
           likes: [],
-          projectIds: [] 
+          projectIds: [],
+          userName: displayName,
+          searchArr: getSearchNameArr(displayName), 
         });
       }
 
     } catch (error) {
       if (error instanceof Error) {
         console.error('Error signing in with Google:', error.message);
-        //alert('Error signing in. Please try again.');
       } else {
         console.error('Unexpected error', error);
       }

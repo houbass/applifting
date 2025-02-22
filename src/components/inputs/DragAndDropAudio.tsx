@@ -86,6 +86,10 @@ const DragAndDropAudio = ({
     maxSize: MAX_FILE_SIZE,
   });
 
+  const onDelete = () => {
+    setAudioPreview(null)
+  }
+
   return (
     <>
       {!audioPreview && (
@@ -121,7 +125,7 @@ const DragAndDropAudio = ({
           url={url}
           waveformData={waveformData}
           duration={audioPreview.duration}
-          setAudioPreview={setAudioPreview}
+          onDelete={onDelete}
         />
       )}
     </>
