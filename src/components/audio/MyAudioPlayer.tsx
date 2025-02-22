@@ -9,11 +9,11 @@ interface Props {
   url: string;
   waveformData: number[];
   duration: number;
-  setAudioPreview?: (value: null) => void
+  onDelete?: () => void
 }
 
 const MyAudioPlayer = ({
-  url, waveformData, duration, setAudioPreview
+  url, waveformData, duration, onDelete
 }: Props) => {
 
   // States
@@ -95,12 +95,12 @@ const MyAudioPlayer = ({
         height={50}
       />
 
-      {setAudioPreview && (
+      {onDelete && (
         <Button 
           variant="contained"
           size="small"
           color="error"
-          onClick={() => setAudioPreview(null)}
+          onClick={() => onDelete()}
         >
           <DeleteForever />
         </Button>

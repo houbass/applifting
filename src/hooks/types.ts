@@ -5,4 +5,6 @@ export interface UserDataType {
   follow: string[];
   likes: string[];
   followers: string[];
+  userName: string;
+  searchArr: string[];
 }

@@ -9,6 +9,9 @@ import { setAlert } from "@/redux/slices/userSlice";
 // Types
 import { FormData } from "@/components/types";
 
+// Utils
+import { formatedFileName } from "./utils";
+
 const useAudioFileUpload = () => {
   const dispatch = useDispatch();
 
@@ -18,11 +21,13 @@ const useAudioFileUpload = () => {
   const [message, setMessage] = useState('');
   const userInfo = useSelector(selectUser);
   const uid = userInfo?.uid;
+
+
   
   // Utils
   const handleUpload = async ( formData: FormData ) => {
     const projectName = formData.projectName;
-    const projectNameFormated = formData.projectName.toLowerCase().split(' ').join('_');
+    const projectNameFormated = formatedFileName(formData.projectName);
 
     try{
       if(formData.audioPreview?.file) {

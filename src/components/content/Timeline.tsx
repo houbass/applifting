@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Link from "next/link";
-import { Box, CircularProgress, Chip, Stack, Typography, useTheme } from "@mui/material";
+import { CircularProgress, Stack, } from "@mui/material";
 
 // Firebase
 import { getDocs, collection } from "firebase/firestore";
@@ -10,14 +9,10 @@ import { db } from "@/config/firebase";
 import { AudioCollectionItem } from "@/components/types";
 
 // Components
-import MyAudioPlayer from "../audio/MyAudioPlayer";
+import SongCard from "./SongCard";
 
 // TODO make on scroll fetching
 const Timeline = () => {
-  const theme = useTheme();
-  const bgColor = theme.palette.action.hover;
-  const textColor = theme.palette.text.primary;
-  const primaryColor = theme.palette.primary.main;
 
   // States
   const [data, setData] = useState<AudioCollectionItem[] | null>(null);
@@ -43,7 +38,6 @@ const Timeline = () => {
     }
   };
 
-
   if(loading) {
     return (
       <Stack justifyContent="center" alignItems="center" height="200px">
@@ -56,72 +50,10 @@ const Timeline = () => {
     <Stack pt={3} gap={1}>
       {data?.map((item, index) => {
         return (
-          <Stack 
-            borderRadius={2} 
-            pl={1} 
-            key={item.projectName + item.userName + index} 
-            bgcolor={bgColor}
-          >  
-            <Stack >
-              <Typography variant="overline">
-                {item.projectName + ' - '}
-                <Link href={`/profile/${item.uid}`} style={{ textDecoration: 'none' }} >
-                  
-                  <Typography 
-                    color={textColor} 
-                    variant="overline"
-                    sx={{
-                      '&:hover' : {
-                        color: primaryColor
-                      }
-                    }}
-                  >
-                    {item.userName}
-                  </Typography>
-
-                </Link>
-              </Typography>
-
-
-              <MyAudioPlayer 
-                url={item.url}
-                waveformData={item.waveform}
-                duration={item.duration}
-              />
-            </Stack>
-
-            <Stack mt={1} flexDirection="row" justifyContent="space-between">
-              <Box> 
-                {item.instruments.map(instrument => {
-                  return (
-                    <Box 
-                      key={instrument}
-                      mb={1} 
-                      mr={1}
-                      display="inline-block"
-                    >
-                      <Chip label={instrument} size="small" />
-                    </Box>
-                  )
-                })}
-              </Box>
-
-              <Box textAlign="right"> 
-                {item.style.map(style => {
-                  return (
-                    <Box 
-                      key={style}
-                      mb={1} 
-                      mr={1}
-                      display="inline-block"
-                    >
-                      <Chip color="primary" label={style} size="small" />
-                    </Box>
-                  )
-                })}
-              </Box>
-            </Stack>
-          </Stack>
+          <SongCard 
+            key={index}
+            item={item}
+          />
         )
       })}
     </Stack>
