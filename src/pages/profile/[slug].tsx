@@ -1,8 +1,7 @@
 
 import React from 'react';
 import { Stack, Typography, CircularProgress } from '@mui/material';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectUser } from '@/redux/slices/userSlice';
+import { useDispatch } from 'react-redux';
 import { setAlert } from '@/redux/slices/userSlice';
 
 // Types
@@ -26,11 +25,13 @@ import PageLayout from '@/components/containers/PageLayout';
 // TODO infinitive scrolling
 const Profile = () => {
   // Hooks
+  // Redirect when logout
+  const { user, userCheck } = useHomeRedirect();
   const dispatch = useDispatch();
-  const user = useSelector(selectUser);
   const router = useRouter();
   const { slug } = router.query;
-  const id = slug as string;
+  const id = user && userCheck ? slug as string : undefined;
+
   // Fetch user data
   const { data, isLoading} = useGetUserData(id);
   const { songs, setSongs, isSongsLoading } = useGetUserSongs(id);
@@ -38,6 +39,7 @@ const Profile = () => {
   // Utils
   const onDelete = async(song: AudioCollectionItem) => {
     // Handle deletion
+    if(!id) return;
     const collection = 'audio'
     try {
       const filePath = `audio/${id}/${formatedFileName(song.projectName)}`
@@ -74,8 +76,7 @@ const Profile = () => {
     }    
   }
 
-  // Redirect when logout
-  useHomeRedirect()
+  if(!user || !userCheck) return
 
   if (isLoading || isSongsLoading) return (
     <PageLayout>

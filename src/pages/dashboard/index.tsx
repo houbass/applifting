@@ -9,34 +9,36 @@ import PageLayout from "@/components/containers/PageLayout";
 import Timeline from "@/components/content/Timeline";
 
 export default function Dashboard() {
-  
+
   // Redirect when logout
-  useHomeRedirect()
+  const { user, userCheck } = useHomeRedirect();
 
   return (
     <>
       <BasicHead title="Collabro"/>
 
-      <PageLayout>
-        <Stack 
-          gap={2} 
-          flexDirection="row" 
-          justifyContent="center"
-        >
-          <Box pt={2}>
-            <Link href="/createproject" passHref legacyBehavior>
-              <Button 
-                variant="contained"
-                color="error"
-              >
-                Create Collab
-              </Button>
-            </Link>
-          </Box>
-        </Stack>
+      { user && userCheck && (
+        <PageLayout>
+          <Stack 
+            gap={2} 
+            flexDirection="row" 
+            justifyContent="center"
+          >
+            <Box pt={2}>
+              <Link href="/createproject" passHref legacyBehavior>
+                <Button 
+                  variant="contained"
+                  color="error"
+                >
+                  Create Collab
+                </Button>
+              </Link>
+            </Box>
+          </Stack>
 
-        <Timeline />
-      </PageLayout>
+          <Timeline />
+        </PageLayout>
+      )}
     </>
   )
 }

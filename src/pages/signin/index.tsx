@@ -12,6 +12,10 @@ import GoogleSignUp from '@/components/auth/GoogleSingnUp';
 
 export default function Signin() {
   
+  // Redirect when log in
+  const { user, userCheck } = useDashboardRedirect();
+
+  // States
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -33,34 +37,34 @@ export default function Signin() {
     }
   };
 
-  useDashboardRedirect();
-
   return (
     <>
       <BasicHead title='Sign In' />
 
-      <main>
-        <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
-          <Stack gap={1} maxWidth={MAX_WIDTH} width="100%">
-            <Box>
-              <Typography>
-                LETS SIGN IN
-              </Typography>
-            </Box>
+      { !user && userCheck && (
+        <main>
+          <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
+            <Stack gap={1} maxWidth={MAX_WIDTH} width="100%">
+              <Box>
+                <Typography>
+                  LETS SIGN IN
+                </Typography>
+              </Box>
 
-            <SignInUp 
-              setEmail={setEmail}
-              setPassword={setPassword}
-              handler={handleSignIn}
-              success={success}
-              error={error}
-              text="Sign In"
-            />
+              <SignInUp 
+                setEmail={setEmail}
+                setPassword={setPassword}
+                handler={handleSignIn}
+                success={success}
+                error={error}
+                text="Sign In"
+              />
 
-            <GoogleSignUp />
+              <GoogleSignUp />
+            </Stack>
           </Stack>
-        </Stack>
-      </main>
+        </main>
+      )}
     </>
   )
 }

@@ -8,7 +8,7 @@ import { collection, query, where, getDocs, orderBy, limit } from "firebase/fire
 // Types
 import { AudioCollectionItem } from "@/components/types";
 
-const useGetUserSongs = (id: string) => {
+const useGetUserSongs = (id: string | undefined) => {
 
   // States
   const [songs, setSongs] = useState<AudioCollectionItem[] | null>(null);

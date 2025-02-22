@@ -10,17 +10,19 @@ import CreateProjectForm from "@/components/forms/CreateProjectForm";
 const CreateProjectPage = () => {
 
   // Redirect when logout
-  useHomeRedirect();
+  const { user, userCheck } = useHomeRedirect();
 
   return (
     <>
       <BasicHead title="Create Collab"/>
 
-      <main>
-        <PageLayout>
-          <CreateProjectForm />
-        </PageLayout>
-      </main>
+      { user && userCheck && (
+        <main>
+          <PageLayout>
+            <CreateProjectForm />
+          </PageLayout>
+        </main>
+      )}
     </>
   )
 }

@@ -13,6 +13,9 @@ const useHomeRedirect = () => {
       router.push("/");
     } 
   }, [user, userCheck])
+
+
+  return { user, userCheck }
 }
 
 export default useHomeRedirect;

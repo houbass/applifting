@@ -13,6 +13,8 @@ const useDashboardRedirect = () => {
       router.push("/dashboard");
     }
   }, [user, userCheck])
+
+  return { user, userCheck}
 }
 
 export default useDashboardRedirect;
