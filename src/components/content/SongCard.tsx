@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import { Box, Chip, Stack, Typography, useTheme } from "@mui/material";
+import { Avatar, Box, Button, Divider, Chip, Stack, Typography, useTheme } from "@mui/material";
 
 // Utils
 import { formatTimestamp } from "@/utils/utils";
@@ -16,10 +16,17 @@ interface Props {
   onDelete?: () => void
 }
 
+const AVATAR_WIDTH = "20px";
+
 const SongCard = ({ 
   item, onDelete 
 }: Props) => {
+
+  // States
+  const { userName, description, userPhotoURL } = item;
+  const firstLetter = userName[0].toUpperCase();
   
+  // Colors
   const theme = useTheme();
   const bgColor = theme.palette.action.hover;
   const textColor = theme.palette.text.primary;
@@ -29,30 +36,81 @@ const SongCard = ({
 
   return (
     <Stack 
-      borderRadius={2} 
-      pl={1} 
+      borderRadius={2}  
       bgcolor={bgColor}
     >  
-      <Stack >
-
-        <Stack flexDirection="row" justifyContent="space-between" pr={1}>
-          <Typography variant="overline">
-            {item.projectName + ' - '}
-            <Link href={`/profile/${item.uid}`} style={{ textDecoration: 'none' }} >
-              
-              <Typography 
-                color={textColor} 
-                variant="overline"
+      <Stack 
+        p={1} 
+        flexDirection="row"
+        alignItems="center" 
+        justifyContent="space-between"
+      >
+        <Stack flexDirection="row" gap={1} alignItems="center">
+          {userPhotoURL.length > 0 
+            ? (
+              <Avatar 
+                alt={userName} 
+                src={userPhotoURL} 
                 sx={{
-                  '&:hover' : {
-                    color: primaryColor
-                  }
+                  width: AVATAR_WIDTH, 
+                  height: AVATAR_WIDTH,
+                }}
+              />)
+            : (
+              <Avatar 
+                alt={userName}
+                sx={{
+                  width: AVATAR_WIDTH, 
+                  height: AVATAR_WIDTH, 
+                  fontSize: "12px", 
+                  fontWeight: '500',
+                  color: textColor,
                 }}
               >
-                {item.userName}
-              </Typography>
+                {firstLetter}
+              </Avatar>)
+          }
 
-            </Link>
+          <Link href={`/profile/${item.uid}`} style={{ textDecoration: 'none' }} >              
+            <Typography 
+              color={textColor} 
+              variant="caption"
+              sx={{
+                '&:hover' : {
+                  color: primaryColor
+                }
+              }}
+            >
+              {item.userName}
+            </Typography>
+          </Link>
+          
+        </Stack>
+
+        <Button 
+          size="small" 
+          variant="contained"
+        >
+          lets collab
+        </Button>
+      </Stack>       
+
+      <Divider />
+
+      <Stack px={2} pt={2} pb={1} gap={1}>
+        <Typography variant="inherit">
+          {description}
+        </Typography>
+
+        <Divider />
+      </Stack>
+
+      
+
+      <Stack px={2} pb={2}> 
+        <Stack flexDirection="row" justifyContent="space-between">
+          <Typography variant="overline">
+            {item.projectName}
           </Typography>
 
           <Typography variant="overline">
@@ -68,36 +126,62 @@ const SongCard = ({
         />
       </Stack>
 
-      <Stack mt={1} flexDirection="row" justifyContent="space-between">
-        <Box> 
-          {item.instruments.map(instrument => {
-            return (
-              <Box 
-                key={instrument}
-                mb={1} 
-                mr={1}
-                display="inline-block"
-              >
-                <Chip label={instrument} size="small" />
-              </Box>
-            )
-          })}
-        </Box>
+      <Divider />
 
-        <Box textAlign="right"> 
-          {item.style.map(style => {
-            return (
-              <Box 
-                key={style}
-                mb={1} 
-                mr={1}
-                display="inline-block"
-              >
-                <Chip color="primary" label={style} size="small" />
-              </Box>
-            )
-          })}
-        </Box>
+      <Stack 
+        pt={1}  
+        flexDirection="row" 
+      >
+        
+        <Stack gap={0.5} flex={1} pl={1}>
+          <Typography 
+            color="textSecondary" 
+            fontSize={10} 
+            textTransform="uppercase"
+          >
+            Looking for
+          </Typography>
+          <Box> 
+            {item.instruments.map(instrument => {
+              return (
+                <Box 
+                  key={instrument}
+                  mb={1} 
+                  mr={1}
+                  display="inline-block"
+                >
+                  <Chip label={instrument} size="small" />
+                </Box>
+              )
+            })}
+          </Box>
+        </Stack>
+
+        <Stack gap={0.5} textAlign="right" flex={1}>
+          <Typography 
+            color="textSecondary" 
+            fontSize={10} 
+            textTransform="uppercase"
+            pr={1}
+          >
+            Style
+          </Typography>
+
+          <Box > 
+            {item.style.map(style => {
+              return (
+                <Box 
+                  key={style}
+                  mb={1} 
+                  mr={1}
+                  display="inline-block"
+                >
+                  <Chip color="default" label={style} size="small" />
+                </Box>
+              )
+            })}
+          </Box>
+        </Stack>
       </Stack>
     </Stack>
   )

@@ -11,6 +11,7 @@ export interface FormData {
   instrumentSelection: string[],
   styleSelection: string[],
   audioPreview: AudioPreview | null,
+  description: string
 }
 
 export interface AudioCollectionItem {
@@ -24,4 +25,7 @@ export interface AudioCollectionItem {
   waveform: number[];
   url: string;
   userName: string;
+  userPhotoURL: string;
+  coverURL: string;
+  description: string;
 }

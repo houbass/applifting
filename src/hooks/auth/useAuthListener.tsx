@@ -14,7 +14,9 @@ const useAuthListener = () => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
       dispatch(setUserCheck(true));
       if (currentUser) {
+
         const userData = {
+          photoURL: currentUser.photoURL || null,
           email: currentUser.email as string,
           uid: currentUser.uid as string
         }

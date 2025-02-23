@@ -28,6 +28,7 @@ const defaultFormData = {
   instrumentSelection: [],
   styleSelection: [],
   audioPreview: null,
+  description: '',
 }
 
 const CreateProjectForm = () => {
@@ -42,12 +43,13 @@ const CreateProjectForm = () => {
   const projectNameRef = useRef<HTMLInputElement>(null);
   const instrumentsRef = useRef<HTMLInputElement>(null);
   const styleRef = useRef<HTMLInputElement>(null);
+  const descriptionRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLInputElement>(null);
   
   // States
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>(defaultFormData); 
-  const { projectName, instrumentSelection, styleSelection, audioPreview } = formData;
+  const { projectName, instrumentSelection, styleSelection, audioPreview, description } = formData;
 
   // Modal turnOn
   useEffect(() => {
@@ -72,6 +74,13 @@ const CreateProjectForm = () => {
       }))
 
       scrollIn(instrumentsRef.current);
+    } else if (description.length === 0 && descriptionRef.current) {
+      dispatch(setAlert({
+        text: "Describe your project",
+        type: "error"
+      }))
+
+      scrollIn(descriptionRef.current);
     } else if (styleSelection.length === 0 && styleRef.current) {
       dispatch(setAlert({
         text: "Select what genre is your demo",
@@ -100,8 +109,8 @@ const CreateProjectForm = () => {
   }
 
   return (
-    <Stack gap={1} pt={6}>
-      <Box 
+    <Stack gap={2} pt={6}>
+      <Stack 
         ref={projectNameRef}
         mb={1} 
         width="100%"
@@ -109,15 +118,19 @@ const CreateProjectForm = () => {
           scrollMarginTop: SCROLL_MARGIN_TOP
         }}
       >
+        <Typography variant="overline">
+          Project Name
+        </Typography>
+
         <TextField 
           fullWidth
-          id="outlined-basic" 
-          label="Project Name" 
+          id="outlined-basic"  
+          placeholder="Name your project"
           variant="outlined" 
           value={projectName}
           onChange={(e) => setFormData({ ...formData , projectName: e.target.value })}
         />
-      </Box>
+      </Stack>
     
       <Box 
         ref={instrumentsRef}
@@ -129,7 +142,7 @@ const CreateProjectForm = () => {
           list={INSTRUMENTS} 
           selection={instrumentSelection}
           setSelection={(arr) => setFormData({ ...formData , instrumentSelection: arr })}
-          label="What Are You Looking For?"
+          label="select What you looking for"
         />
       </Box>
 
@@ -147,17 +160,43 @@ const CreateProjectForm = () => {
         />
       </Box>
 
-      <Box 
+      <Stack
+        ref={descriptionRef}
+        sx={{
+          scrollMarginTop: SCROLL_MARGIN_TOP
+        }}
+      >
+        <Typography variant="overline">
+          description
+        </Typography>
+
+        <TextField
+          id="outlined-multiline-static"
+          placeholder="Describe your project, (what exactly you are looking and what are your expectations)."
+          multiline
+          rows={4}
+          fullWidth
+          variant="outlined"
+          value={description}
+          onChange={(e) => setFormData({ ...formData , description: e.target.value })}
+        />
+      </Stack>
+
+      <Stack 
         ref={audioRef}
         sx={{
           scrollMarginTop: SCROLL_MARGIN_TOP
         }}
       >
+        <Typography variant="overline">
+          Upload your demo
+        </Typography>
+
         <DragAndDropAudio 
           audioPreview={audioPreview}
           setAudioPreview={(data) => setFormData({ ...formData , audioPreview: data })}
         />
-      </Box>
+      </Stack>
 
       <Box mt={1} >
         <Button 

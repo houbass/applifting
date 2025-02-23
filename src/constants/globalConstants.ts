@@ -15,7 +15,7 @@ export const STYLES = [
   "deep house", "downtempo", "soul", "dubstep", "dub", "drum and bass", "progressive house",
   "ambient", "experimental", "trance", "future bass", "lo-fi hip hop", "synthwave", 
   "funk", "uk garage", "disco", "electro", "future house", "rock", "chillout", "psy trance",
-  "bass music", "boom bap", "jazz", "idm", "drumstep", "synth-pop", "drill"
+  "bass music", "boom bap", "jazz", "idm", "drumstep", "synth-pop", "drill", "metal"
 ];
 
 export const MAX_FILE_SIZE = 20 * 1024 * 1024; // 20 MB in bytes
