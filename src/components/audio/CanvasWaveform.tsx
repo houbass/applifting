@@ -45,11 +45,12 @@ const CanvasWaveform = ({
     const ctx = canvas.getContext("2d");
     const canvasWidth = canvas.width;
     const xDelta = canvasWidth / data.length;
+ 
     ctx?.clearRect(0, 0, canvas.width, canvas.height);
     
     async function drawWaveform() {
       if (!ctx) return;
-    
+      ctx.imageSmoothingEnabled = true;
       ctx.strokeStyle = lineColor;
       ctx.lineWidth = 2;
       
