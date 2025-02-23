@@ -12,17 +12,21 @@ const useGetUserData = (id: string | undefined) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) {
+      if(data) {
+        setData(null)
+      }
+      return
+    };
 
     const docRef = doc(db, "users", id);
 
-    console.log('--- Fetching user data')
     // Listen for real-time updates
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {
         setData(docSnap.data() as UserDataType);
       } else {
-        console.log("No such document!");
+        console.error("No such document!");
         setData(null);
       }
       setIsLoading(false);

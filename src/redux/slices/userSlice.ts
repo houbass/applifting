@@ -1,20 +1,22 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { User } from "../types";
-import { Alert } from "../types";
+import { User, Alert } from "../types";
+import { UserDataType } from "@/hooks/types";
 
 // Definition of state Type
 interface UserState {
   user: User | null
   userCheck: boolean
   alert: Alert | null
+  userData: UserDataType | null
 };
 
 // Definition of initial state
 const initialState: UserState = {
   user: null,
   userCheck: false,
-  alert: null
+  alert: null,
+  userData: null
 };
 
 // Definition of state slice and reducers
@@ -30,7 +32,10 @@ const userSlice = createSlice({
     },
     setAlert: (state, action: PayloadAction<Alert | null>) => {
       state.alert = action.payload;
-    }
+    },
+    setUserData: (state, action: PayloadAction<UserDataType | null>) => {
+      state.userData = action.payload;
+    },
   }
 });
 
@@ -38,7 +43,8 @@ const userSlice = createSlice({
 export const { 
   setUser,
   setUserCheck,
-  setAlert
+  setAlert,
+  setUserData,
 } = userSlice.actions;
 
 export default userSlice.reducer;
@@ -47,3 +53,4 @@ export default userSlice.reducer;
 export const selectUser = (state: RootState) => state.user.user;
 export const selectUserCheck = (state: RootState) => state.user.userCheck;
 export const selectAlert = (state: RootState) => state.user.alert;
+export const selectUserData = (state: RootState) => state.user.userData;

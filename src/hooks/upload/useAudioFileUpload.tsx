@@ -3,7 +3,7 @@ import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 import { doc, setDoc, updateDoc, arrayUnion, getDoc } from "firebase/firestore";
 import { db, storage } from "@/config/firebase";
 import { useDispatch, useSelector } from "react-redux";
-import { selectUser } from "@/redux/slices/userSlice";
+import { selectUserData } from "@/redux/slices/userSlice";
 import { setAlert } from "@/redux/slices/userSlice";
 import useGetTimelineData from "../firebase/useGetTimelineData";
 
@@ -20,12 +20,13 @@ const useAudioFileUpload = () => {
   const { fetchCollection } = useGetTimelineData();
 
   // States
+  const userData = useSelector(selectUserData);
+  const uid = userData?.uid;
+  const userName = userData?.userName
   const [isUploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState('');
-  const userInfo = useSelector(selectUser);
-  const uid = userInfo?.uid;
-
+  
   // Utils
   const handleUpload = async ( formData: FormData ) => {
     const projectName = formData.projectName;
@@ -88,7 +89,7 @@ const useAudioFileUpload = () => {
                   timeStamp: Date.now(),
                   duration: formData.audioPreview?.duration,
                   waveform: formData.audioPreview?.waveform,
-                  userName: userInfo?.displayName
+                  userName: userName
                 })
     
                 const userRef = doc(db, "users", uid)

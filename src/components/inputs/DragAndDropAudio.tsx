@@ -57,8 +57,8 @@ const DragAndDropAudio = ({
       const file = acceptedFiles[0];
       const reader = new FileReader();
 
-      reader.onabort = () => console.log('file reading was aborted');
-      reader.onerror = () => console.log('file reading has failed');
+      reader.onabort = () => console.error('file reading was aborted');
+      reader.onerror = () => console.error('file reading has failed');
       reader.onload = () => {
         if (reader.result) {
           // Create a preview URL using the file contents

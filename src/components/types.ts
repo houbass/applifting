@@ -11,7 +11,6 @@ export interface FormData {
   instrumentSelection: string[],
   styleSelection: string[],
   audioPreview: AudioPreview | null,
-  displayName: string
 }
 
 export interface AudioCollectionItem {

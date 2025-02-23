@@ -34,7 +34,7 @@ const Profile = () => {
   const id = user && userCheck ? slug as string : undefined;
 
   // Fetch user data
-  const { data, isLoading} = useGetUserData(id);
+  const { data, isLoading } = useGetUserData(id);
 
   // TODO move it to redux (just user profile)
   const { songs, setSongs, isSongsLoading } = useGetUserSongs(id);
@@ -50,17 +50,14 @@ const Profile = () => {
       
       // Delete track from storage
       await deleteFileFromStorage(filePath)
-      console.log(`Song deleted successfully.`);
-
       // Delete from collection
       await deleteDocumentById(collection, songId);
-      console.log(`Document deleted successfully.`);
-
       // Delete it from user projectIds array
       await removeProjectId(id, songId)
-      console.log(`Profile updated successfully.`);
 
-      setSongs(null);
+      // filter out current profile
+      const filteredSongs = songs?.filter(item => item.id !== songId) || [];
+      setSongs(filteredSongs)
 
       // Filterout timeline data if this song is included
       dispatch(setFilterOut(songId));

@@ -6,31 +6,30 @@ import { useDispatch } from 'react-redux';
 import { setUser, setUserCheck } from '@/redux/slices/userSlice';
 
 const useAuthListener = () => {
-    // Check if user is logged in
-    const dispatch = useDispatch();
+  // Hooks
+  const dispatch = useDispatch();
 
-    useEffect(() => {
-      const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
-        dispatch(setUserCheck(true));
-        if (currentUser) {
-          const userData = {
-            displayName: currentUser.displayName as string,
-            email: currentUser.email as string,
-            uid: currentUser.uid as string
-          }
-          // User is logged in
-          console.log('--- In LISTENER', userData)
-          dispatch(setUser(userData));
-          
-        } else {
-          // User is logged out
-          dispatch(setUser(null));
+  // Check if user is logged in
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
+      dispatch(setUserCheck(true));
+      if (currentUser) {
+        const userData = {
+          email: currentUser.email as string,
+          uid: currentUser.uid as string
         }
-      });
-  
-      // Cleanup the listener on component unmount
-      return () => unsubscribe();
-    }, []);
+        // User is logged in
+        dispatch(setUser(userData));
+        
+      } else {
+        // User is logged out
+        dispatch(setUser(null));
+      }
+    });
+
+    // Cleanup the listener on component unmount
+    return () => unsubscribe();
+  }, []);
 }
 
 export default useAuthListener;

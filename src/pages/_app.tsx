@@ -1,16 +1,16 @@
 import '@/styles/globals.css';
-import React from 'react';
+import React, { useEffect } from 'react';
 import type { AppProps } from 'next/app';
 import { Box } from '@mui/material';
 import { CircularProgress , useTheme } from '@mui/material';
-import { Provider, useSelector } from 'react-redux';
+import { Provider, useSelector, useDispatch } from 'react-redux';
 import { store } from '@/redux/store';
-import { selectUserCheck } from '@/redux/slices/userSlice';
+import { selectUser, selectUserCheck, setUserData, selectUserData } from '@/redux/slices/userSlice';
 import { ThemeProviderWrapper } from '@/contexts/ThemeContext';
 
 // Hooks
 import useAuthListener from '@/hooks/auth/useAuthListener';
-//import useGetUserData from '@/hooks/firebase/useGetUserData';
+import useGetUserData from '@/hooks/firebase/useGetUserData';
 
 // Components
 import UserTopNavBar from '@/components/navigation/UserTopNavBar';
@@ -19,17 +19,25 @@ import Snackbar from '@/components/alerts/Snackbar';
 const GlobalComponents = () => {
 
   // Hooks 
-  const theme = useTheme();
-  const userCheck = useSelector(selectUserCheck);
-  //const user = useSelector(selectUser);
-  //const { data: userData } = useGetUserData(user?.uid);
-
   // Check if user is logged in
   useAuthListener()
+  const dispatch = useDispatch();
+  const theme = useTheme();
+  const user = useSelector(selectUser);
+  const userCheck = useSelector(selectUserCheck);
+  const userDataRedux = useSelector(selectUserData)
+  const { data: userData } = useGetUserData(user?.uid);
 
-  //console.log('--- user', user)
+  useEffect(() => {
+    if(userData) {
+      dispatch(setUserData(userData));
+    }
 
-  console.log('--- UPDATE CHECK ---')
+    // reset on logout
+    if(!userData && userDataRedux) {
+      dispatch(setUserData(null));
+    }
+  }, [userData])
 
   return(
     <>

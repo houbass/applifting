@@ -1,10 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Button, Stack, TextField, Modal, Typography, CircularProgress  } from "@mui/material";
 import CircularProgressWithLabel from "../progress/CircularProgressWithLabel";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
 import { useTheme } from "@mui/material";
-import { selectUser } from "@/redux/slices/userSlice";
 
 // Hooks
 import useAudioFileUpload from "@/hooks/upload/useAudioFileUpload";
@@ -29,7 +28,6 @@ const defaultFormData = {
   instrumentSelection: [],
   styleSelection: [],
   audioPreview: null,
-  displayName: '',
 }
 
 const CreateProjectForm = () => {
@@ -47,8 +45,6 @@ const CreateProjectForm = () => {
   const audioRef = useRef<HTMLInputElement>(null);
   
   // States
-  const user = useSelector(selectUser);
-  const displayName = user?.displayName;
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [formData, setFormData] = useState<FormData>(defaultFormData); 
   const { projectName, instrumentSelection, styleSelection, audioPreview } = formData;
@@ -60,18 +56,8 @@ const CreateProjectForm = () => {
     }
   }, [isUploading])
 
-
-  // TODO fetch user data with listener once in _app and save it to redux
-  // bug displanlayname: null when log first time and upload audio
-
-
-  console.log('--- IN COMPONENT', user)
-  console.log('--- IN COMPONENT', displayName)
   // Utils
   function validation() {
-
-    console.log('--- IN VALIDATION', displayName)
-
     if(projectName.length === 0 && projectNameRef.current) {
       dispatch(setAlert({
         text: "Project name is required",
