@@ -34,7 +34,7 @@ const Timeline = () => {
   }
 
   return (
-    <Stack pt={3} gap={1}>
+    <Stack pt={3} gap={2}>
       {timelineData?.map((item, index) => {
         return (
           <SongCard 

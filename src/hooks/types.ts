@@ -7,4 +7,5 @@ export interface UserDataType {
   followers: string[];
   userName: string;
   searchArr: string[];
+  photoURL: string;
 }

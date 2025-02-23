@@ -1,5 +1,5 @@
 import React from 'react';
-import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth, db } from '@/config/firebase';
 import { useState } from 'react';
 import { Box, Typography, Stack } from '@mui/material';
@@ -34,9 +34,6 @@ export default function Signup() {
     try {
       // Firebase sign-up method
       const userCredential  = await createUserWithEmailAndPassword(auth, email, password);
-      await updateProfile(userCredential.user, {
-        displayName: displayName,
-      });
 
       // Save custom data to Firestore (only after registration)
       const uid = userCredential.user.uid
@@ -48,6 +45,7 @@ export default function Signup() {
         projectIds: [],
         userName: displayName, 
         searchArr: getSearchNameArr(displayName),
+        photoURL: '',
       });
 
       setSuccess('Account created successfully!');

@@ -89,7 +89,10 @@ const useAudioFileUpload = () => {
                   timeStamp: Date.now(),
                   duration: formData.audioPreview?.duration,
                   waveform: formData.audioPreview?.waveform,
-                  userName: userName
+                  userName: userName,
+                  userPhotoURL: userData.photoURL,
+                  coverURL: '',
+                  description: formData.description
                 })
     
                 const userRef = doc(db, "users", uid)

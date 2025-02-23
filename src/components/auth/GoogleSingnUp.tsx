@@ -32,6 +32,7 @@ const GoogleSignUp = () => {
           projectIds: [],
           userName: displayName,
           searchArr: getSearchNameArr(displayName), 
+          photoURL: user.photoURL
         });
       }
 
