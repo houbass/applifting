@@ -12,7 +12,7 @@ interface Props {
   onDelete?: () => void
 }
 
-const MyAudioPlayer = ({
+const AudioPlayer = ({
   url, waveformData, duration, onDelete
 }: Props) => {
 
@@ -48,8 +48,10 @@ const MyAudioPlayer = ({
 
   // Utils
   function playPause() {
+    if(!audioRef.current) return
+
     if(isPlaying) {
-      audioRef.current?.pause();
+      audioRef.current.pause();
       setIsPlaying(false);
       return
     }
@@ -57,8 +59,10 @@ const MyAudioPlayer = ({
     if(currentTime >= duration) {
       setCurrentTime(0);
       audioRef.current?.play();
+      return
     }
 
+    audioRef.current.currentTime = currentTime;
     audioRef.current?.play();
   }
 
@@ -66,9 +70,10 @@ const MyAudioPlayer = ({
     if(audioRef.current?.currentTime) {
       audioRef.current.currentTime = Number(value);
       setCurrentTime(Number(value));
+    } else {
+      setCurrentTime(Number(value));
     }
   }
-
 
   return (
     <Stack 
@@ -106,7 +111,6 @@ const MyAudioPlayer = ({
         </Button>
       )}
 
-
       <audio 
         ref={audioRef} 
         onPlay={() => setIsPlaying(true)}
@@ -118,4 +122,4 @@ const MyAudioPlayer = ({
   )
 }
 
-export default MyAudioPlayer;
+export default AudioPlayer;

@@ -1,6 +1,6 @@
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 import { debounce } from "lodash";
 
 interface Props {
@@ -22,9 +22,8 @@ const CanvasWaveform = ({
   const [containerWidth, setContainerWidth] = useState<number | null>(null);
   const [isInteracting, setIsInteracting] = useState(false);
 
-  // TODO total time with data
-  //const [currentTime, setCurrentTime] = useState<number>(0);
-
+  const theme = useTheme();
+  const lineColor = theme.palette.text.primary
   const timePassColor = "rgba(0, 0, 0, 0.4)";
   const timePassLineColor = 'red'
 
@@ -51,20 +50,24 @@ const CanvasWaveform = ({
     async function drawWaveform() {
       if (!ctx) return;
     
-      ctx.strokeStyle = "#ffffff";
+      ctx.strokeStyle = lineColor;
       ctx.lineWidth = 2;
       
       for (let i = 0; i < data.length; i++) {
 
         // Biggere space when it getting smaller
-        let divisor = 1;
+        let divisor = 2;
 
-        if( canvas.width >= 300 && canvas.width < 500) {
-          divisor = 2;
+        if(canvas.width < 350 && canvas.width > 250) {
+          divisor = 3;
         }
 
-        if(canvas.width < 300) {
-          divisor = 3;
+        if(canvas.width <= 250 && canvas.width > 160) {
+          divisor = 4;
+        }
+
+        if(canvas.width <= 160) {
+          divisor = 5;
         }
 
         if(i % divisor !== 0) continue;
@@ -78,7 +81,7 @@ const CanvasWaveform = ({
     }
 
     drawWaveform();
-  }, [containerWidth]);
+  }, [containerWidth, lineColor]);
   
   // Draw timer
   useEffect(() => {

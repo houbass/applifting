@@ -9,7 +9,7 @@ import { formatTimestamp } from "@/utils/utils";
 import { AudioCollectionItem } from "../types";
 
 // Components
-import MyAudioPlayer from "../audio/MyAudioPlayer";
+import AudioPlayer from "../audio/AudioPlayer";
 
 interface Props {
   item: AudioCollectionItem
@@ -60,7 +60,7 @@ const SongCard = ({
           </Typography>
         </Stack>
 
-        <MyAudioPlayer 
+        <AudioPlayer 
           url={item.url}
           waveformData={item.waveform}
           duration={item.duration}
