@@ -10,7 +10,8 @@ export interface FormData {
   projectName: string,
   instrumentSelection: string[],
   styleSelection: string[],
-  audioPreview: AudioPreview | null
+  audioPreview: AudioPreview | null,
+  displayName: string
 }
 
 export interface AudioCollectionItem {

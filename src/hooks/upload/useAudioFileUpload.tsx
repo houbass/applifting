@@ -5,6 +5,7 @@ import { db, storage } from "@/config/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUser } from "@/redux/slices/userSlice";
 import { setAlert } from "@/redux/slices/userSlice";
+import useGetTimelineData from "../firebase/useGetTimelineData";
 
 // Types
 import { FormData } from "@/components/types";
@@ -13,7 +14,10 @@ import { FormData } from "@/components/types";
 import { formatedFileName } from "./utils";
 
 const useAudioFileUpload = () => {
+
+  // Hooks
   const dispatch = useDispatch();
+  const { fetchCollection } = useGetTimelineData();
 
   // States
   const [isUploading, setUploading] = useState(false);
@@ -22,17 +26,22 @@ const useAudioFileUpload = () => {
   const userInfo = useSelector(selectUser);
   const uid = userInfo?.uid;
 
-
-  
   // Utils
   const handleUpload = async ( formData: FormData ) => {
     const projectName = formData.projectName;
     const projectNameFormated = formatedFileName(formData.projectName);
 
+    if(!uid) return
     try{
       if(formData.audioPreview?.file) {
+        const metadata = {
+          customMetadata: {
+            uid: uid, // Store uploader's UID
+          },
+        };
+
         const audioRef = ref(storage, `audio/${uid}/${projectNameFormated}`);
-        const uploadTask = uploadBytesResumable(audioRef, formData.audioPreview?.file);
+        const uploadTask = uploadBytesResumable(audioRef, formData.audioPreview?.file, metadata);
   
         // check if this project already exist    
         const projectId = uid + '_' + projectNameFormated
@@ -88,6 +97,7 @@ const useAudioFileUpload = () => {
                 })
               }
               
+              await fetchCollection();
               setMessage('Project uploaded successfully')
               setUploading(false);
               setProgress(0);

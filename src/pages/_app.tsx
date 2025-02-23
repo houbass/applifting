@@ -7,7 +7,10 @@ import { Provider, useSelector } from 'react-redux';
 import { store } from '@/redux/store';
 import { selectUserCheck } from '@/redux/slices/userSlice';
 import { ThemeProviderWrapper } from '@/contexts/ThemeContext';
+
+// Hooks
 import useAuthListener from '@/hooks/auth/useAuthListener';
+//import useGetUserData from '@/hooks/firebase/useGetUserData';
 
 // Components
 import UserTopNavBar from '@/components/navigation/UserTopNavBar';
@@ -15,12 +18,18 @@ import Snackbar from '@/components/alerts/Snackbar';
 
 const GlobalComponents = () => {
 
-  // Hooks
+  // Hooks 
   const theme = useTheme();
   const userCheck = useSelector(selectUserCheck);
+  //const user = useSelector(selectUser);
+  //const { data: userData } = useGetUserData(user?.uid);
 
   // Check if user is logged in
   useAuthListener()
+
+  //console.log('--- user', user)
+
+  console.log('--- UPDATE CHECK ---')
 
   return(
     <>

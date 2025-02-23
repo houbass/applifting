@@ -12,6 +12,7 @@ import { useRouter } from 'next/router';
 import useGetUserData from '@/hooks/firebase/useGetUserData';
 import useGetUserSongs from '@/hooks/firebase/useGetUserSongs';
 import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
+import { setFilterOut } from '@/redux/slices/dashboardSlice';
 
 // Utils
 import { deleteDocumentById, removeProjectId, deleteFileFromStorage } from '@/utils/firebase';
@@ -34,30 +35,35 @@ const Profile = () => {
 
   // Fetch user data
   const { data, isLoading} = useGetUserData(id);
+
+  // TODO move it to redux (just user profile)
   const { songs, setSongs, isSongsLoading } = useGetUserSongs(id);
 
   // Utils
   const onDelete = async(song: AudioCollectionItem) => {
     // Handle deletion
     if(!id) return;
+    const songId = song.id;
     const collection = 'audio'
     try {
       const filePath = `audio/${id}/${formatedFileName(song.projectName)}`
-      console.log(filePath);
       
       // Delete track from storage
       await deleteFileFromStorage(filePath)
       console.log(`Song deleted successfully.`);
 
       // Delete from collection
-      await deleteDocumentById(collection, song.id);
+      await deleteDocumentById(collection, songId);
       console.log(`Document deleted successfully.`);
 
       // Delete it from user projectIds array
-      await removeProjectId(id, song.id)
+      await removeProjectId(id, songId)
       console.log(`Profile updated successfully.`);
 
-      setSongs(null)
+      setSongs(null);
+
+      // Filterout timeline data if this song is included
+      dispatch(setFilterOut(songId));
 
       // Info message when deleted
       dispatch(setAlert({

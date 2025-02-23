@@ -1,12 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { CircularProgress, Stack, } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selecTimelineData } from "@/redux/slices/dashboardSlice";
 
-// Firebase
-import { getDocs, collection } from "firebase/firestore";
-import { db } from "@/config/firebase";
-
-// Types
-import { AudioCollectionItem } from "@/components/types";
+// Hooks
+import useGetTimelineData from "@/hooks/firebase/useGetTimelineData";
 
 // Components
 import SongCard from "./SongCard";
@@ -14,31 +12,20 @@ import SongCard from "./SongCard";
 // TODO make on scroll fetching
 const Timeline = () => {
 
+  // Hooks
+  const { fetchCollection } = useGetTimelineData();
+
   // States
-  const [data, setData] = useState<AudioCollectionItem[] | null>(null);
-  const [loading, setLoading] = useState(true);
-  
+  const timelineData = useSelector(selecTimelineData);
+
   // Fetch data
   useEffect(() => {
-    if(!data) {
+    if(!timelineData) {
       fetchCollection();
     }
-  }, []);
+  }, [timelineData]);
 
-  // Utils
-  const fetchCollection = async () => {
-    try {
-      const querySnapshot = await getDocs(collection(db, "audio"));
-      const items = querySnapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-      setData(items as AudioCollectionItem[]);
-    } catch (error) {
-      console.error("Error fetching documents: ", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  if(loading) {
+  if(!timelineData) {
     return (
       <Stack justifyContent="center" alignItems="center" height="200px">
         <CircularProgress />
@@ -48,7 +35,7 @@ const Timeline = () => {
 
   return (
     <Stack pt={3} gap={1}>
-      {data?.map((item, index) => {
+      {timelineData?.map((item, index) => {
         return (
           <SongCard 
             key={index}

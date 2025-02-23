@@ -16,6 +16,7 @@ const useGetUserData = (id: string | undefined) => {
 
     const docRef = doc(db, "users", id);
 
+    console.log('--- Fetching user data')
     // Listen for real-time updates
     const unsubscribe = onSnapshot(docRef, (docSnap) => {
       if (docSnap.exists()) {

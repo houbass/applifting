@@ -12,7 +12,6 @@ const useAuthListener = () => {
     useEffect(() => {
       const unsubscribe = onAuthStateChanged(auth, (currentUser: User | null) => {
         dispatch(setUserCheck(true));
-    
         if (currentUser) {
           const userData = {
             displayName: currentUser.displayName as string,
@@ -20,6 +19,7 @@ const useAuthListener = () => {
             uid: currentUser.uid as string
           }
           // User is logged in
+          console.log('--- In LISTENER', userData)
           dispatch(setUser(userData));
           
         } else {

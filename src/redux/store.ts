@@ -2,10 +2,12 @@ import { configureStore, combineReducers } from '@reduxjs/toolkit';
 
 // Slices
 import userReducer from "./slices/userSlice";
+import dashboardReducer from "./slices/dashboardSlice";
 
 
 const rootReducer = combineReducers({
   user: userReducer,
+  dashboard: dashboardReducer,
 });
 
 // Configure the Redux store
