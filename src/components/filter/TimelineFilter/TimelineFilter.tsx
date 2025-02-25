@@ -1,11 +1,13 @@
 import React, { useMemo, useState } from "react";
-import { Box, Button } from "@mui/material";
+import Link from "next/link";
+import { Box, Button, Stack } from "@mui/material";
 import FilterDialog from "./FilterDialog";
 import ChipFieldItem from "../ChipFieldItem";
 
 const btnStyle = {
   fontSize: "10px",
   padding: '5px 10px',
+  textAlign: 'center'
 }
 
 const TimelineFilter = () => {
@@ -38,22 +40,48 @@ const TimelineFilter = () => {
   }
 
   return (
-    <Box 
-      my={1}
-    >
-      <Box
-        mb={1} 
-        mr={1}
-        display="inline-block"
+    <>
+      <Box 
+        my={1}
       >
-        <Button 
-          variant="outlined"
-          color="info"
-          sx={btnStyle}
-          onClick={handleClickOpen}
+        <Stack
+          mb={1} 
+          gap={2}
+          flexDirection="row"
+          justifyContent="space-between"
         >
-          filter by instruments & styles
-        </Button>
+          <Button 
+            variant="outlined"
+            color="info"
+            sx={btnStyle}
+            onClick={handleClickOpen}
+          >
+            filter by instruments & styles
+          </Button>
+
+          <Link href="/createproject" passHref legacyBehavior>
+            <Button 
+              variant="outlined"
+              color="error"
+              sx={btnStyle}
+            >
+              create collab
+            </Button>
+          </Link>
+        </Stack>
+
+        <Box>
+          {arr.map(item => (
+            <ChipFieldItem 
+              key={item + 'yoman'}
+              label={item}
+              onClick={() => null}
+              onDelete={() => onDelete(item)}
+              size="medium"
+              color="primary"
+            />
+          ))}
+        </Box>
       </Box>
 
       <FilterDialog
@@ -64,19 +92,7 @@ const TimelineFilter = () => {
         styleSelection={styleSelection}
         setStyleSelection={setStyleSelection}
       />
-
-      {arr.map(item => (
-        <ChipFieldItem 
-          key={item + 'yoman'}
-          label={item}
-          onClick={() => null}
-          onDelete={() => onDelete(item)}
-          size="medium"
-          color="primary"
-        />
-      ))}
-
-    </Box>
+    </>
   )
 }
 
