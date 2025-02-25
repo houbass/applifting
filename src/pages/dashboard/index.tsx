@@ -1,12 +1,13 @@
 import React from "react";
 import Link from 'next/link';
-import { Box, Button, Card, Stack } from '@mui/material';
+import { Box, Button, Card, Divider, Stack } from '@mui/material';
 import useHomeRedirect from '@/hooks/redirects/useHomeRedirect';
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
 import Timeline from "@/components/content/Timeline";
+import TimelineFilter from "@/components/filter/TimelineFilter/TimelineFilter";
 
 export default function Dashboard() {
 
@@ -19,6 +20,8 @@ export default function Dashboard() {
 
       { user && userCheck && (
         <PageLayout>
+          <TimelineFilter />
+          <Divider />     
 
           <Card sx={{marginTop: "16px"}}>
             <Stack 

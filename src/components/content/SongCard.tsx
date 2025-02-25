@@ -20,6 +20,7 @@ import { AudioCollectionItem } from "../types";
 
 // Components
 import AudioPlayer from "../audio/AudioPlayer";
+import ChipFieldItem from "../filter/ChipFieldItem";
 
 interface Props {
   item: AudioCollectionItem
@@ -176,14 +177,10 @@ const SongCard = ({
             <Box > 
               {item.style.map(style => {
                 return (
-                  <Box 
+                  <ChipFieldItem 
                     key={style}
-                    mb={1} 
-                    mr={1}
-                    display="inline-block"
-                  >
-                    <Chip color="default" label={style} size="small" />
-                  </Box>
+                    label={style}
+                  />
                 )
               })}
             </Box>

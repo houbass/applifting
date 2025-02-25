@@ -20,7 +20,7 @@ import { scrollIn } from "../../utils/utils";
 import { INSTRUMENTS, STYLES } from "@/constants/globalConstants";
 
 // Components
-import ChipField from "@/components/ChipField";
+import ChipField from "@/components/filter/ChipField";
 import DragAndDropAudio from "../inputs/DragAndDropAudio";
 
 const defaultFormData = {

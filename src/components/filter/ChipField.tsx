@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Box, Chip, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
+import ChipFieldItem from "./ChipFieldItem";
 
 interface Props {
   list: string[]
@@ -18,7 +19,8 @@ const ChipField = ({
   const dispatch = useDispatch()
 
   // States
-  const [currentList, setCurrentList] = useState<string[]>(list);
+  const initialList = list.filter(item => !selection.includes(item))
+  const [currentList, setCurrentList] = useState<string[]>(initialList);
   currentList.sort();
   
   // Utils
@@ -27,7 +29,7 @@ const ChipField = ({
     // Max 3elements
     if(selection.length > 2) {
       dispatch(setAlert({
-        text: `you can't select more than 3 ${title}`,
+        text: `you can select maximum 3 ${title}`,
         type: 'error'
       }))
     } else {
@@ -55,19 +57,14 @@ const ChipField = ({
         <Box>
           {selection.map(item => {
             return (
-              <Box 
+              <ChipFieldItem 
                 key={item}
-                mb={1} 
-                mr={1}
-                display="inline-block"
-              >
-                <Chip 
-                  color="primary"
-                  label={item}
-                  onClick={() => instrumentDelete(item)}
-                  onDelete={() => instrumentDelete(item)}
-                />
-              </Box>
+                label={item}
+                onClick={() => instrumentHandler(item)}
+                onDelete={() => instrumentDelete(item)}
+                size="medium"
+                color="primary"
+              />
             )
           })}
         </Box>
@@ -76,18 +73,11 @@ const ChipField = ({
       <Box>
         {currentList.map(item => {
           return (
-            <Box 
+            <ChipFieldItem 
               key={item}
-              mb={1} 
-              mr={1}
-              display="inline-block"
-            >
-              <Chip 
-                color="default"
-                label={item}
-                onClick={() => instrumentHandler(item)}
-              />
-            </Box>
+              label={item}
+              onClick={() => instrumentHandler(item)}
+            />
           )
         })}
       </Box>
