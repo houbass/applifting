@@ -1,16 +1,21 @@
 import React, { useState } from "react";
 import { Box, Chip, Stack, Typography } from "@mui/material";
+import { useDispatch } from "react-redux";
+import { setAlert } from "@/redux/slices/userSlice";
 
 interface Props {
   list: string[]
   selection: string[]
   setSelection: (value: string[]) => void
   label: string
+  title: string
 }
 
 const ChipField = ({
-  list, selection, setSelection, label
+  list, selection, setSelection, label, title
 }: Props) => {
+
+  const dispatch = useDispatch()
 
   // States
   const [currentList, setCurrentList] = useState<string[]>(list);
@@ -18,10 +23,19 @@ const ChipField = ({
   
   // Utils
   function instrumentHandler(selected: string) {
-    setSelection([...selection, selected]);
-    setCurrentList(
-      currentList.filter(item => item !== selected)
-    );
+
+    // Max 3elements
+    if(selection.length > 2) {
+      dispatch(setAlert({
+        text: `you can't select more than 3 ${title}`,
+        type: 'error'
+      }))
+    } else {
+      setSelection([...selection, selected]);
+      setCurrentList(
+        currentList.filter(item => item !== selected)
+      );
+    }
   }
 
   function instrumentDelete(selected: string) {

@@ -26,13 +26,52 @@ const useAudioFileUpload = () => {
   const [isUploading, setUploading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState('');
+
+  function formatString(text: string) {
+    return text.split(' ').join('_');
+  }
+
+  function formatStringArr(textArr: string[]) {
+    const formatedStrings = textArr.map(item => formatString(item));
+    return formatedStrings
+  }
+
+  function getCombinations(instruments: string[] | undefined, styles: string[] | undefined) {
+    const thisInstruments = instruments ? [...instruments].sort() : [];
+    const thisStyles = styles ? [...styles].sort() : [];
+    const joinedArrays = thisInstruments.concat(thisStyles);
+    const formatedArr = formatStringArr(joinedArrays);
+    const result: string[] = [];
+    
+    // Generate all combinations
+    const generateCombinations = (start: number, currentCombination: string[]) => {
+        if (currentCombination.length > 0) {
+            result.push(currentCombination.join('-'));
+        }
+        
+        for (let i = start; i < formatedArr.length; i++) {
+            currentCombination.push(formatedArr[i]);
+            generateCombinations(i + 1, currentCombination);
+            currentCombination.pop();
+        }
+    };
+    
+    if(joinedArrays.length > 0) {
+      // Start generating from the first element
+      generateCombinations(0, []);
+    }
+
+    return result;
+  }
   
   // Utils
   const handleUpload = async ( formData: FormData ) => {
-    const projectName = formData.projectName;
-    const projectNameFormated = formatedFileName(formData.projectName);
-
     if(!uid) return
+
+    const { projectName, instrumentSelection, styleSelection, description, audioPreview } = formData;
+    const projectNameFormated = formatedFileName(projectName);
+    const searchTags = getCombinations(instrumentSelection, styleSelection);
+
     try{
       if(formData.audioPreview?.file) {
         const metadata = {
@@ -84,15 +123,16 @@ const useAudioFileUpload = () => {
                   projectName: projectName,
                   url: downloadURL,
                   uid: uid,
-                  instruments: formData.instrumentSelection,
-                  style: formData.styleSelection,
+                  instruments: instrumentSelection,
+                  style: styleSelection,
                   timeStamp: Date.now(),
-                  duration: formData.audioPreview?.duration,
-                  waveform: formData.audioPreview?.waveform,
+                  duration: audioPreview?.duration,
+                  waveform: audioPreview?.waveform,
                   userName: userName,
                   userPhotoURL: userData.photoURL,
                   coverURL: '',
-                  description: formData.description
+                  description,
+                  searchTags,
                 })
     
                 const userRef = doc(db, "users", uid)

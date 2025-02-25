@@ -31,7 +31,8 @@ const userSlice = createSlice({
       state.userCheck = action.payload;
     },
     setAlert: (state, action: PayloadAction<Alert | null>) => {
-      state.alert = action.payload;
+      const value = action.payload
+      state.alert = value ? {...value, text: value.text.toUpperCase()} : null;
     },
     setUserData: (state, action: PayloadAction<UserDataType | null>) => {
       state.userData = action.payload;

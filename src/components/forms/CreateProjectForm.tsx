@@ -31,6 +31,9 @@ const defaultFormData = {
   description: '',
 }
 
+const MAX_PROJECTNAME_LENGTH = 40;
+const MAX_DESCRIPTION_LENGTH = 300;
+
 const CreateProjectForm = () => {
 
   // Hooks
@@ -67,6 +70,7 @@ const CreateProjectForm = () => {
       }))
 
       scrollIn(projectNameRef.current);
+      return
     } else if (instrumentSelection.length === 0 && instrumentsRef.current) {
       dispatch(setAlert({
         text: "Selecet what you looking for",
@@ -74,6 +78,7 @@ const CreateProjectForm = () => {
       }))
 
       scrollIn(instrumentsRef.current);
+      return
     } else if (description.length === 0 && descriptionRef.current) {
       dispatch(setAlert({
         text: "Describe your project",
@@ -81,6 +86,7 @@ const CreateProjectForm = () => {
       }))
 
       scrollIn(descriptionRef.current);
+      return
     } else if (styleSelection.length === 0 && styleRef.current) {
       dispatch(setAlert({
         text: "Select what genre is your demo",
@@ -88,17 +94,43 @@ const CreateProjectForm = () => {
       }))
 
       scrollIn(styleRef.current);
+      return
     } else if (!audioPreview && audioRef.current) {
       dispatch(setAlert({
         text: "Add your demo",
         type: "error"
       }))
 
-      scrollIn(audioRef.current); 
+      scrollIn(audioRef.current);
+      return 
     } else {
       if(audioPreview && audioPreview.waveform) {
         handleUpload(formData)
       }
+    }
+  }
+
+  function projectNameOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    if(value.length < MAX_PROJECTNAME_LENGTH) {
+      setFormData({ ...formData , projectName: e.target.value });
+    } else {
+      dispatch(setAlert({
+        text: "project name is too long",
+        type: "error"
+      }))
+    }
+  }
+
+  function descriptionOnChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const value = e.target.value;
+    if(value.length < MAX_DESCRIPTION_LENGTH) {
+      setFormData({ ...formData , description: value });
+    } else {
+      dispatch(setAlert({
+        text: "description is too long",
+        type: "error"
+      }))
     }
   }
 
@@ -128,7 +160,7 @@ const CreateProjectForm = () => {
           placeholder="Name your project"
           variant="outlined" 
           value={projectName}
-          onChange={(e) => setFormData({ ...formData , projectName: e.target.value })}
+          onChange={projectNameOnChange}
         />
       </Stack>
     
@@ -143,6 +175,7 @@ const CreateProjectForm = () => {
           selection={instrumentSelection}
           setSelection={(arr) => setFormData({ ...formData , instrumentSelection: arr })}
           label="select What you looking for"
+          title="instruments"
         />
       </Box>
 
@@ -157,6 +190,7 @@ const CreateProjectForm = () => {
           selection={styleSelection}
           setSelection={(arr) => setFormData({ ...formData , styleSelection: arr })}
           label="Select Genre"
+          title="styles"
         />
       </Box>
 
@@ -178,7 +212,7 @@ const CreateProjectForm = () => {
           fullWidth
           variant="outlined"
           value={description}
-          onChange={(e) => setFormData({ ...formData , description: e.target.value })}
+          onChange={descriptionOnChange}
         />
       </Stack>
 

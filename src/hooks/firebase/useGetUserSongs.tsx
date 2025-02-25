@@ -17,21 +17,32 @@ const useGetUserSongs = (id: string | undefined) => {
   async function fetchUserSongs(id: string, setSongs: (value: AudioCollectionItem[]) => void) {
     setIsSongsLoading(true)
     try {
-        const q = query(
-          collection(db, "audio"), 
-          where("uid", "==", id),
-          orderBy("timeStamp", "desc"),
-          limit(10)
-        );
 
-        const querySnapshot = await getDocs(q);
-        const docs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      // TODO WHEN FILTERING
+      /*
+      const q = query(
+        collection(db, "audio"), 
+        where("searchArr", "array-contains", searchValue),  // Checks if searchArr contains searchValue
+        orderBy("timeStamp", "desc"),
+        limit(10)
+      );
+      */
 
-        setSongs(docs as AudioCollectionItem[]);
-        setIsSongsLoading(false);
+      const q = query(
+        collection(db, "audio"), 
+        where("uid", "==", id),
+        orderBy("timeStamp", "desc"),
+        limit(10)
+      );
+
+      const querySnapshot = await getDocs(q);
+      const docs = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+      setSongs(docs as AudioCollectionItem[]);
+      setIsSongsLoading(false);
     } catch (error) {
-        console.error("Error fetching documents: ", error);
-        setIsSongsLoading(false);
+      console.error("Error fetching documents: ", error);
+      setIsSongsLoading(false);
     }
   };
 
