@@ -21,7 +21,6 @@ const TimelineFilter = () => {
   const [open, setOpen] = useState(false);
   const { instruments, styles } = useSelector(selectFilterData)
 
-  
   const arr = useMemo(() => {
     return instruments.concat(styles)
   }, [instruments, styles])
@@ -57,10 +56,11 @@ const TimelineFilter = () => {
   return (
     <>
       <Box 
-        my={1}
+        mt={1}
+        mb={arr.length > 0 ? 0 : 1}
       >
         <Stack
-          mb={1} 
+          mb={arr.length > 0 ? 1 : 0} 
           gap={2}
           flexDirection="row"
           justifyContent="space-between"

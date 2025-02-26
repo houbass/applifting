@@ -49,7 +49,7 @@ const FilterDialog = ({ open, onClose }: Props) => {
             list={INSTRUMENTS} 
             selection={instruments}
             setSelection={setInstruments}
-            label="select What you looking for"
+            label="Select Instrument"
             title="instruments"
           />
 

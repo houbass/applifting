@@ -11,6 +11,8 @@ import {
   Typography, 
   useTheme 
 } from "@mui/material";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/slices/userSlice";
 
 // Utils
 import { formatTimestamp } from "@/utils/utils";
@@ -34,8 +36,11 @@ const SongCard = ({
 }: Props) => {
 
   // States
-  const { userName, description, userPhotoURL } = item;
+  const { userName, description, userPhotoURL, uid } = item;
   const firstLetter = userName[0].toUpperCase();
+  const user = useSelector(selectUser);
+  const userId = user?.uid;
+  const isOwner = uid === userId;
   
   // Colors
   const theme = useTheme();
@@ -97,12 +102,14 @@ const SongCard = ({
             
           </Stack>
 
-          <Button 
-            size="small" 
-            variant="contained"
-          >
-            lets collab
-          </Button>
+          {!isOwner && (
+            <Button 
+              size="small" 
+              variant="contained"
+            >
+              lets collab
+            </Button>
+          )}
         </Stack>       
 
         <Divider />
