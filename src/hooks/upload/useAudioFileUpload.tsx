@@ -5,19 +5,17 @@ import { db, storage } from "@/config/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserData } from "@/redux/slices/userSlice";
 import { setAlert } from "@/redux/slices/userSlice";
-import useGetTimelineData from "../firebase/useGetTimelineData";
 
 // Types
 import { FormData } from "@/components/types";
 
 // Utils
-import { formatedFileName } from "./utils";
+import { formatedFileName, getSearchCombinations } from "./utils";
 
 const useAudioFileUpload = () => {
 
   // Hooks
   const dispatch = useDispatch();
-  const { fetchCollection } = useGetTimelineData();
 
   // States
   const userData = useSelector(selectUserData);
@@ -27,42 +25,6 @@ const useAudioFileUpload = () => {
   const [progress, setProgress] = useState(0);
   const [message, setMessage] = useState('');
 
-  function formatString(text: string) {
-    return text.split(' ').join('_');
-  }
-
-  function formatStringArr(textArr: string[]) {
-    const formatedStrings = textArr.map(item => formatString(item));
-    return formatedStrings
-  }
-
-  function getCombinations(instruments: string[] | undefined, styles: string[] | undefined) {
-    const thisInstruments = instruments ? [...instruments].sort() : [];
-    const thisStyles = styles ? [...styles].sort() : [];
-    const joinedArrays = thisInstruments.concat(thisStyles);
-    const formatedArr = formatStringArr(joinedArrays);
-    const result: string[] = [];
-    
-    // Generate all combinations
-    const generateCombinations = (start: number, currentCombination: string[]) => {
-        if (currentCombination.length > 0) {
-            result.push(currentCombination.join('-'));
-        }
-        
-        for (let i = start; i < formatedArr.length; i++) {
-            currentCombination.push(formatedArr[i]);
-            generateCombinations(i + 1, currentCombination);
-            currentCombination.pop();
-        }
-    };
-    
-    if(joinedArrays.length > 0) {
-      // Start generating from the first element
-      generateCombinations(0, []);
-    }
-
-    return result;
-  }
   
   // Utils
   const handleUpload = async ( formData: FormData ) => {
@@ -70,7 +32,7 @@ const useAudioFileUpload = () => {
 
     const { projectName, instrumentSelection, styleSelection, description, audioPreview } = formData;
     const projectNameFormated = formatedFileName(projectName);
-    const searchTags = getCombinations(instrumentSelection, styleSelection);
+    const searchTags = getSearchCombinations(instrumentSelection, styleSelection);
 
     try{
       if(formData.audioPreview?.file) {
@@ -141,7 +103,6 @@ const useAudioFileUpload = () => {
                 })
               }
               
-              await fetchCollection();
               setMessage('Project uploaded successfully')
               setUploading(false);
               setProgress(0);

@@ -1,6 +1,10 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
 import { Box, Button, Stack } from "@mui/material";
+import { useSelector, useDispatch } from "react-redux";
+import { selectFilterData, setFilterData } from "@/redux/slices/dashboardSlice";
+
+// Components
 import FilterDialog from "./FilterDialog";
 import ChipFieldItem from "../ChipFieldItem";
 
@@ -11,15 +15,16 @@ const btnStyle = {
 }
 
 const TimelineFilter = () => {
+  const dispatch = useDispatch();
 
   // States
   const [open, setOpen] = useState(false);
-  const [instrumentSelection, setInstrumentSelection] = useState<string[]>([]); 
-  const [styleSelection, setStyleSelection] = useState<string[]>([]); 
+  const { instruments, styles } = useSelector(selectFilterData)
+
   
   const arr = useMemo(() => {
-    return instrumentSelection.concat(styleSelection)
-  }, [instrumentSelection, styleSelection])
+    return instruments.concat(styles)
+  }, [instruments, styles])
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -30,12 +35,22 @@ const TimelineFilter = () => {
   };
 
   function onDelete(item: string) {
-    const isInstument = instrumentSelection.includes(item);
+    const isInstrument = instruments.includes(item);
 
-    if(isInstument) {
-      setInstrumentSelection(instrumentSelection.filter(ins => ins !== item));
+    if(isInstrument) {
+      dispatch(
+        setFilterData({
+          instruments: instruments.filter(ins => ins !== item),
+          styles
+        })
+      )
     } else {
-      setStyleSelection(styleSelection.filter(style => style !== item));
+      dispatch(
+        setFilterData({
+          instruments,
+          styles: styles.filter(style => style !== item)
+        })
+      )
     }
   }
 
@@ -87,10 +102,6 @@ const TimelineFilter = () => {
       <FilterDialog
         open={open}
         onClose={handleClose}
-        instrumentSelection={instrumentSelection}
-        setInstrumentSelection={setInstrumentSelection}
-        styleSelection={styleSelection}
-        setStyleSelection={setStyleSelection}
       />
     </>
   )

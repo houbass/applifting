@@ -1,28 +1,35 @@
 import React from 'react';
-
 import { Dialog, Stack, IconButton, Box } from '@mui/material';
 import { Close } from "@mui/icons-material";
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFilterData, setFilterData } from '@/redux/slices/dashboardSlice';
+
+// Constants
+import { INSTRUMENTS, STYLES } from '@/constants/globalConstants';
+
+// Components
 import ChipField from '../ChipField';
 
-import { INSTRUMENTS, STYLES } from '@/constants/globalConstants';
 
 export interface Props {
   open: boolean;
   onClose: () => void;
-  instrumentSelection: string[]
-  setInstrumentSelection: (value: string[]) => void
-  styleSelection: string[]
-  setStyleSelection: (value: string[]) => void
 }
 
-const FilterDialog = ({ 
-  open, 
-  onClose, 
-  instrumentSelection, 
-  setInstrumentSelection, 
-  styleSelection,
-  setStyleSelection  
-}: Props) => {
+const FilterDialog = ({ open, onClose }: Props) => {
+  const dispatch = useDispatch();
+
+  // Stats
+  const { instruments, styles } = useSelector(selectFilterData)
+
+  // Utils
+  function setInstruments(instruments: string[]) {
+    dispatch(setFilterData({ instruments, styles }));
+  }
+
+  function setStyles(styles: string[]) {
+    dispatch(setFilterData({ instruments, styles }));
+  }
 
   const handleClose = () => {
     onClose();
@@ -40,16 +47,16 @@ const FilterDialog = ({
         <Stack px={2} pb={4} gap={2}>
           <ChipField
             list={INSTRUMENTS} 
-            selection={instrumentSelection}
-            setSelection={setInstrumentSelection}
+            selection={instruments}
+            setSelection={setInstruments}
             label="select What you looking for"
             title="instruments"
           />
 
           <ChipField
             list={STYLES} 
-            selection={styleSelection}
-            setSelection={setStyleSelection}
+            selection={styles}
+            setSelection={setStyles}
             label="Select Genre"
             title="styles"
           />

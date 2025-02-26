@@ -6,11 +6,13 @@ import { CircularProgress , useTheme } from '@mui/material';
 import { Provider, useSelector, useDispatch } from 'react-redux';
 import { store } from '@/redux/store';
 import { selectUser, selectUserCheck, setUserData, selectUserData } from '@/redux/slices/userSlice';
+import { selectFilterData } from '@/redux/slices/dashboardSlice';
 import { ThemeProviderWrapper } from '@/contexts/ThemeContext';
 
 // Hooks
 import useAuthListener from '@/hooks/auth/useAuthListener';
 import useGetUserData from '@/hooks/firebase/useGetUserData';
+import useGetTimelineData from '@/hooks/firebase/useGetTimelineData';
 
 // Components
 import UserTopNavBar from '@/components/navigation/UserTopNavBar';
@@ -23,10 +25,14 @@ const GlobalComponents = () => {
   useAuthListener()
   const dispatch = useDispatch();
   const theme = useTheme();
+  const { fetchTimeline } = useGetTimelineData();
+
+  // States
   const user = useSelector(selectUser);
   const userCheck = useSelector(selectUserCheck);
   const userDataRedux = useSelector(selectUserData)
   const { data: userData } = useGetUserData(user?.uid);
+  const filterData = useSelector(selectFilterData);
 
   useEffect(() => {
     if(userData) {
@@ -39,6 +45,14 @@ const GlobalComponents = () => {
     }
   }, [userData])
 
+
+  // Fetch timeline data
+  useEffect(() => {
+    if(userDataRedux) {
+      fetchTimeline();
+    }
+  }, [userDataRedux, filterData]);
+  
   return(
     <>
       {!userCheck && (

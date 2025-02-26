@@ -17,17 +17,6 @@ const useGetUserSongs = (id: string | undefined) => {
   async function fetchUserSongs(id: string, setSongs: (value: AudioCollectionItem[]) => void) {
     setIsSongsLoading(true)
     try {
-
-      // TODO WHEN FILTERING
-      /*
-      const q = query(
-        collection(db, "audio"), 
-        where("searchArr", "array-contains", searchValue),  // Checks if searchArr contains searchValue
-        orderBy("timeStamp", "desc"),
-        limit(10)
-      );
-      */
-
       const q = query(
         collection(db, "audio"), 
         where("uid", "==", id),

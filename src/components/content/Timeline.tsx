@@ -1,29 +1,16 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { CircularProgress, Stack, } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selecTimelineData } from "@/redux/slices/dashboardSlice";
-
-// Hooks
-import useGetTimelineData from "@/hooks/firebase/useGetTimelineData";
 
 // Components
 import SongCard from "./SongCard";
 
 // TODO make on scroll fetching
 const Timeline = () => {
-
-  // Hooks
-  const { fetchCollection } = useGetTimelineData();
-
+  
   // States
   const timelineData = useSelector(selecTimelineData);
-
-  // Fetch data
-  useEffect(() => {
-    if(!timelineData) {
-      fetchCollection();
-    }
-  }, [timelineData]);
 
   if(!timelineData) {
     return (
