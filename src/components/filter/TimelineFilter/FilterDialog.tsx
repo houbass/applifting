@@ -1,4 +1,5 @@
 import React from 'react';
+import { useRouter } from 'next/router';
 import { Dialog, Stack, IconButton, Box } from '@mui/material';
 import { Close } from "@mui/icons-material";
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,16 +19,36 @@ export interface Props {
 
 const FilterDialog = ({ open, onClose }: Props) => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   // Stats
   const { instruments, styles } = useSelector(selectFilterData)
 
   // Utils
   function setInstruments(instruments: string[]) {
+
+    // Put it to URL params
+    router.push({
+      query: {
+        filter: JSON.stringify({
+          instruments,
+          styles
+        })
+      }
+    })
     dispatch(setFilterData({ instruments, styles }));
   }
 
   function setStyles(styles: string[]) {
+    // Put it to URL params
+    router.push({
+      query: {
+        filter: JSON.stringify({
+          instruments,
+          styles
+        })
+      }
+    })
     dispatch(setFilterData({ instruments, styles }));
   }
 

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import { Box, Button, Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { selectFilterData, setFilterData } from "@/redux/slices/dashboardSlice";
@@ -16,15 +17,20 @@ const btnStyle = {
 
 const TimelineFilter = () => {
   const dispatch = useDispatch();
+  const router = useRouter();
 
   // States
+  const { filter } = router.query
+  const urlData = filter && JSON.parse(filter as string)
+  console.log('--- filter', (urlData))
+
   const [open, setOpen] = useState(false);
   const { instruments, styles } = useSelector(selectFilterData)
-
   const arr = useMemo(() => {
     return instruments.concat(styles)
   }, [instruments, styles])
 
+  // Utils
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -37,13 +43,34 @@ const TimelineFilter = () => {
     const isInstrument = instruments.includes(item);
 
     if(isInstrument) {
+      const filterObj = {
+        instruments: instruments.filter(ins => ins !== item),
+        styles
+      }
+
+      // Put it to URL params
+      router.push({
+        query: {
+          filter: JSON.stringify(filterObj)
+        }
+      })
+
       dispatch(
-        setFilterData({
-          instruments: instruments.filter(ins => ins !== item),
-          styles
-        })
+        setFilterData(filterObj)
       )
     } else {
+      const filterObj = {
+        instruments,
+        styles: styles.filter(style => style !== item)
+      }
+
+      // Put it to URL params
+      router.push({
+        query: {
+          filter: JSON.stringify(filterObj)
+        }
+      })
+
       dispatch(
         setFilterData({
           instruments,
