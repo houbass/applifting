@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { Box, Button, Stack } from "@mui/material";
 import { useSelector, useDispatch } from "react-redux";
 import { selectFilterData, setFilterData } from "@/redux/slices/dashboardSlice";
+import { useTranslations } from "next-intl";
 
 // Hooks
 import useGetFilterUrlParams from "@/hooks/timelineFilter/useGetFilterUrlParams";
@@ -19,11 +20,13 @@ const btnStyle = {
 };
 
 const TimelineFilter = () => {
+  // Hooks
+  const t = useTranslations("timelineFilter");
   const dispatch = useDispatch();
   const router = useRouter();
-  const { urlInstruments, urlStyles } = useGetFilterUrlParams();
 
   // States
+  const { urlInstruments, urlStyles } = useGetFilterUrlParams();
   const [open, setOpen] = useState(false);
   const { instruments, styles } = useSelector(selectFilterData);
   const arr = useMemo(() => {
@@ -113,12 +116,12 @@ const TimelineFilter = () => {
             sx={btnStyle}
             onClick={handleClickOpen}
           >
-            filter by instruments & styles
+            {t("filter by instruments & styles")}
           </Button>
 
           <Link href="/createproject" passHref legacyBehavior>
             <Button variant="outlined" color="error" sx={btnStyle}>
-              create collab
+              {t("create collab")}
             </Button>
           </Link>
         </Stack>
@@ -126,7 +129,7 @@ const TimelineFilter = () => {
         <Box>
           {arr.map((item) => (
             <ChipFieldItem
-              key={item + "yoman"}
+              key={item}
               label={item}
               onClick={() => null}
               onDelete={() => onDelete(item)}

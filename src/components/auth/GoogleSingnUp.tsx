@@ -1,15 +1,21 @@
-import React from 'react';
-import { Button, Box } from '@mui/material';
+import React from "react";
+import { Button, Box } from "@mui/material";
+
+// Hooks
+import { useTranslations } from "next-intl";
 
 // Firebase
-import { signInWithPopup } from 'firebase/auth';
-import { auth, googleProvider, db } from '@/config/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { signInWithPopup } from "firebase/auth";
+import { auth, googleProvider, db } from "@/config/firebase";
+import { doc, getDoc, setDoc } from "firebase/firestore";
 
 // Utils
-import { getSearchNameArr } from './utils';
+import { getSearchNameArr } from "./utils";
 
 const GoogleSignUp = () => {
+  // Hooks
+  const t = useTranslations("signInUp");
+
   const handleGoogleSignUp = async () => {
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
@@ -23,7 +29,7 @@ const GoogleSignUp = () => {
 
       if (!userSnap.exists()) {
         // If First time sign-in → Save user data in Firestore
-        const uid = user.uid
+        const uid = user.uid;
         await setDoc(userRef, {
           uid: uid,
           follow: [],
@@ -31,16 +37,15 @@ const GoogleSignUp = () => {
           likes: [],
           projectIds: [],
           userName: displayName,
-          searchArr: getSearchNameArr(displayName), 
-          photoURL: user.photoURL
+          searchArr: getSearchNameArr(displayName),
+          photoURL: user.photoURL,
         });
       }
-
     } catch (error) {
       if (error instanceof Error) {
-        console.error('Error signing in with Google:', error.message);
+        console.error("Error signing in with Google:", error.message);
       } else {
-        console.error('Unexpected error', error);
+        console.error("Unexpected error", error);
       }
     }
   };
@@ -48,10 +53,9 @@ const GoogleSignUp = () => {
   return (
     <Box>
       <Button fullWidth variant="contained" onClick={handleGoogleSignUp}>
-        Sign Up with Google
+        {t("Sign Up with Google")}
       </Button>
     </Box>
-
   );
 };
 

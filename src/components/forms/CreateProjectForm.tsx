@@ -1,5 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Box, Button, Stack, TextField, Modal, Typography, CircularProgress  } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  TextField,
+  Modal,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import CircularProgressWithLabel from "../progress/CircularProgressWithLabel";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
@@ -8,6 +16,7 @@ import { useTheme } from "@mui/material";
 // Hooks
 import useAudioFileUpload from "@/hooks/upload/useAudioFileUpload";
 import useRedirect from "@/hooks/redirects/useRedirect";
+import { useTranslations } from "next-intl";
 
 // Constants
 import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
@@ -24,19 +33,20 @@ import ChipField from "@/components/filter/ChipField";
 import DragAndDropAudio from "../inputs/DragAndDropAudio";
 
 const defaultFormData = {
-  projectName: '',
+  projectName: "",
   instrumentSelection: [],
   styleSelection: [],
   audioPreview: null,
-  description: '',
-}
+  description: "",
+};
 
 const MAX_PROJECTNAME_LENGTH = 40;
 const MAX_DESCRIPTION_LENGTH = 300;
 
 const CreateProjectForm = () => {
-
   // Hooks
+  const t = useTranslations("createCollab");
+  const tTimeline = useTranslations("timelineFilter");
   const dispatch = useDispatch();
   const { goToDashboard } = useRedirect();
   const theme = useTheme();
@@ -48,89 +58,109 @@ const CreateProjectForm = () => {
   const styleRef = useRef<HTMLInputElement>(null);
   const descriptionRef = useRef<HTMLInputElement>(null);
   const audioRef = useRef<HTMLInputElement>(null);
-  
+
   // States
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [formData, setFormData] = useState<FormData>(defaultFormData); 
-  const { projectName, instrumentSelection, styleSelection, audioPreview, description } = formData;
+  const [formData, setFormData] = useState<FormData>(defaultFormData);
+  const {
+    projectName,
+    instrumentSelection,
+    styleSelection,
+    audioPreview,
+    description,
+  } = formData;
 
   // Modal turnOn
   useEffect(() => {
-    if(isUploading) {
-      setIsModalOpen(true)
+    if (isUploading) {
+      setIsModalOpen(true);
     }
-  }, [isUploading])
+  }, [isUploading]);
 
   // Utils
   function validation() {
-    if(projectName.length === 0 && projectNameRef.current) {
-      dispatch(setAlert({
-        text: "Project name is required",
-        type: "error"
-      }))
+    if (projectName.length === 0 && projectNameRef.current) {
+      dispatch(
+        setAlert({
+          text: t("Project name is required"),
+          type: "error",
+        })
+      );
 
       scrollIn(projectNameRef.current);
-      return
+      return;
     } else if (instrumentSelection.length === 0 && instrumentsRef.current) {
-      dispatch(setAlert({
-        text: "Selecet what you looking for",
-        type: "error"
-      }))
+      dispatch(
+        setAlert({
+          text: t("Selecet what instruments you looking for"),
+          type: "error",
+        })
+      );
 
       scrollIn(instrumentsRef.current);
-      return
+      return;
     } else if (description.length === 0 && descriptionRef.current) {
-      dispatch(setAlert({
-        text: "Describe your project",
-        type: "error"
-      }))
+      dispatch(
+        setAlert({
+          text: t("Describe your project"),
+          type: "error",
+        })
+      );
 
       scrollIn(descriptionRef.current);
-      return
+      return;
     } else if (styleSelection.length === 0 && styleRef.current) {
-      dispatch(setAlert({
-        text: "Select what genre is your demo",
-        type: "error"
-      }))
+      dispatch(
+        setAlert({
+          text: t("Select what genre is your demo"),
+          type: "error",
+        })
+      );
 
       scrollIn(styleRef.current);
-      return
+      return;
     } else if (!audioPreview && audioRef.current) {
-      dispatch(setAlert({
-        text: "Add your demo",
-        type: "error"
-      }))
+      dispatch(
+        setAlert({
+          text: t("Add your demo"),
+          type: "error",
+        })
+      );
 
       scrollIn(audioRef.current);
-      return 
+      return;
     } else {
-      if(audioPreview && audioPreview.waveform) {
-        handleUpload(formData)
+      if (audioPreview && audioPreview.waveform) {
+        handleUpload(formData);
       }
     }
   }
 
   function projectNameOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    if(value.length < MAX_PROJECTNAME_LENGTH) {
-      setFormData({ ...formData , projectName: e.target.value });
+    if (value.length < MAX_PROJECTNAME_LENGTH) {
+      setFormData({ ...formData, projectName: e.target.value });
     } else {
-      dispatch(setAlert({
-        text: "project name is too long",
-        type: "error"
-      }))
+      dispatch(
+        setAlert({
+          text: t("Project name is too long"),
+          type: "error",
+        })
+      );
     }
   }
 
   function descriptionOnChange(e: React.ChangeEvent<HTMLInputElement>) {
     const value = e.target.value;
-    if(value.length < MAX_DESCRIPTION_LENGTH) {
-      setFormData({ ...formData , description: value });
+    if (value.length < MAX_DESCRIPTION_LENGTH) {
+      setFormData({ ...formData, description: value });
     } else {
-      dispatch(setAlert({
-        text: "description is too long",
-        type: "error"
-      }))
+      dispatch(
+        setAlert({
+          text: t("Description is too long"),
+          type: "error",
+        })
+      );
     }
   }
 
@@ -142,71 +172,71 @@ const CreateProjectForm = () => {
 
   return (
     <Stack gap={2} pt={6}>
-      <Stack 
+      <Stack
         ref={projectNameRef}
-        mb={1} 
+        mb={1}
         width="100%"
         sx={{
-          scrollMarginTop: SCROLL_MARGIN_TOP
+          scrollMarginTop: SCROLL_MARGIN_TOP,
         }}
       >
-        <Typography variant="overline">
-          Project Name
-        </Typography>
+        <Typography variant="overline">{t("Project Name")}</Typography>
 
-        <TextField 
+        <TextField
           fullWidth
-          id="outlined-basic"  
-          placeholder="Name your project"
-          variant="outlined" 
+          id="outlined-basic"
+          placeholder={t("Name your project")}
+          variant="outlined"
           value={projectName}
           onChange={projectNameOnChange}
         />
       </Stack>
-    
-      <Box 
+
+      <Box
         ref={instrumentsRef}
         sx={{
-          scrollMarginTop: SCROLL_MARGIN_TOP
+          scrollMarginTop: SCROLL_MARGIN_TOP,
         }}
       >
         <ChipField
-          list={INSTRUMENTS} 
+          list={INSTRUMENTS}
           selection={instrumentSelection}
-          setSelection={(arr) => setFormData({ ...formData , instrumentSelection: arr })}
-          label="select What you looking for"
-          title="instruments"
+          setSelection={(arr) =>
+            setFormData({ ...formData, instrumentSelection: arr })
+          }
+          label={t("Selecet what instruments you looking for")}
+          title={tTimeline("instruments")}
         />
       </Box>
 
-      <Box 
+      <Box
         ref={styleRef}
         sx={{
-          scrollMarginTop: SCROLL_MARGIN_TOP
+          scrollMarginTop: SCROLL_MARGIN_TOP,
         }}
       >
-        <ChipField 
-          list={STYLES} 
+        <ChipField
+          list={STYLES}
           selection={styleSelection}
-          setSelection={(arr) => setFormData({ ...formData , styleSelection: arr })}
-          label="Select Genre"
-          title="styles"
+          setSelection={(arr) =>
+            setFormData({ ...formData, styleSelection: arr })
+          }
+          label={t("Select Genre")}
+          title={tTimeline("styles")}
         />
       </Box>
 
       <Stack
         ref={descriptionRef}
         sx={{
-          scrollMarginTop: SCROLL_MARGIN_TOP
+          scrollMarginTop: SCROLL_MARGIN_TOP,
         }}
       >
-        <Typography variant="overline">
-          description
-        </Typography>
+        <Typography variant="overline">{t("description")}</Typography>
 
         <TextField
           id="outlined-multiline-static"
-          placeholder="Describe your project, (what exactly you are looking and what are your expectations)."
+          placeholder={t("Describe your project exactly")}
           multiline
           rows={4}
           fullWidth
@@ -216,74 +246,65 @@ const CreateProjectForm = () => {
         />
       </Stack>
 
-      <Stack 
+      <Stack
         ref={audioRef}
         sx={{
-          scrollMarginTop: SCROLL_MARGIN_TOP
+          scrollMarginTop: SCROLL_MARGIN_TOP,
         }}
       >
-        <Typography variant="overline">
-          Upload your demo
-        </Typography>
+        <Typography variant="overline">{t("Upload your demo")}</Typography>
 
-        <DragAndDropAudio 
+        <DragAndDropAudio
           audioPreview={audioPreview}
-          setAudioPreview={(data) => setFormData({ ...formData , audioPreview: data })}
+          setAudioPreview={(data) =>
+            setFormData({ ...formData, audioPreview: data })
+          }
         />
       </Stack>
 
-      <Box mt={1} >
-        <Button 
-          fullWidth
-          variant="contained" 
-          onClick={validation}  
-        >
-          Submit
+      <Box mt={1}>
+        <Button fullWidth variant="contained" onClick={validation}>
+          {t("Submit")}
         </Button>
       </Box>
 
       <Modal open={isModalOpen}>
         <Stack alignItems="center" justifyContent="center" height="100%">
-          <Stack 
+          <Stack
             alignItems="center"
             justifyContent="center"
-            bgcolor={theme.palette.background.paper} 
-            width={400} 
+            bgcolor={theme.palette.background.paper}
+            width={400}
             minHeight={300}
             borderRadius={10}
             gap={2}
           >
             {isUploading && (
               <Box>
-                {progress === 0 || progress === 100 
-                ? <CircularProgress />
-                : <CircularProgressWithLabel value={progress} />
-                }
+                {progress === 0 || progress === 100 ? (
+                  <CircularProgress />
+                ) : (
+                  <CircularProgressWithLabel value={progress} />
+                )}
               </Box>
             )}
 
             <Box minHeight={50} textAlign="center">
-              <Typography variant="overline">
-                {message}
-              </Typography>
+              <Typography variant="overline">{message}</Typography>
             </Box>
 
             {!isUploading && (
               <Box>
-                <Button 
-                  variant="contained" 
-                  onClick={onModalClose}
-                >
-                  close
+                <Button variant="contained" onClick={onModalClose}>
+                  {t("close")}
                 </Button>
               </Box>
             )}
-
           </Stack>
-        </Stack> 
+        </Stack>
       </Modal>
     </Stack>
-  )
-}
+  );
+};
 
 export default CreateProjectForm;

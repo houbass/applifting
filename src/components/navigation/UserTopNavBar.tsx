@@ -14,18 +14,23 @@ import {
   Notifications,
   Settings,
 } from "@mui/icons-material";
-import { useSelector } from "react-redux";
+
 import { selectUser } from "@/redux/slices/userSlice";
 import Link from "next/link";
 import { common } from "@mui/material/colors";
 import { selectFilterData } from "@/redux/slices/dashboardSlice";
+
+// Hooks
+import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { useTranslations } from "next-intl";
 
 // Components
 import UserSettingsPanel from "./UserSettingsPanel";
 
 const UserTopNavBar = () => {
   // Hooks
+  const t = useTranslations("navbar");
   const router = useRouter();
   const user = useSelector(selectUser);
   const filterData = useSelector(selectFilterData);
@@ -75,20 +80,21 @@ const UserTopNavBar = () => {
 
               <Stack alignItems="center" flexDirection="row">
                 <Link href="/createproject" passHref legacyBehavior>
-                  <Tooltip title="Create Project" disableInteractive>
+                  <Tooltip title={t("Create Project")} disableInteractive>
                     <IconButton
                       size="small"
                       color="inherit"
-                      aria-label="Create Collab Project"
+                      aria-label={t("Create Project")}
                     >
                       <AddBox />
                     </IconButton>
                   </Tooltip>
                 </Link>
 
-                <Tooltip title="Messages" disableInteractive>
+                <Tooltip title={t("Messages")} disableInteractive>
                   <IconButton
                     size="small"
+                    // TODO
                     aria-label="show 12 new messages"
                     color="inherit"
                   >
@@ -98,9 +104,10 @@ const UserTopNavBar = () => {
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip title="Notifications" disableInteractive>
+                <Tooltip title={t("Notifications")} disableInteractive>
                   <IconButton
                     size="small"
+                    // TODO
                     aria-label="show 17 new notifications"
                     color="inherit"
                   >
@@ -110,23 +117,23 @@ const UserTopNavBar = () => {
                   </IconButton>
                 </Tooltip>
 
-                <Tooltip title="Settings" disableInteractive>
+                <Tooltip title={t("Settings")} disableInteractive>
                   <IconButton
                     size="small"
                     onClick={toggleDrawer}
                     color="inherit"
-                    aria-label="Settings"
+                    aria-label={t("Settings")}
                   >
                     <Settings />
                   </IconButton>
                 </Tooltip>
 
                 <Link href={`/profile/${user.uid}`} passHref legacyBehavior>
-                  <Tooltip title="Profile" disableInteractive>
+                  <Tooltip title={t("Profile")} disableInteractive>
                     <IconButton
                       size="small"
                       color="inherit"
-                      aria-label="Account"
+                      aria-label={t("Profile")}
                     >
                       <AccountBox />
                     </IconButton>

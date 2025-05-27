@@ -2,62 +2,59 @@ import React, { useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
+import { useTranslations } from "next-intl";
+
+// Components
 import ChipFieldItem from "./ChipFieldItem";
 
 interface Props {
-  list: string[]
-  selection: string[]
-  setSelection: (value: string[]) => void
-  label: string
-  title: string
+  list: string[];
+  selection: string[];
+  setSelection: (value: string[]) => void;
+  label: string;
+  title: string;
 }
 
-const ChipField = ({
-  list, selection, setSelection, label, title
-}: Props) => {
-
-  const dispatch = useDispatch()
+const ChipField = ({ list, selection, setSelection, label, title }: Props) => {
+  // Hooks
+  const t = useTranslations("timelineFilter");
+  const dispatch = useDispatch();
 
   // States
-  const initialList = list.filter(item => !selection.includes(item))
+  const initialList = list.filter((item) => !selection.includes(item));
   const [currentList, setCurrentList] = useState<string[]>(initialList);
   currentList.sort();
-  
+
   // Utils
   function instrumentHandler(selected: string) {
-
     // Max 3elements
-    if(selection.length > 2) {
-      dispatch(setAlert({
-        text: `you can select maximum 3 ${title}`,
-        type: 'error'
-      }))
+    if (selection.length > 2) {
+      dispatch(
+        setAlert({
+          text: `${t("you can select maximum 3")} ${title}`,
+          type: "error",
+        })
+      );
     } else {
       setSelection([...selection, selected]);
-      setCurrentList(
-        currentList.filter(item => item !== selected)
-      );
+      setCurrentList(currentList.filter((item) => item !== selected));
     }
   }
 
   function instrumentDelete(selected: string) {
-    setSelection(
-      selection.filter(item => item !== selected)
-    );
+    setSelection(selection.filter((item) => item !== selected));
     setCurrentList([...currentList, selected]);
   }
 
-  return(
+  return (
     <Stack>
-      <Typography variant="overline">
-        {label}
-      </Typography>
+      <Typography variant="overline">{label}</Typography>
 
       {selection.length > 0 && (
         <Box>
-          {selection.map(item => {
+          {selection.map((item) => {
             return (
-              <ChipFieldItem 
+              <ChipFieldItem
                 key={item}
                 label={item}
                 onClick={() => instrumentHandler(item)}
@@ -65,24 +62,24 @@ const ChipField = ({
                 size="medium"
                 color="primary"
               />
-            )
+            );
           })}
         </Box>
       )}
 
       <Box>
-        {currentList.map(item => {
+        {currentList.map((item) => {
           return (
-            <ChipFieldItem 
+            <ChipFieldItem
               key={item}
               label={item}
               onClick={() => instrumentHandler(item)}
             />
-          )
+          );
         })}
       </Box>
     </Stack>
-  )
-}
+  );
+};
 
 export default ChipField;

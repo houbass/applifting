@@ -1,50 +1,51 @@
-import React, { useContext } from 'react';
-import { 
+import React, { useContext } from "react";
+import {
   Box,
-  Drawer, 
-  Divider, 
-  IconButton, 
-  Stack, 
+  Drawer,
+  Divider,
+  IconButton,
+  Stack,
   Typography,
   ToggleButton,
   ToggleButtonGroup,
-  PaletteMode
-} from '@mui/material';
-import { Close, DarkMode, LightMode } from '@mui/icons-material';
-import { ThemeContext } from '@/contexts/ThemeContext';
-import Logout from '../auth/Logout';
+  PaletteMode,
+} from "@mui/material";
+import { Close, DarkMode, LightMode } from "@mui/icons-material";
+import { ThemeContext } from "@/contexts/ThemeContext";
+import Logout from "../auth/Logout";
+
+// Hooks
+import { useTranslations } from "next-intl";
 
 interface Props {
-  settingsView: boolean,
-  toggleDrawer: () => void
+  settingsView: boolean;
+  toggleDrawer: () => void;
 }
 
-const UserSettingsPanel = ({
-  settingsView, toggleDrawer
-}: Props) => {
+const UserSettingsPanel = ({ settingsView, toggleDrawer }: Props) => {
+  // Hooks
+  const t = useTranslations("navbar");
 
+  // Contexts
   const themeContext = useContext(ThemeContext);
   if (!themeContext) return null;
   const { toggleColorMode, mode } = themeContext;
 
+  // Utils
   const handleChange = (
     event: React.MouseEvent<HTMLElement>,
-    newAlignment: string,
+    newAlignment: string
   ) => {
-    if(newAlignment) {
-      toggleColorMode(newAlignment as PaletteMode)
+    if (newAlignment) {
+      toggleColorMode(newAlignment as PaletteMode);
     }
   };
 
   return (
-    <Drawer
-      anchor="right"
-      open={settingsView}
-      onClose={toggleDrawer}
-    >
+    <Drawer anchor="right" open={settingsView} onClose={toggleDrawer}>
       <Stack height="100%">
-        <Stack 
-          flexDirection="row" 
+        <Stack
+          flexDirection="row"
           alignItems="center"
           justifyContent="space-between"
           gap={2}
@@ -52,7 +53,7 @@ const UserSettingsPanel = ({
           py={1}
         >
           <Typography fontWeight={600} variant="overline">
-            Settings
+            {t("Settings")}
           </Typography>
 
           <IconButton onClick={toggleDrawer}>
@@ -62,16 +63,9 @@ const UserSettingsPanel = ({
 
         <Divider />
 
-        <Stack 
-          p={2} 
-          gap={2} 
-          height="100%"
-          justifyContent="space-between"
-        >
+        <Stack p={2} gap={2} height="100%" justifyContent="space-between">
           <Stack>
-            <Typography variant="overline">
-              mode
-            </Typography>
+            <Typography variant="overline">{t("mode")}</Typography>
 
             <ToggleButtonGroup
               color="primary"
@@ -81,12 +75,12 @@ const UserSettingsPanel = ({
               aria-label="Platform"
             >
               <ToggleButton value="light" size="small">
-                  <LightMode fontSize="small" sx={{marginRight: "8px"}} />
-                  Light
+                <LightMode fontSize="small" sx={{ marginRight: "8px" }} />
+                {t("Light")}
               </ToggleButton>
               <ToggleButton value="dark" size="small">
-                  <DarkMode fontSize="small" sx={{marginRight: "8px"}} />
-                  Dark
+                <DarkMode fontSize="small" sx={{ marginRight: "8px" }} />
+                {t("Dark")}
               </ToggleButton>
             </ToggleButtonGroup>
           </Stack>
@@ -98,6 +92,6 @@ const UserSettingsPanel = ({
       </Stack>
     </Drawer>
   );
-}
+};
 
 export default UserSettingsPanel;

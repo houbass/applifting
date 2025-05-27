@@ -11,7 +11,7 @@ import TimelineFilter from "@/components/filter/TimelineFilter/TimelineFilter";
 
 export default function Dashboard() {
   // Translations
-  const t = useTranslations("index");
+  const t = useTranslations("dashboard");
 
   // Redirect when logout
   const { user, userCheck } = useHomeRedirect();
@@ -32,18 +32,26 @@ export default function Dashboard() {
 }
 
 export async function getStaticProps({ locale }: { locale: string }) {
-  const index = (await import(`../../../messages/${locale}/index.json`))
+  const dashboard = (await import(`../../../messages/${locale}/dashboard.json`))
     .default;
 
-  const timelineFilterTexts = (
+  const timelineFilter = (
     await import(`../../../messages/${locale}/timelineFilter.json`)
   ).default;
+
+  const songCard = (await import(`../../../messages/${locale}/songCard.json`))
+    .default;
+
+  const navbar = (await import(`../../../messages/${locale}/navbar.json`))
+    .default;
 
   return {
     props: {
       messages: {
-        index,
-        timelineFilterTexts,
+        dashboard,
+        timelineFilter,
+        songCard,
+        navbar,
       },
     },
   };

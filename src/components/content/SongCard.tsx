@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectUser } from "@/redux/slices/userSlice";
+import { useTranslations } from "next-intl";
 
 // Utils
 import { formatTimestamp } from "@/utils/utils";
@@ -32,6 +33,9 @@ interface Props {
 const AVATAR_WIDTH = "20px";
 
 const SongCard = ({ item, onDelete }: Props) => {
+  // Hooks
+  const t = useTranslations("songCard");
+
   // States
   const { userName, description, userPhotoURL, uid } = item;
   const firstLetter = userName[0].toUpperCase();
@@ -100,7 +104,7 @@ const SongCard = ({ item, onDelete }: Props) => {
 
           {!isOwner && (
             <Button size="small" variant="contained">
-              lets collab
+              {t("lets collab")}
             </Button>
           )}
         </Stack>
@@ -138,7 +142,7 @@ const SongCard = ({ item, onDelete }: Props) => {
               fontSize={10}
               textTransform="uppercase"
             >
-              Looking for
+              {t("Looking for")}
             </Typography>
             <Box>
               {item.instruments.map((instrument) => {
@@ -158,7 +162,7 @@ const SongCard = ({ item, onDelete }: Props) => {
               textTransform="uppercase"
               pr={1}
             >
-              Style
+              {t("Style")}
             </Typography>
 
             <Box>

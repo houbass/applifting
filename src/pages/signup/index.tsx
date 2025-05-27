@@ -1,84 +1,95 @@
-import React from 'react';
-import { createUserWithEmailAndPassword } from 'firebase/auth';
-import { auth, db } from '@/config/firebase';
-import { useState } from 'react';
-import { Box, Typography, Stack } from '@mui/material';
-import useDashboardRedirect from '@/hooks/redirects/useDashboardRedirect';
-import { setDoc, doc } from 'firebase/firestore';
-import { PAGE_PADDING_X, PAGE_PADDING_TOP, MAX_WIDTH } from '@/constants/globalConstants';
+import React from "react";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "@/config/firebase";
+import { useState } from "react";
+import { Box, Typography, Stack } from "@mui/material";
+import useDashboardRedirect from "@/hooks/redirects/useDashboardRedirect";
+import { setDoc, doc } from "firebase/firestore";
+import {
+  PAGE_PADDING_X,
+  PAGE_PADDING_TOP,
+  MAX_WIDTH,
+} from "@/constants/globalConstants";
+
+// Hooks
+import { useTranslations } from "next-intl";
 
 // Utils
-import { getSearchNameArr } from '@/components/auth/utils';
+import { getSearchNameArr } from "@/components/auth/utils";
 
 // Components
-import BasicHead from '@/components/containers/BasicHead';
-import SignInUp from '@/components/auth/SignInUp';
-import GoogleSignUp from '@/components/auth/GoogleSingnUp';
+import BasicHead from "@/components/containers/BasicHead";
+import SignInUp from "@/components/auth/SignInUp";
+import GoogleSignUp from "@/components/auth/GoogleSingnUp";
 
 export default function Signup() {
-
   // Redirect when log in
   const { user, userCheck } = useDashboardRedirect();
 
+  // Hooks
+  const t = useTranslations("signInUp");
+
   // States
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
-  const [displayName, setDisplayName] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [displayName, setDisplayName] = useState("");
 
   const handleSignUp = async () => {
-    setError('');
-    setSuccess('');
+    setError("");
+    setSuccess("");
 
     try {
       // Firebase sign-up method
-      const userCredential  = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
 
       // Save custom data to Firestore (only after registration)
-      const uid = userCredential.user.uid
+      const uid = userCredential.user.uid;
       await setDoc(doc(db, "users", userCredential.user.uid), {
         uid: uid,
         follow: [],
         followers: [],
         likes: [],
         projectIds: [],
-        userName: displayName, 
+        userName: displayName,
         searchArr: getSearchNameArr(displayName),
-        photoURL: '',
+        photoURL: "",
       });
 
-      setSuccess('Account created successfully!');
+      setSuccess(t("Account created successfully"));
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
       } else {
-        console.error('Unexpected error', err);
+        console.error("Unexpected error", err);
       }
     }
   };
 
   return (
     <>
-      <BasicHead title='Sign Up' />
+      <BasicHead title={t("Sign Up")} />
 
-      { !user && userCheck && (
+      {!user && userCheck && (
         <main>
           <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
             <Stack gap={1} maxWidth={MAX_WIDTH} width="100%">
               <Box>
-                <Typography>
-                  LETS SIGN UP
-                </Typography>
+                <Typography>{t("LETS SIGN UP")}</Typography>
               </Box>
 
-              <SignInUp 
+              <SignInUp
                 setEmail={setEmail}
                 setPassword={setPassword}
                 handler={handleSignUp}
                 success={success}
                 error={error}
-                text="Sign Up"
+                text={t("Sign Up")}
                 setDisplayName={setDisplayName}
               />
 
@@ -88,5 +99,18 @@ export default function Signup() {
         </main>
       )}
     </>
-  )
+  );
+}
+
+export async function getStaticProps({ locale }: { locale: string }) {
+  const signInUp = (await import(`../../../messages/${locale}/signInUp.json`))
+    .default;
+
+  return {
+    props: {
+      messages: {
+        signInUp,
+      },
+    },
+  };
 }
