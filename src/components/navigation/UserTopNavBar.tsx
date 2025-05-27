@@ -1,18 +1,34 @@
-import React, { useState } from 'react';
-import { AppBar, Badge, IconButton, Stack, Typography, Tooltip } from '@mui/material';
-import { AccountBox, AddBox, Email, Notifications, Settings } from '@mui/icons-material';
-import { useSelector } from 'react-redux';
-import { selectUser } from '@/redux/slices/userSlice';
-import Link from 'next/link';
-import { common } from '@mui/material/colors';
+import React, { useState } from "react";
+import {
+  AppBar,
+  Badge,
+  IconButton,
+  Stack,
+  Typography,
+  Tooltip,
+} from "@mui/material";
+import {
+  AccountBox,
+  AddBox,
+  Email,
+  Notifications,
+  Settings,
+} from "@mui/icons-material";
+import { useSelector } from "react-redux";
+import { selectUser } from "@/redux/slices/userSlice";
+import Link from "next/link";
+import { common } from "@mui/material/colors";
+import { selectFilterData } from "@/redux/slices/dashboardSlice";
+import { useRouter } from "next/router";
 
 // Components
-import UserSettingsPanel from './UserSettingsPanel';
+import UserSettingsPanel from "./UserSettingsPanel";
 
 const UserTopNavBar = () => {
-
   // Hooks
+  const router = useRouter();
   const user = useSelector(selectUser);
+  const filterData = useSelector(selectFilterData);
 
   // States
   const [settingsView, setSettingsView] = useState(false);
@@ -22,28 +38,45 @@ const UserTopNavBar = () => {
     setSettingsView(!settingsView);
   }
 
+  const handleRedirect = () => {
+    router.push({
+      pathname: "/dashboard",
+      query: {
+        filter: JSON.stringify(filterData),
+      },
+    });
+  };
+
   return (
     <>
       {user && (
         <>
           <AppBar position="fixed">
-            <Stack 
+            <Stack
               px={2}
               py={1}
-              flexDirection="row" 
+              flexDirection="row"
               alignItems="center"
-              justifyContent="space-between"  
+              justifyContent="space-between"
             >
-              <Link href="/dashboard" style={{ textDecoration: 'none' }}>
-                <Typography color={common.white} fontWeight={600} variant="overline" fontSize={14}>
+              <button
+                style={{ all: "unset", cursor: "pointer" }}
+                onClick={handleRedirect}
+              >
+                <Typography
+                  color={common.white}
+                  fontWeight={600}
+                  variant="overline"
+                  fontSize={14}
+                >
                   COLLABRO
                 </Typography>
-              </Link>
+              </button>
 
               <Stack alignItems="center" flexDirection="row">
                 <Link href="/createproject" passHref legacyBehavior>
                   <Tooltip title="Create Project" disableInteractive>
-                    <IconButton 
+                    <IconButton
                       size="small"
                       color="inherit"
                       aria-label="Create Collab Project"
@@ -52,7 +85,7 @@ const UserTopNavBar = () => {
                     </IconButton>
                   </Tooltip>
                 </Link>
-                
+
                 <Tooltip title="Messages" disableInteractive>
                   <IconButton
                     size="small"
@@ -78,9 +111,9 @@ const UserTopNavBar = () => {
                 </Tooltip>
 
                 <Tooltip title="Settings" disableInteractive>
-                  <IconButton 
+                  <IconButton
                     size="small"
-                    onClick={toggleDrawer} 
+                    onClick={toggleDrawer}
                     color="inherit"
                     aria-label="Settings"
                   >
@@ -90,7 +123,7 @@ const UserTopNavBar = () => {
 
                 <Link href={`/profile/${user.uid}`} passHref legacyBehavior>
                   <Tooltip title="Profile" disableInteractive>
-                    <IconButton 
+                    <IconButton
                       size="small"
                       color="inherit"
                       aria-label="Account"
@@ -103,7 +136,7 @@ const UserTopNavBar = () => {
             </Stack>
           </AppBar>
 
-          <UserSettingsPanel 
+          <UserSettingsPanel
             settingsView={settingsView}
             toggleDrawer={toggleDrawer}
           />
@@ -111,6 +144,6 @@ const UserTopNavBar = () => {
       )}
     </>
   );
-}
+};
 
 export default UserTopNavBar;
