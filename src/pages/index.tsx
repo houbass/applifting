@@ -1,67 +1,30 @@
-import React from "react";
-import Link from "next/link";
-import { Box, Button, Stack, Typography } from "@mui/material";
-import useDashboardRedirect from "@/hooks/redirects/useDashboardRedirect";
+import React, { useEffect } from "react";
 
 // Hooks
-import { useTranslations } from "next-intl";
+import useGetTimelineData from "@/hooks/firebase/useGetTimelineData";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
+import Timeline from "@/components/content/Timeline";
 
 export default function Home() {
-  // Redirect when log in
-  const { user, userCheck } = useDashboardRedirect();
-
   // Hooks
-  const t = useTranslations("signInUp");
+  const { fetchTimeline } = useGetTimelineData();
+
+  // TODO use tanstack query for fetching data
+  // Fetch timeline data
+  useEffect(() => {
+    fetchTimeline();
+  }, []);
 
   return (
     <>
-      <BasicHead title="Collabro" />
+      <BasicHead title="Home" />
 
-      {!user && userCheck && (
-        <PageLayout>
-          <Stack>
-            <Box pb={6}>
-              <Typography
-                variant="h4"
-                textTransform="uppercase"
-                textAlign="center"
-              >
-                wanna collab bro?
-              </Typography>
-            </Box>
-
-            <Stack gap={1}>
-              <Link href="/signin" passHref legacyBehavior>
-                <Button variant="contained">{t("Sign In")}</Button>
-              </Link>
-
-              <Link href="/signup" passHref legacyBehavior>
-                <Button variant="contained">{t("Sign Up")}</Button>
-              </Link>
-            </Stack>
-          </Stack>
-        </PageLayout>
-      )}
+      <PageLayout>
+        <Timeline />
+      </PageLayout>
     </>
   );
-}
-
-export async function getStaticProps({ locale }: { locale: string }) {
-  const signInUp = (await import(`../../messages/${locale}/signInUp.json`))
-    .default;
-
-  const navbar = (await import(`../../messages/${locale}/navbar.json`)).default;
-
-  return {
-    props: {
-      messages: {
-        signInUp,
-        navbar,
-      },
-    },
-  };
 }

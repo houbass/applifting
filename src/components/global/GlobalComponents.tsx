@@ -3,16 +3,13 @@ import { Box, CircularProgress } from "@mui/material";
 import {
   selectUser,
   selectUserCheck,
-  selectUserData,
   setUserData,
 } from "@/redux/slices/userSlice";
-import { selectFilterData } from "@/redux/slices/dashboardSlice";
 
 // Hooks
 import { useDispatch, useSelector } from "react-redux";
 import { useTheme } from "@mui/material";
 import useAuthListener from "@/hooks/auth/useAuthListener";
-import useGetTimelineData from "@/hooks/firebase/useGetTimelineData";
 import useGetUserData from "@/hooks/firebase/useGetUserData";
 
 // Components
@@ -25,14 +22,12 @@ const GlobalComponents = () => {
   useAuthListener();
   const dispatch = useDispatch();
   const theme = useTheme();
-  const { fetchTimeline } = useGetTimelineData();
 
   // States
   const user = useSelector(selectUser);
   const userCheck = useSelector(selectUserCheck);
-  const userDataRedux = useSelector(selectUserData);
+
   const { data: userData } = useGetUserData(user?.uid);
-  const filterData = useSelector(selectFilterData);
 
   useEffect(() => {
     if (userData) {
@@ -40,38 +35,13 @@ const GlobalComponents = () => {
     }
 
     // reset on logout
-    if (!userData && userDataRedux) {
+    if (!userData) {
       dispatch(setUserData(null));
     }
   }, [userData]);
 
-  // Fetch timeline data
-  useEffect(() => {
-    if (userDataRedux) {
-      fetchTimeline();
-    }
-  }, [userDataRedux, filterData]);
-
   return (
     <>
-      {!userCheck && (
-        <Box
-          sx={{
-            top: 0,
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            background: theme.palette.background.default,
-            zIndex: 2,
-          }}
-        >
-          <CircularProgress color="inherit" />
-        </Box>
-      )}
-
       <UserTopNavBar />
       <Snackbar />
     </>

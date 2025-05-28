@@ -3,17 +3,11 @@ import { signOut } from "firebase/auth";
 import { auth } from "@/config/firebase";
 import { Button, Box } from "@mui/material";
 
-// Hooks
-import { useTranslations } from "next-intl";
-
 interface Props {
   toggleDrawer?: () => void;
 }
 
 const Logout = ({ toggleDrawer }: Props) => {
-  // Hooks
-  const t = useTranslations("navbar");
-
   // Utils
   const handleLogout = async () => {
     try {
@@ -33,7 +27,7 @@ const Logout = ({ toggleDrawer }: Props) => {
   return (
     <Box>
       <Button onClick={handleLogout} variant="contained" size="small">
-        {t("Log Out")}
+        Log Out
       </Button>
     </Box>
   );

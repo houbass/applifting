@@ -5,7 +5,6 @@ import { db, storage } from "@/config/firebase";
 import { useDispatch, useSelector } from "react-redux";
 import { selectUserData } from "@/redux/slices/userSlice";
 import { setAlert } from "@/redux/slices/userSlice";
-import { useTranslations } from "next-intl";
 
 // Types
 import { FormData } from "@/components/types";
@@ -15,7 +14,6 @@ import { formatedFileName, getSearchCombinations } from "./utils";
 
 const useAudioFileUpload = () => {
   // Hooks
-  const t = useTranslations("createCollab");
   const dispatch = useDispatch();
 
   // States
@@ -75,7 +73,7 @@ const useAudioFileUpload = () => {
         } else {
           setUploading(true);
           setProgress(0);
-          setMessage(t("Uploading audio file"));
+          setMessage("Uploading audio file");
           uploadTask.on(
             "state_changed",
             (snapshot) => {
@@ -86,12 +84,12 @@ const useAudioFileUpload = () => {
             },
             (error) => {
               console.error("Upload error:", error);
-              setMessage(t("Upload failed"));
+              setMessage("Upload failed");
               setUploading(false);
             },
             async () => {
               // Get download URL after successful upload
-              setMessage(t("Saving to database"));
+              setMessage("Saving to database");
               const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
               if (uid) {
@@ -118,7 +116,7 @@ const useAudioFileUpload = () => {
                 });
               }
 
-              setMessage(t("Project uploaded successfully"));
+              setMessage("Project uploaded successfully");
               setUploading(false);
               setProgress(0);
             }
@@ -128,7 +126,7 @@ const useAudioFileUpload = () => {
     } catch (err) {
       console.error(err);
       setUploading(false);
-      setMessage(t("Upload failed"));
+      setMessage("Upload failed");
     }
   };
 
@@ -145,7 +143,7 @@ const useAudioFileUpload = () => {
 
     try {
       setUploading(true);
-      setMessage(t("Updating project"));
+      setMessage("Updating project");
 
       // update doc
       const projectRef = doc(db, "audio", projectId);
@@ -160,10 +158,10 @@ const useAudioFileUpload = () => {
     } catch (err) {
       console.error(err);
       setUploading(false);
-      setMessage(t("Update failed"));
+      setMessage("Update failed");
     } finally {
       setUploading(false);
-      setMessage(t("Project updated successfully"));
+      setMessage("Project updated successfully");
     }
   };
 

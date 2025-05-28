@@ -1,27 +1,25 @@
-
-
 import { initializeApp } from "firebase/app";
 
 //funkce na login
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 //funkce pro databazi
-import{ getFirestore } from "firebase/firestore";
+import { getFirestore } from "firebase/firestore";
 
 //funkce pro storage
-import{ getStorage } from "firebase/storage";
+import { getStorage } from "firebase/storage";
 
 // API KEYS
 import { apiKeys } from "./apiKeys";
 
 const firebaseConfig = {
-    apiKey: apiKeys.firebaseApiKey,
-    authDomain: "collabro-281e7.firebaseapp.com",
-    projectId: "collabro-281e7",
-    storageBucket: "collabro-281e7.firebasestorage.app",
-    messagingSenderId: "513304203869",
-    appId: "1:513304203869:web:d6c6e55b2c9dc0090973b4",
-    measurementId: apiKeys.googleId
+  apiKey: apiKeys.firebaseApiKey,
+  authDomain: "applifting-3771e.firebaseapp.com",
+  projectId: "applifting-3771e",
+  storageBucket: "applifting-3771e.firebasestorage.app",
+  messagingSenderId: "69381622379",
+  appId: "1:69381622379:web:0587b2c0382cfbfdfebf2e",
+  measurementId: apiKeys.googleId,
 };
 
 //firebase init

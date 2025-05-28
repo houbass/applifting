@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { Box, Stack, Typography } from "@mui/material";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { auth } from "@/config/firebase";
-import useDashboardRedirect from "@/hooks/redirects/useDashboardRedirect";
+import useHomeRedirect from "@/hooks/redirects/useHomeRedirect";
+
 import {
   PAGE_PADDING_TOP,
   PAGE_PADDING_X,
   MAX_WIDTH,
 } from "@/constants/globalConstants";
-import { useTranslations } from "next-intl";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
@@ -17,10 +17,7 @@ import GoogleSignUp from "@/components/auth/GoogleSingnUp";
 
 export default function Signin() {
   // Redirect when log in
-  const { user, userCheck } = useDashboardRedirect();
-
-  // Hooks
-  const t = useTranslations("signInUp");
+  const { user, userCheck } = useHomeRedirect();
 
   // States
   const [email, setEmail] = useState("");
@@ -33,11 +30,10 @@ export default function Signin() {
 
     try {
       await signInWithEmailAndPassword(auth, email, password);
-      setSuccess(t("Successfully signed in"));
+      setSuccess("Successfully signed in");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
-        //alert('Error signing in. Please try again.');
       } else {
         console.error("Unexpected error", err);
       }
@@ -46,14 +42,14 @@ export default function Signin() {
 
   return (
     <>
-      <BasicHead title={t("Sign In")} />
+      <BasicHead title="Sign In" />
 
       {!user && userCheck && (
         <main>
           <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
             <Stack gap={1} maxWidth={MAX_WIDTH} width="100%">
               <Box>
-                <Typography>{t("LETS SIGN IN")}</Typography>
+                <Typography>LETS SIGN IN</Typography>
               </Box>
 
               <SignInUp
@@ -62,7 +58,7 @@ export default function Signin() {
                 handler={handleSignIn}
                 success={success}
                 error={error}
-                text={t("Sign In")}
+                text="Sign In"
               />
 
               <GoogleSignUp />
@@ -72,17 +68,4 @@ export default function Signin() {
       )}
     </>
   );
-}
-
-export async function getStaticProps({ locale }: { locale: string }) {
-  const signInUp = (await import(`../../../messages/${locale}/signInUp.json`))
-    .default;
-
-  return {
-    props: {
-      messages: {
-        signInUp,
-      },
-    },
-  };
 }

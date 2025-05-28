@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Stack, Typography, CircularProgress, Dialog } from "@mui/material";
+import { Stack, Typography, CircularProgress } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
 
@@ -12,8 +12,6 @@ import { useRouter } from "next/router";
 import useGetUserData from "@/hooks/firebase/useGetUserData";
 import useGetUserSongs from "@/hooks/firebase/useGetUserSongs";
 import useHomeRedirect from "@/hooks/redirects/useHomeRedirect";
-import { setFilterOut } from "@/redux/slices/dashboardSlice";
-import { useTranslations } from "next-intl";
 import useGetTimelineData from "@/hooks/firebase/useGetTimelineData";
 
 // Utils
@@ -26,9 +24,8 @@ import { formatedFileName } from "@/hooks/upload/utils";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
-import SongCard from "@/components/content/SongCard";
+
 import PageLayout from "@/components/containers/PageLayout";
-import CreateProjectForm from "@/components/forms/CreateProjectForm";
 
 // TODO infinitive scrolling
 const Profile = () => {
@@ -36,7 +33,6 @@ const Profile = () => {
   const { user, userCheck } = useHomeRedirect();
 
   // Hooks
-  const t = useTranslations("profile");
   const dispatch = useDispatch();
   const router = useRouter();
   const { slug } = router.query;
@@ -74,13 +70,10 @@ const Profile = () => {
       const filteredSongs = songs?.filter((item) => item.id !== songId) || [];
       setSongs(filteredSongs);
 
-      // Filterout timeline data if this song is included
-      dispatch(setFilterOut(songId));
-
       // Info message when deleted
       dispatch(
         setAlert({
-          text: t("Song has been deleted successfully"),
+          text: "Song has been deleted successfully",
           type: "success",
         })
       );
@@ -123,10 +116,10 @@ const Profile = () => {
   if (!data)
     return (
       <>
-        <BasicHead title={t("Profile")} />
+        <BasicHead title="Profile" />
 
         <PageLayout>
-          <Typography>{t("No such a profile")}</Typography>
+          <Typography>No such a profile</Typography>
         </PageLayout>
       </>
     );
@@ -137,71 +130,14 @@ const Profile = () => {
         <BasicHead title={data.userName} />
 
         <PageLayout>
-          <Typography>{t("profile name", { name: data.userName })}</Typography>
+          <Typography>{data.userName}</Typography>
 
           <Stack gap={1}>
-            {songs &&
-              songs.map((song, index) => {
-                if (user?.uid === id) {
-                  return (
-                    <SongCard
-                      key={index}
-                      item={song}
-                      onDelete={() => onDelete(song)}
-                      onEdit={() => onEdit(song)}
-                    />
-                  );
-                } else {
-                  return <SongCard key={index} item={song} />;
-                }
-              })}
+            <p>profile</p>
           </Stack>
         </PageLayout>
-
-        <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
-          <Stack p={2}>
-            <CreateProjectForm
-              song={selectedSong}
-              onUpdate={onUpdate}
-              setIsDialogOpen={setIsDialogOpen}
-            />
-          </Stack>
-        </Dialog>
       </>
     );
 };
 
 export default Profile;
-
-export async function getServerSideProps(context: GetServerSidePropsContext) {
-  const locale = context.locale || "en";
-
-  const profile = (await import(`../../../messages/${locale}/profile.json`))
-    .default;
-
-  const songCard = (await import(`../../../messages/${locale}/songCard.json`))
-    .default;
-
-  const navbar = (await import(`../../../messages/${locale}/navbar.json`))
-    .default;
-
-  const timelineFilter = (
-    await import(`../../../messages/${locale}/timelineFilter.json`)
-  ).default;
-
-  const createCollab = (
-    await import(`../../../messages/${locale}/createCollab.json`)
-  ).default;
-
-  return {
-    props: {
-      messages: {
-        profile,
-        songCard,
-        navbar,
-        createCollab,
-        timelineFilter,
-      },
-    },
-  };
-}

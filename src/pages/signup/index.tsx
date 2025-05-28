@@ -3,16 +3,13 @@ import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth, db } from "@/config/firebase";
 import { useState } from "react";
 import { Box, Typography, Stack } from "@mui/material";
-import useDashboardRedirect from "@/hooks/redirects/useDashboardRedirect";
+import useHomeRedirect from "@/hooks/redirects/useHomeRedirect";
 import { setDoc, doc } from "firebase/firestore";
 import {
   PAGE_PADDING_X,
   PAGE_PADDING_TOP,
   MAX_WIDTH,
 } from "@/constants/globalConstants";
-
-// Hooks
-import { useTranslations } from "next-intl";
 
 // Utils
 import { getSearchNameArr } from "@/components/auth/utils";
@@ -24,10 +21,7 @@ import GoogleSignUp from "@/components/auth/GoogleSingnUp";
 
 export default function Signup() {
   // Redirect when log in
-  const { user, userCheck } = useDashboardRedirect();
-
-  // Hooks
-  const t = useTranslations("signInUp");
+  const { user, userCheck } = useHomeRedirect();
 
   // States
   const [email, setEmail] = useState("");
@@ -61,7 +55,7 @@ export default function Signup() {
         photoURL: "",
       });
 
-      setSuccess(t("Account created successfully"));
+      setSuccess("Account created successfully");
     } catch (err) {
       if (err instanceof Error) {
         setError(err.message);
@@ -73,14 +67,14 @@ export default function Signup() {
 
   return (
     <>
-      <BasicHead title={t("Sign Up")} />
+      <BasicHead title="Sign Up" />
 
       {!user && userCheck && (
         <main>
           <Stack alignItems="center" px={PAGE_PADDING_X} py={PAGE_PADDING_TOP}>
             <Stack gap={1} maxWidth={MAX_WIDTH} width="100%">
               <Box>
-                <Typography>{t("LETS SIGN UP")}</Typography>
+                <Typography>LETS SIGN UP</Typography>
               </Box>
 
               <SignInUp
@@ -89,7 +83,7 @@ export default function Signup() {
                 handler={handleSignUp}
                 success={success}
                 error={error}
-                text={t("Sign Up")}
+                text="Sign Up"
                 setDisplayName={setDisplayName}
               />
 
@@ -100,17 +94,4 @@ export default function Signup() {
       )}
     </>
   );
-}
-
-export async function getStaticProps({ locale }: { locale: string }) {
-  const signInUp = (await import(`../../../messages/${locale}/signInUp.json`))
-    .default;
-
-  return {
-    props: {
-      messages: {
-        signInUp,
-      },
-    },
-  };
 }

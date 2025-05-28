@@ -14,18 +14,12 @@ import { Close, DarkMode, LightMode } from "@mui/icons-material";
 import { ThemeContext } from "@/contexts/ThemeContext";
 import Logout from "../auth/Logout";
 
-// Hooks
-import { useTranslations } from "next-intl";
-
 interface Props {
   settingsView: boolean;
   toggleDrawer: () => void;
 }
 
 const UserSettingsPanel = ({ settingsView, toggleDrawer }: Props) => {
-  // Hooks
-  const t = useTranslations("navbar");
-
   // Contexts
   const themeContext = useContext(ThemeContext);
   if (!themeContext) return null;
@@ -53,7 +47,7 @@ const UserSettingsPanel = ({ settingsView, toggleDrawer }: Props) => {
           py={1}
         >
           <Typography fontWeight={600} variant="overline">
-            {t("Settings")}
+            Settings
           </Typography>
 
           <IconButton onClick={toggleDrawer}>
@@ -65,7 +59,7 @@ const UserSettingsPanel = ({ settingsView, toggleDrawer }: Props) => {
 
         <Stack p={2} gap={2} height="100%" justifyContent="space-between">
           <Stack>
-            <Typography variant="overline">{t("mode")}</Typography>
+            <Typography variant="overline">mode</Typography>
 
             <ToggleButtonGroup
               color="primary"
@@ -76,11 +70,11 @@ const UserSettingsPanel = ({ settingsView, toggleDrawer }: Props) => {
             >
               <ToggleButton value="light" size="small">
                 <LightMode fontSize="small" sx={{ marginRight: "8px" }} />
-                {t("Light")}
+                Light
               </ToggleButton>
               <ToggleButton value="dark" size="small">
                 <DarkMode fontSize="small" sx={{ marginRight: "8px" }} />
-                {t("Dark")}
+                Dark
               </ToggleButton>
             </ToggleButtonGroup>
           </Stack>

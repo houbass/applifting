@@ -1,9 +1,6 @@
 import React from "react";
 import { Button, Box } from "@mui/material";
 
-// Hooks
-import { useTranslations } from "next-intl";
-
 // Firebase
 import { signInWithPopup } from "firebase/auth";
 import { auth, googleProvider, db } from "@/config/firebase";
@@ -13,9 +10,6 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 import { getSearchNameArr } from "./utils";
 
 const GoogleSignUp = () => {
-  // Hooks
-  const t = useTranslations("signInUp");
-
   const handleGoogleSignUp = async () => {
     try {
       const userCredential = await signInWithPopup(auth, googleProvider);
@@ -53,7 +47,7 @@ const GoogleSignUp = () => {
   return (
     <Box>
       <Button fullWidth variant="contained" onClick={handleGoogleSignUp}>
-        {t("Sign Up with Google")}
+        Sign Up with Google
       </Button>
     </Box>
   );

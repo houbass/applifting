@@ -1,7 +1,7 @@
 import React, { createContext, ReactNode, useMemo } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { CssBaseline, PaletteMode } from "@mui/material";
-import useLocalStorageState from 'use-local-storage-state'
+import useLocalStorageState from "use-local-storage-state";
 
 // Define context type
 interface ThemeContextProps {
@@ -10,15 +10,16 @@ interface ThemeContextProps {
 }
 
 // Create context
-export const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
+export const ThemeContext = createContext<ThemeContextProps | undefined>(
+  undefined
+);
 
 // Provider component
 export const ThemeProviderWrapper = ({ children }: { children: ReactNode }) => {
-
   // States
-  const [mode, setMode] = useLocalStorageState<PaletteMode>('palleteMode', {
-    defaultValue: "dark"
-})
+  const [mode, setMode] = useLocalStorageState<PaletteMode>("palleteMode", {
+    defaultValue: "light",
+  });
 
   // FToggle between dark and light mode
   const toggleColorMode = (mode: PaletteMode) => {
