@@ -10,13 +10,14 @@ import { AudioCollectionItem } from "@/components/types";
 
 // Constants
 import { PAGE_SIZE } from "@/constants/globalConstants";
+import { useCallback } from "react";
 
 const useGetTimelineData = () => {
   // Hooks
   const dispatch = useDispatch();
 
   // Utils
-  const fetchTimeline = async () => {
+  const fetchTimeline = useCallback(async () => {
     try {
       const q = query(
         collection(db, "audio"),
@@ -33,7 +34,7 @@ const useGetTimelineData = () => {
     } catch (error) {
       console.error("Error fetching documents: ", error);
     }
-  };
+  }, [dispatch]);
 
   return { fetchTimeline };
 };

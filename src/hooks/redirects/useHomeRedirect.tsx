@@ -7,15 +7,14 @@ const useHomeRedirect = () => {
   const router = useRouter();
   const user = useSelector(selectUser);
   const userCheck = useSelector(selectUserCheck);
-  
+
   useEffect(() => {
-    if(!user && userCheck) {
+    if (!user && userCheck) {
       router.push("/");
-    } 
-  }, [user, userCheck])
+    }
+  }, [user, userCheck, router]);
 
-
-  return { user, userCheck }
-}
+  return { user, userCheck };
+};
 
 export default useHomeRedirect;

@@ -16,7 +16,7 @@ export default function Home() {
   // Fetch timeline data
   useEffect(() => {
     fetchTimeline();
-  }, []);
+  }, [fetchTimeline]);
 
   return (
     <>

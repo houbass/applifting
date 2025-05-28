@@ -6,11 +6,9 @@ import { selectAlert } from "@/redux/slices/userSlice";
 const Snackbar = () => {
   // States
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  const alert = useSelector(selectAlert);
+  const { text, type } = useSelector(selectAlert);
   const [open, setOpen] = useState(false);
   const [firstRun, setFirstRun] = useState(true);
-  const text = alert?.text;
-  const type = alert?.type;
 
   // Timer to close the alert after 3 seconds
   useEffect(() => {
@@ -34,7 +32,7 @@ const Snackbar = () => {
         }
       };
     }
-  }, [alert]);
+  }, [firstRun, text]);
 
   return (
     <>

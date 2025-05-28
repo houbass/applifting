@@ -38,7 +38,7 @@ const GlobalComponents = () => {
     if (!userData) {
       dispatch(setUserData(null));
     }
-  }, [userData]);
+  }, [userData, dispatch]);
 
   return (
     <>

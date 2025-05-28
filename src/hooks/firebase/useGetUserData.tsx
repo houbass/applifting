@@ -13,11 +13,11 @@ const useGetUserData = (id: string | undefined) => {
 
   useEffect(() => {
     if (!id) {
-      if(data) {
-        setData(null)
+      if (data) {
+        setData(null);
       }
-      return
-    };
+      return;
+    }
 
     const docRef = doc(db, "users", id);
 
@@ -34,7 +34,7 @@ const useGetUserData = (id: string | undefined) => {
 
     // Cleanup the listener on unmount
     return () => unsubscribe();
-  }, [id]);
+  }, [id, data]);
 
   return { data, isLoading };
 };

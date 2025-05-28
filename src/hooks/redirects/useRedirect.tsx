@@ -8,11 +8,11 @@ const useRedirect = () => {
     router.push({
       pathname: "/dashboard",
     });
-  }, []);
+  }, [router]);
 
   const goToCreateProject = useCallback(() => {
     router.push("/createproject");
-  }, []);
+  }, [router]);
 
   return {
     goToDashboard,
