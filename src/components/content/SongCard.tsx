@@ -28,11 +28,12 @@ import ChipFieldItem from "../filter/ChipFieldItem";
 interface Props {
   item: AudioCollectionItem;
   onDelete?: () => void;
+  onEdit?: () => void;
 }
 
 const AVATAR_WIDTH = "20px";
 
-const SongCard = ({ item, onDelete }: Props) => {
+const SongCard = ({ item, onDelete, onEdit }: Props) => {
   // Hooks
   const t = useTranslations("songCard");
 
@@ -101,6 +102,12 @@ const SongCard = ({ item, onDelete }: Props) => {
               </Typography>
             </Link>
           </Stack>
+
+          {isOwner && onEdit && (
+            <Button size="small" variant="contained" onClick={onEdit}>
+              {t("edit song")}
+            </Button>
+          )}
 
           {!isOwner && (
             <Button size="small" variant="contained">

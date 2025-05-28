@@ -127,12 +127,49 @@ const useAudioFileUpload = () => {
       }
     } catch (err) {
       console.error(err);
+      setUploading(false);
       setMessage(t("Upload failed"));
+    }
+  };
+
+  // Updating project
+  const handleUpdate = async (formData: FormData, projectId: string) => {
+    if (!uid) return;
+
+    const { projectName, instrumentSelection, styleSelection, description } =
+      formData;
+    const searchTags = getSearchCombinations(
+      instrumentSelection,
+      styleSelection
+    );
+
+    try {
+      setUploading(true);
+      setMessage(t("Updating project"));
+
+      // update doc
+      const projectRef = doc(db, "audio", projectId);
+
+      await updateDoc(projectRef, {
+        projectName: projectName,
+        instruments: instrumentSelection,
+        style: styleSelection,
+        description,
+        searchTags,
+      });
+    } catch (err) {
+      console.error(err);
+      setUploading(false);
+      setMessage(t("Update failed"));
+    } finally {
+      setUploading(false);
+      setMessage(t("Project updated successfully"));
     }
   };
 
   return {
     handleUpload,
+    handleUpdate,
     isUploading,
     progress,
     message,

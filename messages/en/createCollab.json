@@ -20,5 +20,9 @@
   "Upload failed": "Upload failed",
   "Saving to database": "Saving to database",
   "Project uploaded successfully": "Project uploaded successfully",
-  "close": "close"
+  "close": "close",
+  "Cancel": "Cancel",
+  "Project updated successfully": "Project updated successfully",
+  "Update failed": "Update failed",
+  "Updating project": "Updating project"
 }

@@ -1,10 +1,9 @@
-import React, { useEffect, useRef, useState } from "react"
-import { Snackbar as Snack, Alert } from "@mui/material"
+import React, { useEffect, useRef, useState } from "react";
+import { Snackbar as Snack, Alert } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectAlert } from "@/redux/slices/userSlice";
 
 const Snackbar = () => {
-
   // States
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const alert = useSelector(selectAlert);
@@ -37,24 +36,21 @@ const Snackbar = () => {
     }
   }, [alert]);
 
-  return(
+  return (
     <>
       {text && type && (
         <Snack
           open={open}
-          anchorOrigin={{vertical: "top", horizontal: "center"}}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
+          sx={{ zIndex: 9999 }}
         >
-          <Alert
-            severity={type}
-            variant="filled"
-            sx={{ width: "100%" }}
-          >
+          <Alert severity={type} variant="filled" sx={{ width: "100%" }}>
             {text}
           </Alert>
         </Snack>
       )}
     </>
-  )
-}
+  );
+};
 
 export default Snackbar;

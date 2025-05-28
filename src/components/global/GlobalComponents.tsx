@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Box, CircularProgress, Snackbar } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import {
   selectUser,
   selectUserCheck,
@@ -17,6 +17,7 @@ import useGetUserData from "@/hooks/firebase/useGetUserData";
 
 // Components
 import UserTopNavBar from "../navigation/UserTopNavBar";
+import Snackbar from "../alerts/Snackbar";
 
 const GlobalComponents = () => {
   // Hooks

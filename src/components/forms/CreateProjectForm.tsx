@@ -22,7 +22,7 @@ import { useTranslations } from "next-intl";
 import { SCROLL_MARGIN_TOP } from "@/constants/globalConstants";
 
 // Types
-import { FormData } from "@/components/types";
+import { FormData, AudioCollectionItem } from "@/components/types";
 
 // Utils
 import { scrollIn } from "../../utils/utils";
@@ -32,25 +32,24 @@ import { INSTRUMENTS, STYLES } from "@/constants/globalConstants";
 import ChipField from "@/components/filter/ChipField";
 import DragAndDropAudio from "../inputs/DragAndDropAudio";
 
-const defaultFormData = {
-  projectName: "",
-  instrumentSelection: [],
-  styleSelection: [],
-  audioPreview: null,
-  description: "",
-};
-
 const MAX_PROJECTNAME_LENGTH = 40;
 const MAX_DESCRIPTION_LENGTH = 300;
 
-const CreateProjectForm = () => {
+interface Props {
+  song?: AudioCollectionItem | null;
+  onUpdate?: () => Promise<void>;
+  setIsDialogOpen?: (isOpen: boolean) => void;
+}
+
+const CreateProjectForm = ({ song, onUpdate, setIsDialogOpen }: Props) => {
   // Hooks
   const t = useTranslations("createCollab");
   const tTimeline = useTranslations("timelineFilter");
   const dispatch = useDispatch();
   const { goToDashboard } = useRedirect();
   const theme = useTheme();
-  const { handleUpload, isUploading, progress, message } = useAudioFileUpload();
+  const { handleUpload, handleUpdate, isUploading, progress, message } =
+    useAudioFileUpload();
 
   // Refs
   const projectNameRef = useRef<HTMLInputElement>(null);
@@ -60,7 +59,16 @@ const CreateProjectForm = () => {
   const audioRef = useRef<HTMLInputElement>(null);
 
   // States
+  const defaultFormData = {
+    projectName: song?.projectName || "",
+    instrumentSelection: song?.instruments || [],
+    styleSelection: song?.style || [],
+    audioPreview: null,
+    description: song?.description || "",
+  };
+
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const [formData, setFormData] = useState<FormData>(defaultFormData);
   const {
     projectName,
@@ -78,61 +86,76 @@ const CreateProjectForm = () => {
   }, [isUploading]);
 
   // Utils
-  function validation() {
-    if (projectName.length === 0 && projectNameRef.current) {
-      dispatch(
-        setAlert({
-          text: t("Project name is required"),
-          type: "error",
-        })
-      );
+  async function validation() {
+    try {
+      if (projectName.length === 0 && projectNameRef.current) {
+        dispatch(
+          setAlert({
+            text: t("Project name is required"),
+            type: "error",
+          })
+        );
 
-      scrollIn(projectNameRef.current);
-      return;
-    } else if (instrumentSelection.length === 0 && instrumentsRef.current) {
-      dispatch(
-        setAlert({
-          text: t("Selecet what instruments you looking for"),
-          type: "error",
-        })
-      );
+        scrollIn(projectNameRef.current);
+        return;
+      } else if (instrumentSelection.length === 0 && instrumentsRef.current) {
+        dispatch(
+          setAlert({
+            text: t("Selecet what instruments you looking for"),
+            type: "error",
+          })
+        );
 
-      scrollIn(instrumentsRef.current);
-      return;
-    } else if (description.length === 0 && descriptionRef.current) {
-      dispatch(
-        setAlert({
-          text: t("Describe your project"),
-          type: "error",
-        })
-      );
+        scrollIn(instrumentsRef.current);
+        return;
+      } else if (styleSelection.length === 0 && styleRef.current) {
+        dispatch(
+          setAlert({
+            text: t("Select what genre is your demo"),
+            type: "error",
+          })
+        );
 
-      scrollIn(descriptionRef.current);
-      return;
-    } else if (styleSelection.length === 0 && styleRef.current) {
-      dispatch(
-        setAlert({
-          text: t("Select what genre is your demo"),
-          type: "error",
-        })
-      );
+        scrollIn(styleRef.current);
+        return;
+      } else if (description.length === 0 && descriptionRef.current) {
+        dispatch(
+          setAlert({
+            text: t("Describe your project"),
+            type: "error",
+          })
+        );
 
-      scrollIn(styleRef.current);
-      return;
-    } else if (!audioPreview && audioRef.current) {
-      dispatch(
-        setAlert({
-          text: t("Add your demo"),
-          type: "error",
-        })
-      );
+        scrollIn(descriptionRef.current);
+        return;
+      } else if (!song && !audioPreview && audioRef.current) {
+        dispatch(
+          setAlert({
+            text: t("Add your demo"),
+            type: "error",
+          })
+        );
 
-      scrollIn(audioRef.current);
-      return;
-    } else {
-      if (audioPreview && audioPreview.waveform) {
-        handleUpload(formData);
+        scrollIn(audioRef.current);
+        return;
+      } else {
+        if (!song && audioPreview && audioPreview.waveform) {
+          handleUpload(formData);
+        }
+
+        // If editing song
+        if (song && onUpdate) {
+          await handleUpdate(formData, song.id);
+        }
       }
+    } catch (err) {
+      console.error(err);
+      dispatch(
+        setAlert({
+          text: String(err),
+          type: "error",
+        })
+      );
     }
   }
 
@@ -164,14 +187,20 @@ const CreateProjectForm = () => {
     }
   }
 
-  function onModalClose() {
+  async function onModalClose() {
     setIsModalOpen(false);
     setFormData(defaultFormData);
-    goToDashboard();
+
+    if (setIsDialogOpen && onUpdate) {
+      setIsDialogOpen(false);
+      await onUpdate();
+    } else {
+      goToDashboard();
+    }
   }
 
   return (
-    <Stack gap={2} pt={6}>
+    <Stack gap={2} pt={song ? 0 : 6}>
       <Stack
         ref={projectNameRef}
         mb={1}
@@ -246,25 +275,33 @@ const CreateProjectForm = () => {
         />
       </Stack>
 
-      <Stack
-        ref={audioRef}
-        sx={{
-          scrollMarginTop: SCROLL_MARGIN_TOP,
-        }}
-      >
-        <Typography variant="overline">{t("Upload your demo")}</Typography>
+      {!song && (
+        <Stack
+          ref={audioRef}
+          sx={{
+            scrollMarginTop: SCROLL_MARGIN_TOP,
+          }}
+        >
+          <Typography variant="overline">{t("Upload your demo")}</Typography>
 
-        <DragAndDropAudio
-          audioPreview={audioPreview}
-          setAudioPreview={(data) =>
-            setFormData({ ...formData, audioPreview: data })
-          }
-        />
-      </Stack>
+          <DragAndDropAudio
+            audioPreview={audioPreview}
+            setAudioPreview={(data) =>
+              setFormData({ ...formData, audioPreview: data })
+            }
+          />
+        </Stack>
+      )}
 
       <Box mt={1}>
         <Button fullWidth variant="contained" onClick={validation}>
           {t("Submit")}
+        </Button>
+      </Box>
+
+      <Box>
+        <Button fullWidth variant="contained" color="error">
+          {t("Cancel")}
         </Button>
       </Box>
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { Stack, Typography, CircularProgress } from "@mui/material";
+import React, { useState } from "react";
+import { Stack, Typography, CircularProgress, Dialog } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setAlert } from "@/redux/slices/userSlice";
 
@@ -14,6 +14,7 @@ import useGetUserSongs from "@/hooks/firebase/useGetUserSongs";
 import useHomeRedirect from "@/hooks/redirects/useHomeRedirect";
 import { setFilterOut } from "@/redux/slices/dashboardSlice";
 import { useTranslations } from "next-intl";
+import useGetTimelineData from "@/hooks/firebase/useGetTimelineData";
 
 // Utils
 import {
@@ -27,6 +28,7 @@ import { formatedFileName } from "@/hooks/upload/utils";
 import BasicHead from "@/components/containers/BasicHead";
 import SongCard from "@/components/content/SongCard";
 import PageLayout from "@/components/containers/PageLayout";
+import CreateProjectForm from "@/components/forms/CreateProjectForm";
 
 // TODO infinitive scrolling
 const Profile = () => {
@@ -38,13 +40,19 @@ const Profile = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const { slug } = router.query;
+  const { fetchTimeline } = useGetTimelineData();
+
+  // States
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedSong, setSelectedSong] = useState<AudioCollectionItem | null>(
+    null
+  );
   const id = user && userCheck ? (slug as string) : undefined;
 
   // Fetch user data
   const { data, isLoading } = useGetUserData(id);
-
-  // TODO move it to redux (just user profile)
-  const { songs, setSongs, isSongsLoading } = useGetUserSongs(id);
+  const { songs, setSongs, isSongsLoading, fetchUserSongs } =
+    useGetUserSongs(id);
 
   // Utils
   const onDelete = async (song: AudioCollectionItem) => {
@@ -88,6 +96,21 @@ const Profile = () => {
     }
   };
 
+  function onEdit(song: AudioCollectionItem) {
+    setIsDialogOpen(true);
+    setSelectedSong(song);
+  }
+
+  async function onUpdate() {
+    try {
+      await fetchUserSongs(id as string, setSongs);
+      await fetchTimeline();
+      //setIsDialogOpen(false);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
   if (!user || !userCheck) return;
 
   if (isLoading || isSongsLoading)
@@ -125,6 +148,7 @@ const Profile = () => {
                       key={index}
                       item={song}
                       onDelete={() => onDelete(song)}
+                      onEdit={() => onEdit(song)}
                     />
                   );
                 } else {
@@ -133,6 +157,16 @@ const Profile = () => {
               })}
           </Stack>
         </PageLayout>
+
+        <Dialog open={isDialogOpen} onClose={() => setIsDialogOpen(false)}>
+          <Stack p={2}>
+            <CreateProjectForm
+              song={selectedSong}
+              onUpdate={onUpdate}
+              setIsDialogOpen={setIsDialogOpen}
+            />
+          </Stack>
+        </Dialog>
       </>
     );
 };
@@ -151,12 +185,22 @@ export async function getServerSideProps(context: GetServerSidePropsContext) {
   const navbar = (await import(`../../../messages/${locale}/navbar.json`))
     .default;
 
+  const timelineFilter = (
+    await import(`../../../messages/${locale}/timelineFilter.json`)
+  ).default;
+
+  const createCollab = (
+    await import(`../../../messages/${locale}/createCollab.json`)
+  ).default;
+
   return {
     props: {
       messages: {
         profile,
         songCard,
         navbar,
+        createCollab,
+        timelineFilter,
       },
     },
   };
