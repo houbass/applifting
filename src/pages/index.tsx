@@ -54,10 +54,13 @@ export async function getStaticProps({ locale }: { locale: string }) {
   const signInUp = (await import(`../../messages/${locale}/signInUp.json`))
     .default;
 
+  const navbar = (await import(`../../messages/${locale}/navbar.json`)).default;
+
   return {
     props: {
       messages: {
         signInUp,
+        navbar,
       },
     },
   };
