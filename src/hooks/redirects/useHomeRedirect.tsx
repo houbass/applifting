@@ -8,8 +8,10 @@ const useHomeRedirect = () => {
   const user = useSelector(selectUser);
   const userCheck = useSelector(selectUserCheck);
 
+  console.log(user);
+
   useEffect(() => {
-    if (!user && userCheck) {
+    if (user && userCheck) {
       router.push("/");
     }
   }, [user, userCheck, router]);

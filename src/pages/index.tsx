@@ -22,7 +22,7 @@ export default function Home() {
     <>
       <BasicHead title="Home" />
 
-      <PageLayout>
+      <PageLayout title="Recent articles">
         <Timeline />
       </PageLayout>
     </>

@@ -3,10 +3,14 @@ import { CircularProgress, Stack } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selecTimelineData } from "@/redux/slices/dashboardSlice";
 
+// Components
+import ArticleCard from "./ArticleCard";
+
 // TODO make on scroll fetching
 const Timeline = () => {
   // States
   const timelineData = useSelector(selecTimelineData);
+  const data = [1, 2, 3];
 
   if (!timelineData) {
     return (
@@ -17,8 +21,11 @@ const Timeline = () => {
   }
 
   return (
-    <Stack pt={2} gap={2}>
-      <p>timeline</p>
+    <Stack sx={{ pt: 6, gap: 4 }}>
+      {data.map((item, index) => {
+        console.log(item);
+        return <ArticleCard key={index} />;
+      })}
     </Stack>
   );
 };

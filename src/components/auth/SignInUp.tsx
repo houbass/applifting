@@ -21,7 +21,7 @@ const SignInUp = ({
   setDisplayName,
 }: Props) => {
   return (
-    <Stack gap={1}>
+    <Stack sx={{ gap: 1 }}>
       {setDisplayName && (
         <TextField
           id="outlined-basic"

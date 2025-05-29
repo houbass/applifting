@@ -13,7 +13,6 @@ import {
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import SignInUp from "@/components/auth/SignInUp";
-import GoogleSignUp from "@/components/auth/GoogleSingnUp";
 
 export default function Signin() {
   // Redirect when log in
@@ -60,8 +59,6 @@ export default function Signin() {
                 error={error}
                 text="Sign In"
               />
-
-              <GoogleSignUp />
             </Stack>
           </Stack>
         </main>

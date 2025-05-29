@@ -1,10 +1,25 @@
 import React, { useState } from "react";
-import { AppBar, IconButton, Stack, Typography, Tooltip } from "@mui/material";
-import { AccountBox, AddBox, Settings } from "@mui/icons-material";
-
+import Image from "next/image";
+import {
+  AppBar,
+  IconButton,
+  Stack,
+  Tooltip,
+  Typography,
+  Button,
+} from "@mui/material";
+import {
+  AccountBox,
+  AddBox,
+  Settings,
+  ArrowForward,
+} from "@mui/icons-material";
 import { selectUser } from "@/redux/slices/userSlice";
 import Link from "next/link";
-import { common } from "@mui/material/colors";
+import logo from "../../../public/logo.png";
+
+// Constants
+import { MAX_WIDTH, PAGE_PADDING_X } from "@/constants/globalConstants";
 
 // Hooks
 import { useSelector } from "react-redux";
@@ -12,11 +27,13 @@ import { useRouter } from "next/router";
 
 // Components
 import UserSettingsPanel from "./UserSettingsPanel";
+import { common } from "@mui/material/colors";
 
 const UserTopNavBar = () => {
   // Hooks
   const router = useRouter();
   const user = useSelector(selectUser);
+  const path = router.asPath;
 
   // States
   const [settingsView, setSettingsView] = useState(false);
@@ -32,63 +49,89 @@ const UserTopNavBar = () => {
     });
   };
 
+  function linkOpacity(target: string) {
+    return path === target ? "initial" : "secondary";
+  }
+
   return (
     <>
-      <AppBar position="fixed">
-        <Stack
-          px={2}
-          py={1}
-          flexDirection="row"
-          alignItems="center"
-          justifyContent="space-between"
-        >
-          <button
-            style={{ all: "unset", cursor: "pointer" }}
-            onClick={handleRedirect}
+      <AppBar
+        position="fixed"
+        sx={{
+          backgroundColor: "#F8F9FA",
+          color: "text.primary",
+          boxShadow: "none",
+        }}
+      >
+        <Stack sx={{ alignItems: "center", px: PAGE_PADDING_X, py: 1 }}>
+          <Stack
+            sx={{
+              width: "100%",
+              maxWidth: MAX_WIDTH,
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "space-between",
+            }}
           >
-            <Typography
-              color={common.white}
-              fontWeight={600}
-              variant="overline"
-              fontSize={14}
+            <Stack
+              sx={{ flexDirection: "row", alignItems: "center", gap: "40px" }}
             >
-              COLLABRO
-            </Typography>
-          </button>
+              <button className="unsetLink" onClick={handleRedirect}>
+                <Image
+                  alt="logo"
+                  src={logo}
+                  style={{ width: "39px", height: "auto" }}
+                />
+              </button>
 
-          <Stack alignItems="center" flexDirection="row">
-            <Link href="/createproject" passHref legacyBehavior>
-              <Tooltip title="Create Project" disableInteractive>
-                <IconButton
-                  size="small"
-                  color="inherit"
-                  aria-label="Create Project"
-                >
-                  <AddBox />
-                </IconButton>
-              </Tooltip>
-            </Link>
-
-            <Tooltip title="Settings" disableInteractive>
-              <IconButton
-                size="small"
-                onClick={toggleDrawer}
-                color="inherit"
-                aria-label="Settings"
-              >
-                <Settings />
-              </IconButton>
-            </Tooltip>
-
-            {user && (
-              <Link href={`/profile/${user.uid}`} passHref legacyBehavior>
-                <Tooltip title="Profile" disableInteractive>
-                  <IconButton size="small" color="inherit" aria-label="Profile">
-                    <AccountBox />
-                  </IconButton>
-                </Tooltip>
+              <Link href="/" className="unsetLink">
+                <Typography color={linkOpacity("/")}>
+                  Recent Articles
+                </Typography>
               </Link>
-            )}
+
+              <Link href="/about" className="unsetLink">
+                <Typography color={linkOpacity("/about")}>About</Typography>
+              </Link>
+            </Stack>
+
+            <Stack alignItems="center" flexDirection="row">
+              <Link href="/signin" passHref legacyBehavior>
+                <Button
+                  endIcon={<ArrowForward />}
+                  sx={{ textTransform: "initial" }}
+                >
+                  Log in
+                </Button>
+              </Link>
+
+              {user && (
+                <>
+                  <Link href={`/profile/${user.uid}`} passHref legacyBehavior>
+                    <Tooltip title="Profile" disableInteractive>
+                      <IconButton
+                        size="small"
+                        color="inherit"
+                        aria-label="Profile"
+                      >
+                        <AccountBox />
+                      </IconButton>
+                    </Tooltip>
+                  </Link>
+
+                  <Tooltip title="Settings" disableInteractive>
+                    <IconButton
+                      size="small"
+                      onClick={toggleDrawer}
+                      color="inherit"
+                      aria-label="Settings"
+                    >
+                      <Settings />
+                    </IconButton>
+                  </Tooltip>
+                </>
+              )}
+            </Stack>
           </Stack>
         </Stack>
       </AppBar>

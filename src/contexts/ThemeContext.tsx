@@ -33,14 +33,32 @@ export const ThemeProviderWrapper = ({ children }: { children: ReactNode }) => {
         palette: {
           mode,
           primary: {
-            main: mode === "light" ? "#1976d2" : "#90caf9",
+            main: mode === "light" ? "#007BFF" : "#90caf9",
           },
           secondary: {
-            main: mode === "light" ? "#d32f2f" : "#f48fb1",
+            main: mode === "light" ? "#6C757D" : "#f48fb1",
           },
           background: {
             default: mode === "light" ? "#ffffff" : "#121212",
             paper: mode === "light" ? "#f5f5f5" : "#1e1e1e",
+          },
+          text: {
+            primary: mode === "light" ? "#212529" : "#ffffff",
+            secondary: mode === "light" ? "#6c757d" : "#b0bec5",
+          },
+        },
+
+        typography: {
+          h1: {
+            fontSize: "40px",
+            fontWeight: 500,
+          },
+          h4: {
+            fontSize: "24px",
+            fontWeight: 500,
+          },
+          body1: {
+            lineHeight: "24px",
           },
         },
       }),
