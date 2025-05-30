@@ -4,7 +4,7 @@ import { auth } from "@/config/firebase";
 import { useDispatch } from "react-redux";
 import { setUser, setUserCheck } from "@/redux/slices/userSlice";
 
-const useAuthListener = () => {
+export default function useAuthListener() {
   // Hooks
   const dispatch = useDispatch();
 
@@ -29,6 +29,4 @@ const useAuthListener = () => {
     // Cleanup the listener on component unmount
     return () => unsubscribe();
   }, [dispatch]);
-};
-
-export default useAuthListener;
+}

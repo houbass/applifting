@@ -7,3 +7,26 @@
   all: unset;
   cursor: pointer;
 }
+
+.container {
+  max-width: 600px;
+  margin: 0 auto;
+  font-family: sans-serif;
+}
+
+.text-input {
+  width: 100%;
+  padding: 8px;
+  font-size: 14px;
+  font-family: monospace;
+  border: 1px solid #000;
+  margin-bottom: 1rem;
+}
+
+.text-preview {
+  white-space: pre-wrap; /* ✅ keeps spaces and newlines */
+  font-family: monospace;
+  font-size: 14px;
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+}

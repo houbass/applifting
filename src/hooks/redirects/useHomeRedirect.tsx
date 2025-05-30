@@ -3,7 +3,7 @@ import { selectUser, selectUserCheck } from "@/redux/slices/userSlice";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
 
-const useHomeRedirect = () => {
+export default function useHomeRedirect() {
   const router = useRouter();
   const user = useSelector(selectUser);
   const userCheck = useSelector(selectUserCheck);
@@ -17,6 +17,4 @@ const useHomeRedirect = () => {
   }, [user, userCheck, router]);
 
   return { user, userCheck };
-};
-
-export default useHomeRedirect;
+}

@@ -7,12 +7,13 @@ import { selecTimelineData } from "@/redux/slices/dashboardSlice";
 import ArticleCard from "./ArticleCard";
 
 // TODO make on scroll fetching
-const Timeline = () => {
+export default function Timeline() {
   // States
   const timelineData = useSelector(selecTimelineData);
   const data = [1, 2, 3];
 
   if (!timelineData) {
+    // TODO use skletons
     return (
       <Stack justifyContent="center" alignItems="center" height="200px">
         <CircularProgress />
@@ -28,6 +29,4 @@ const Timeline = () => {
       })}
     </Stack>
   );
-};
-
-export default Timeline;
+}

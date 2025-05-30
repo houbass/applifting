@@ -15,7 +15,7 @@ export const ThemeContext = createContext<ThemeContextProps | undefined>(
 );
 
 // Provider component
-export const ThemeProviderWrapper = ({ children }: { children: ReactNode }) => {
+export function ThemeProviderWrapper({ children }: { children: ReactNode }) {
   // States
   const [mode, setMode] = useLocalStorageState<PaletteMode>("palleteMode", {
     defaultValue: "light",
@@ -73,4 +73,4 @@ export const ThemeProviderWrapper = ({ children }: { children: ReactNode }) => {
       </ThemeProvider>
     </ThemeContext.Provider>
   );
-};
+}

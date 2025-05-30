@@ -12,7 +12,7 @@ import { AudioCollectionItem } from "@/components/types";
 import { PAGE_SIZE } from "@/constants/globalConstants";
 import { useCallback } from "react";
 
-const useGetTimelineData = () => {
+export default function useGetTimelineData() {
   // Hooks
   const dispatch = useDispatch();
 
@@ -37,6 +37,4 @@ const useGetTimelineData = () => {
   }, [dispatch]);
 
   return { fetchTimeline };
-};
-
-export default useGetTimelineData;
+}

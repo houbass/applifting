@@ -14,7 +14,7 @@ import {
 // Types
 import { AudioCollectionItem } from "@/components/types";
 
-const useGetUserSongs = (id: string | undefined) => {
+export default function useGetUserSongs(id: string | undefined) {
   // States
   const [songs, setSongs] = useState<AudioCollectionItem[] | null>(null);
   const [isSongsLoading, setIsSongsLoading] = useState(false);
@@ -54,6 +54,4 @@ const useGetUserSongs = (id: string | undefined) => {
   }, [id]);
 
   return { songs, setSongs, isSongsLoading, fetchUserSongs };
-};
-
-export default useGetUserSongs;
+}

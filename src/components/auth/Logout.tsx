@@ -7,7 +7,7 @@ interface Props {
   toggleDrawer?: () => void;
 }
 
-const Logout = ({ toggleDrawer }: Props) => {
+export default function Logout({ toggleDrawer }: Props) {
   // Utils
   const handleLogout = async () => {
     try {
@@ -31,6 +31,4 @@ const Logout = ({ toggleDrawer }: Props) => {
       </Button>
     </Box>
   );
-};
-
-export default Logout;
+}

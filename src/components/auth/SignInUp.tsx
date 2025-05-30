@@ -11,7 +11,7 @@ interface Props {
   setDisplayName?: (value: string) => void;
 }
 
-const SignInUp = ({
+export default function SignInUp({
   setEmail,
   setPassword,
   handler,
@@ -19,7 +19,7 @@ const SignInUp = ({
   error,
   text,
   setDisplayName,
-}: Props) => {
+}: Props) {
   return (
     <Stack sx={{ gap: 1 }}>
       {setDisplayName && (
@@ -54,6 +54,4 @@ const SignInUp = ({
       <Typography color="error">{error}</Typography>
     </Stack>
   );
-};
-
-export default SignInUp;
+}

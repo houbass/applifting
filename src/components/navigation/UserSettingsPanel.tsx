@@ -19,7 +19,10 @@ interface Props {
   toggleDrawer: () => void;
 }
 
-const UserSettingsPanel = ({ settingsView, toggleDrawer }: Props) => {
+export default function UserSettingsPanel({
+  settingsView,
+  toggleDrawer,
+}: Props) {
   // Contexts
   const themeContext = useContext(ThemeContext);
   if (!themeContext) return null;
@@ -86,6 +89,4 @@ const UserSettingsPanel = ({ settingsView, toggleDrawer }: Props) => {
       </Stack>
     </Drawer>
   );
-};
-
-export default UserSettingsPanel;
+}

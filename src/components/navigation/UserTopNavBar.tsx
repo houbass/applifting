@@ -8,12 +8,7 @@ import {
   Typography,
   Button,
 } from "@mui/material";
-import {
-  AccountBox,
-  AddBox,
-  Settings,
-  ArrowForward,
-} from "@mui/icons-material";
+import { AccountBox, Settings, ArrowForward } from "@mui/icons-material";
 import { selectUser } from "@/redux/slices/userSlice";
 import Link from "next/link";
 import logo from "../../../public/logo.png";
@@ -27,9 +22,8 @@ import { useRouter } from "next/router";
 
 // Components
 import UserSettingsPanel from "./UserSettingsPanel";
-import { common } from "@mui/material/colors";
 
-const UserTopNavBar = () => {
+export default function UserTopNavBar() {
   // Hooks
   const router = useRouter();
   const user = useSelector(selectUser);
@@ -96,6 +90,10 @@ const UserTopNavBar = () => {
             </Stack>
 
             <Stack alignItems="center" flexDirection="row">
+              <Link href="/create-article" className="unsetLink">
+                <Typography color="primary">Create Article</Typography>
+              </Link>
+
               <Link href="/signin" passHref legacyBehavior>
                 <Button
                   endIcon={<ArrowForward />}
@@ -142,6 +140,4 @@ const UserTopNavBar = () => {
       />
     </>
   );
-};
-
-export default UserTopNavBar;
+}

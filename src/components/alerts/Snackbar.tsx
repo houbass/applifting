@@ -3,7 +3,7 @@ import { Snackbar as Snack, Alert } from "@mui/material";
 import { useSelector } from "react-redux";
 import { selectAlert } from "@/redux/slices/userSlice";
 
-const Snackbar = () => {
+export default function Snackbar() {
   // States
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { text, type } = useSelector(selectAlert);
@@ -49,6 +49,4 @@ const Snackbar = () => {
       )}
     </>
   );
-};
-
-export default Snackbar;
+}

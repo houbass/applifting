@@ -12,7 +12,7 @@ export default function Home() {
   // Hooks
   const { fetchTimeline } = useGetTimelineData();
 
-  // TODO use tanstack query for fetching data
+  // TODO use tanstack query for fetching data + serverside
   // Fetch timeline data
   useEffect(() => {
     fetchTimeline();
@@ -23,7 +23,9 @@ export default function Home() {
       <BasicHead title="Home" />
 
       <PageLayout title="Recent articles">
-        <Timeline />
+        <section>
+          <Timeline />
+        </section>
       </PageLayout>
     </>
   );

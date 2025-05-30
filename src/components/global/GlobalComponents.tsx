@@ -7,7 +7,7 @@ import useAuthListener from "@/hooks/auth/useAuthListener";
 import UserTopNavBar from "../navigation/UserTopNavBar";
 import Snackbar from "../alerts/Snackbar";
 
-const GlobalComponents = () => {
+export default function GlobalComponents() {
   // Hooks
   // Check if user is logged in
   useAuthListener();
@@ -18,6 +18,4 @@ const GlobalComponents = () => {
       <Snackbar />
     </>
   );
-};
-
-export default GlobalComponents;
+}
