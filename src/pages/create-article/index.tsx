@@ -1,12 +1,10 @@
 import { Button } from "@mui/material";
 import dynamic from "next/dynamic";
-import { Box, Typography } from "@mui/material";
 import { useForm } from "react-hook-form";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
-import { useState } from "react";
 const CreateArticleForm = dynamic(
   () => import("@/components/forms/CreateArticleForm"),
   {
@@ -25,8 +23,6 @@ export default function ArticleDetail() {
   // Fetch detail data
 
   // TODO redirect if not logged in
-  // check
-  const [text, setText] = useState("");
 
   // Form hook
   const {
@@ -41,11 +37,11 @@ export default function ArticleDetail() {
     },
   });
 
-  // TUtils
-  const onSubmit = (data: NewArticleFormData) => {
+  // Utils
+  // TODO upload
+  function onSubmit(data: NewArticleFormData) {
     console.log("Form submitted with data:", data);
-    setText(data.content);
-  };
+  }
 
   return (
     <>
@@ -71,18 +67,6 @@ export default function ArticleDetail() {
             defaultImageUrl={""}
           />
         </section>
-
-        <Box mt={4}>
-          <Typography
-            component="pre"
-            sx={{
-              whiteSpace: "pre-wrap",
-              wordBreak: "break-word",
-            }}
-          >
-            {text}
-          </Typography>
-        </Box>
       </PageLayout>
     </>
   );

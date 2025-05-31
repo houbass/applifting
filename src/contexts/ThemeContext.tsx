@@ -38,6 +38,9 @@ export function ThemeProviderWrapper({ children }: { children: ReactNode }) {
           secondary: {
             main: mode === "light" ? "#6C757D" : "#f48fb1",
           },
+          error: {
+            main: "#DC3545",
+          },
           background: {
             default: mode === "light" ? "#ffffff" : "#121212",
             paper: mode === "light" ? "#f5f5f5" : "#1e1e1e",
@@ -51,6 +54,10 @@ export function ThemeProviderWrapper({ children }: { children: ReactNode }) {
         typography: {
           h1: {
             fontSize: "40px",
+            fontWeight: 500,
+          },
+          h3: {
+            fontSize: "28px",
             fontWeight: 500,
           },
           h4: {
