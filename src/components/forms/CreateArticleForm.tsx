@@ -19,7 +19,7 @@ import ImgUploadBtn from "../input/ImgUploadBtn";
 interface Props {
   register: UseFormRegister<NewArticleFormData>;
   formState: { errors: FieldErrors<FieldValues> };
-  defaultImageUrl: null | string;
+  defaultImageUrl: string | null;
 }
 
 export default function CreateArticleForm({
@@ -40,7 +40,7 @@ export default function CreateArticleForm({
   };
   return (
     <form>
-      <Stack sx={{ pt: 6, pb: 2, gap: 4, maxWidth: 760 }}>
+      <Stack sx={{ pt: 6, gap: 4, maxWidth: 760 }}>
         <Stack sx={{ gap: 1 }}>
           <Typography id="articletitle-label">Article Title</Typography>
           <TextField

@@ -15,7 +15,7 @@ const CreateArticleForm = dynamic(
 export interface NewArticleFormData {
   articleTitle: string;
   content: string;
-  image: File | undefined;
+  image: File | null;
 }
 
 export default function ArticleDetail() {
@@ -33,7 +33,7 @@ export default function ArticleDetail() {
     defaultValues: {
       articleTitle: "",
       content: "",
-      image: undefined,
+      image: null,
     },
   });
 
@@ -64,7 +64,7 @@ export default function ArticleDetail() {
           <CreateArticleForm
             register={register}
             formState={{ errors }}
-            defaultImageUrl={""}
+            defaultImageUrl={null}
           />
         </section>
       </PageLayout>

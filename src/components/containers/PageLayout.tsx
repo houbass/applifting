@@ -25,6 +25,7 @@ export default function PageLayout({
         sx={{
           px: PAGE_PADDING_X,
           pt: PAGE_PADDING_TOP,
+          pb: 2,
           alignItems: "center",
         }}
       >
