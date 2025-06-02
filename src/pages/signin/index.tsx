@@ -1,9 +1,5 @@
-import React, { useState } from "react";
-import { Box, Stack, Typography } from "@mui/material";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "@/config/firebase";
-import useHomeRedirect from "@/hooks/redirects/useHomeRedirect";
-
+import { Stack } from "@mui/material";
+import useHomeRedirectOnLogIn from "@/hooks/redirects/useHomeRedirectOnLogIn";
 import { PAGE_PADDING_X } from "@/constants/globalConstants";
 
 // Components
@@ -13,8 +9,7 @@ import SignInForm from "@/components/forms/SignInForm";
 
 export default function Signin() {
   // Redirect when log in
-  // TODO redirect
-  const { user, userCheck } = useHomeRedirect();
+  useHomeRedirectOnLogIn();
 
   return (
     <PageLayout>

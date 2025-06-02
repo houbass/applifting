@@ -31,7 +31,9 @@ export default function PageLayout({
       >
         <Stack sx={{ maxWidth: MAX_WIDTH, width: "100%" }}>
           <header>
-            <Stack sx={{ flexDirection: "row", gap: 4, alignItems: "center" }}>
+            <Stack
+              sx={{ flexDirection: "row", alignItems: "center", mb: 6, gap: 4 }}
+            >
               {title && <Typography variant="h1">{title}</Typography>}
               {button && button}
             </Stack>

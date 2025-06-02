@@ -3,6 +3,7 @@ import { Button } from "@mui/material";
 // Types
 import { UseFormRegister } from "react-hook-form";
 import { NewArticleFormData } from "@/pages/create-article";
+import { useRef } from "react";
 
 interface Props {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -15,7 +16,7 @@ interface Props {
     | "error"
     | "info"
     | "warning";
-  register?: UseFormRegister<NewArticleFormData>;
+  register: UseFormRegister<NewArticleFormData>;
 }
 
 // TODO make input logic better
@@ -25,25 +26,25 @@ export default function ImgUploadBtn({
   color = "primary",
   register,
 }: Props) {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+
   return (
-    <Button variant={variant} color={color} component="label">
-      Upload an Image
-      {register ? (
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          {...register("image", { required: "Image is required" })}
-          onChange={onChange}
-        />
-      ) : (
-        <input
-          type="file"
-          accept="image/*"
-          style={{ display: "none" }}
-          onChange={onChange}
-        />
-      )}
-    </Button>
+    <>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/*"
+        style={{ display: "none" }}
+        onChange={onChange}
+      />
+
+      <Button
+        variant={variant}
+        color={color}
+        onClick={() => inputRef.current?.click()}
+      >
+        Select File
+      </Button>
+    </>
   );
 }

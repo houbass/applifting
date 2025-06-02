@@ -51,7 +51,18 @@ export function ThemeProviderWrapper({ children }: { children: ReactNode }) {
           },
         },
 
+        components: {
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                textTransform: "none",
+              },
+            },
+          },
+        },
+
         typography: {
+          fontFamily: '"Helvetica", "Roboto", "Arial", sans-serif',
           h1: {
             fontSize: "40px",
             fontWeight: 500,

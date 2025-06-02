@@ -22,7 +22,7 @@ export default function Timeline() {
   }
 
   return (
-    <Stack sx={{ pt: 6, gap: 4 }}>
+    <Stack sx={{ gap: 4 }}>
       {data.map((item, index) => {
         console.log(item);
         return <ArticleCard key={index} />;

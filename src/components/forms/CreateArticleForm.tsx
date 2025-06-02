@@ -12,7 +12,7 @@ import {
 // Types
 import { FieldValues, UseFormRegister, FieldErrors } from "react-hook-form";
 import { NewArticleFormData } from "@/pages/create-article";
-
+import { UseFormSetValue } from "react-hook-form";
 // Components
 import ImgUploadBtn from "../input/ImgUploadBtn";
 
@@ -20,12 +20,14 @@ interface Props {
   register: UseFormRegister<NewArticleFormData>;
   formState: { errors: FieldErrors<FieldValues> };
   defaultImageUrl: string | null;
+  setValue: UseFormSetValue<NewArticleFormData>;
 }
 
 export default function CreateArticleForm({
   register,
   formState: { errors },
   defaultImageUrl,
+  setValue,
 }: Props) {
   const [imagePreview, setImagePreview] = useState<string | null>(
     defaultImageUrl
@@ -35,12 +37,20 @@ export default function CreateArticleForm({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
+      console.log(file);
+      setValue("image", file);
       setImagePreview(URL.createObjectURL(file));
     }
   };
+
+  function handleDeleteImage() {
+    setValue("image", null);
+    setImagePreview(null);
+  }
+
   return (
     <form>
-      <Stack sx={{ pt: 6, gap: 4, maxWidth: 760 }}>
+      <Stack sx={{ maxWidth: 760, gap: 4 }}>
         <Stack sx={{ gap: 1 }}>
           <Typography id="articletitle-label">Article Title</Typography>
           <TextField
@@ -62,12 +72,11 @@ export default function CreateArticleForm({
               </Typography>
             )}
             <Box>
-              {/* Change uppercase on buttons by default */}
               <ImgUploadBtn
                 onChange={handleFileChange}
+                register={register}
                 variant="contained"
                 color="secondary"
-                register={register}
               />
             </Box>
           </Stack>
@@ -89,12 +98,12 @@ export default function CreateArticleForm({
             />
 
             <Stack sx={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
-              <ImgUploadBtn onChange={handleFileChange} />
+              <ImgUploadBtn onChange={handleFileChange} register={register} />
               <Divider
                 orientation="vertical"
                 sx={{ height: 16, background: "orange" }}
               />
-              <Button color="error" onClick={() => setImagePreview(null)}>
+              <Button color="error" onClick={handleDeleteImage}>
                 Delete
               </Button>
             </Stack>

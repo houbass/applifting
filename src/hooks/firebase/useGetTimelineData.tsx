@@ -6,7 +6,7 @@ import { getDocs, collection, orderBy, limit, query } from "firebase/firestore";
 import { db } from "@/config/firebase";
 
 // Types
-import { AudioCollectionItem } from "@/components/types";
+import { AudioCollectionItem } from "@/types/types";
 
 // Constants
 import { PAGE_SIZE } from "@/constants/globalConstants";

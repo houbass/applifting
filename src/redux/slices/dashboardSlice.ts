@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
-import { AudioCollectionItem } from "@/components/types";
+import { AudioCollectionItem } from "@/types/types";
 
 // Definition of state Type
 interface DashboardState {

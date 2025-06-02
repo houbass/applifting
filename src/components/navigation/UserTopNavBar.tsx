@@ -1,20 +1,26 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import {
   AppBar,
-  IconButton,
+  Avatar,
   Stack,
   Tooltip,
   Typography,
   Button,
 } from "@mui/material";
-import { AccountBox, Settings, ArrowForward } from "@mui/icons-material";
+import { ArrowForward, ArrowDropDown } from "@mui/icons-material";
 import { selectUser } from "@/redux/slices/userSlice";
 import Link from "next/link";
 import logo from "../../../public/logo.png";
+import { ref, getDownloadURL } from "firebase/storage";
+import { storage } from "@/config/firebase";
 
 // Constants
-import { MAX_WIDTH, PAGE_PADDING_X } from "@/constants/globalConstants";
+import {
+  MAX_WIDTH,
+  PAGE_PADDING_X,
+  NAV_LINKS_GAP,
+} from "@/constants/globalConstants";
 
 // Hooks
 import { useSelector } from "react-redux";
@@ -31,6 +37,7 @@ export default function UserTopNavBar() {
 
   // States
   const [settingsView, setSettingsView] = useState(false);
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
 
   // Utils
   function toggleDrawer() {
@@ -46,6 +53,25 @@ export default function UserTopNavBar() {
   function linkOpacity(target: string) {
     return path === target ? "initial" : "secondary";
   }
+
+  // Get avatar image from Firebase Storage
+  useEffect(() => {
+    const fetchImage = async () => {
+      try {
+        if (!user) {
+          setAvatarUrl(null);
+          return;
+        }
+        const imageRef = ref(storage, "profile/avatar.jpg");
+        const downloadUrl = await getDownloadURL(imageRef);
+        setAvatarUrl(downloadUrl);
+      } catch (error) {
+        console.error("Error fetching image:", error);
+      }
+    };
+
+    fetchImage();
+  }, [user]);
 
   return (
     <>
@@ -68,13 +94,17 @@ export default function UserTopNavBar() {
             }}
           >
             <Stack
-              sx={{ flexDirection: "row", alignItems: "center", gap: "40px" }}
+              sx={{
+                flexDirection: "row",
+                alignItems: "center",
+                gap: NAV_LINKS_GAP,
+              }}
             >
               <button className="unsetLink" onClick={handleRedirect}>
                 <Image
                   alt="logo"
                   src={logo}
-                  style={{ width: "39px", height: "auto" }}
+                  style={{ width: "50px", height: "auto" }}
                 />
               </button>
 
@@ -89,44 +119,46 @@ export default function UserTopNavBar() {
               </Link>
             </Stack>
 
-            <Stack alignItems="center" flexDirection="row">
-              <Link href="/create-article" className="unsetLink">
-                <Typography color="primary">Create Article</Typography>
-              </Link>
-
-              <Link href="/signin" passHref legacyBehavior>
-                <Button
-                  endIcon={<ArrowForward />}
-                  sx={{ textTransform: "initial" }}
-                >
-                  Log in
-                </Button>
-              </Link>
+            <Stack
+              sx={{
+                alignItems: "center",
+                flexDirection: "row",
+                gap: NAV_LINKS_GAP,
+              }}
+            >
+              {!user && (
+                <Link href="/signin" passHref legacyBehavior>
+                  <Button endIcon={<ArrowForward />}>Log in</Button>
+                </Link>
+              )}
 
               {user && (
                 <>
-                  <Link href={`/profile/${user.uid}`} passHref legacyBehavior>
-                    <Tooltip title="Profile" disableInteractive>
-                      <IconButton
-                        size="small"
-                        color="inherit"
-                        aria-label="Profile"
-                      >
-                        <AccountBox />
-                      </IconButton>
-                    </Tooltip>
+                  <Link href="/my-articles" className="unsetLink">
+                    <Typography color="primary">My Articles</Typography>
                   </Link>
 
-                  <Tooltip title="Settings" disableInteractive>
-                    <IconButton
-                      size="small"
-                      onClick={toggleDrawer}
-                      color="inherit"
-                      aria-label="Settings"
-                    >
-                      <Settings />
-                    </IconButton>
-                  </Tooltip>
+                  <Link href="/create-article" className="unsetLink">
+                    <Typography color="primary">Create Article</Typography>
+                  </Link>
+
+                  {avatarUrl && (
+                    <Tooltip title="Settings" disableInteractive>
+                      <Stack
+                        sx={{ flexDirection: "row", alignItems: "center" }}
+                      >
+                        <Button
+                          size="small"
+                          onClick={toggleDrawer}
+                          color="inherit"
+                          aria-label="Settings"
+                        >
+                          <ArrowDropDown />
+                          <Avatar alt="avatar" src={avatarUrl} />
+                        </Button>
+                      </Stack>
+                    </Tooltip>
+                  )}
                 </>
               )}
             </Stack>

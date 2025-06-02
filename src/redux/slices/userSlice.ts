@@ -30,9 +30,12 @@ const userSlice = createSlice({
     setUserCheck: (state, action: PayloadAction<boolean>) => {
       state.userCheck = action.payload;
     },
-    setAlert: (state, action: PayloadAction<Alert>) => {
-      const value = action.payload;
-      state.alert = { ...value, text: value.text.toUpperCase() };
+    setAlert: (state, action: PayloadAction<string>) => {
+      const text = action.payload;
+      state.alert = {
+        text: text.toUpperCase(),
+        type: "error",
+      };
     },
   },
 });

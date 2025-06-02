@@ -60,28 +60,7 @@ export default function UserSettingsPanel({
 
         <Divider />
 
-        <Stack p={2} gap={2} height="100%" justifyContent="space-between">
-          <Stack>
-            <Typography variant="overline">mode</Typography>
-
-            <ToggleButtonGroup
-              color="primary"
-              value={mode}
-              exclusive
-              onChange={handleChange}
-              aria-label="Platform"
-            >
-              <ToggleButton value="light" size="small">
-                <LightMode fontSize="small" sx={{ marginRight: "8px" }} />
-                Light
-              </ToggleButton>
-              <ToggleButton value="dark" size="small">
-                <DarkMode fontSize="small" sx={{ marginRight: "8px" }} />
-                Dark
-              </ToggleButton>
-            </ToggleButtonGroup>
-          </Stack>
-
+        <Stack p={2}>
           <Box>
             <Logout toggleDrawer={toggleDrawer} />
           </Box>

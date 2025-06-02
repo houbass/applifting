@@ -1,6 +1,17 @@
 import React from "react";
-import { Button, Stack, TextField, Card, Typography } from "@mui/material";
+import {
+  Button,
+  Stack,
+  TextField,
+  Card,
+  Typography,
+  CircularProgress,
+} from "@mui/material";
 import { useForm } from "react-hook-form";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { useDispatch, useSelector } from "react-redux";
+import { setAlert, selectUser } from "@/redux/slices/userSlice";
+import { auth } from "@/config/firebase";
 
 interface LoginData {
   email: string;
@@ -8,6 +19,12 @@ interface LoginData {
 }
 
 export default function SignInForm() {
+  // Redux
+  const dispatch = useDispatch();
+  const user = useSelector(selectUser);
+
+  console.log("Current user:", user);
+
   // Form hook
   const {
     register,
@@ -17,20 +34,16 @@ export default function SignInForm() {
 
   async function handleSignIn(data: LoginData) {
     console.log(data);
-    /*
-      setError("");
-  
-      try {
-        await signInWithEmailAndPassword(auth, email, password);
-        setSuccess("Successfully signed in");
-      } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message);
-        } else {
-          console.error("Unexpected error", err);
-        }
+    const { email, password } = data;
+    try {
+      await signInWithEmailAndPassword(auth, email, password);
+    } catch (err) {
+      if (err instanceof Error) {
+        dispatch(setAlert(err.message));
+      } else {
+        console.error("Unexpected error", err);
       }
-      */
+    }
   }
 
   return (
@@ -50,6 +63,7 @@ export default function SignInForm() {
           <TextField
             aria-labelledby="email-label"
             fullWidth
+            type="email"
             placeholder="me@example.com"
             {...register("email", { required: "Email is required" })}
             error={!!errors.email}
@@ -71,7 +85,11 @@ export default function SignInForm() {
         </Stack>
 
         <Stack sx={{ flexDirection: "row", justifyContent: "flex-end" }}>
-          <Button variant="contained" onClick={handleSubmit(handleSignIn)}>
+          <Button
+            //startIcon={<CircularProgress color="inherit" size={16} />}
+            variant="contained"
+            onClick={handleSubmit(handleSignIn)}
+          >
             Log In
           </Button>
         </Stack>
