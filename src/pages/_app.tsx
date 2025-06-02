@@ -4,25 +4,27 @@ import type { AppProps } from "next/app";
 import { Provider } from "react-redux";
 import { store } from "@/redux/store";
 import { ThemeProviderWrapper } from "@/contexts/ThemeContext";
-import { IntlProvider } from "next-intl";
 import { useRouter } from "next/router";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 // Components
 import GlobalComponents from "@/components/global/GlobalComponents";
+
+const queryClient = new QueryClient();
 
 export default function App({ Component, pageProps }: AppProps) {
   const { locale } = useRouter();
 
   return (
     <>
-      <IntlProvider locale={locale!} messages={pageProps.messages}>
+      <QueryClientProvider client={queryClient}>
         <Provider store={store}>
           <ThemeProviderWrapper>
             <GlobalComponents />
             <Component {...pageProps} />
           </ThemeProviderWrapper>
         </Provider>
-      </IntlProvider>
+      </QueryClientProvider>
     </>
   );
 }

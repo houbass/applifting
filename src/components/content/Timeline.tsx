@@ -1,31 +1,23 @@
 import React from "react";
-import { CircularProgress, Stack } from "@mui/material";
-import { useSelector } from "react-redux";
-import { selecTimelineData } from "@/redux/slices/dashboardSlice";
+import { Stack } from "@mui/material";
+
+// Types
+import { Article } from "@/types/types";
 
 // Components
 import ArticleCard from "./ArticleCard";
 
+interface Props {
+  data: Article[];
+}
+
 // TODO make on scroll fetching
-export default function Timeline() {
-  // States
-  const timelineData = useSelector(selecTimelineData);
-  const data = [1, 2, 3];
-
-  if (!timelineData) {
-    // TODO use skletons
-    return (
-      <Stack justifyContent="center" alignItems="center" height="200px">
-        <CircularProgress />
-      </Stack>
-    );
-  }
-
+export default function Timeline({ data }: Props) {
   return (
     <Stack sx={{ gap: 4 }}>
       {data.map((item, index) => {
         console.log(item);
-        return <ArticleCard key={index} />;
+        return <ArticleCard key={index} data={item} />;
       })}
     </Stack>
   );

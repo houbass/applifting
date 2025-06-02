@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { selectUser, selectUserCheck } from "@/redux/slices/userSlice";
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
@@ -8,15 +8,15 @@ export default function useHomeRedirectOnLogOut() {
   const user = useSelector(selectUser);
   const userCheck = useSelector(selectUserCheck);
 
-  function redirectHome() {
+  const redirectHome = useCallback(() => {
     router.push("/");
-  }
+  }, [router]);
 
   useEffect(() => {
     if (!user && userCheck) {
       redirectHome();
     }
-  }, [user, userCheck, router]);
+  }, [user, userCheck, router, redirectHome]);
 
   return { redirectHome };
 }

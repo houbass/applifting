@@ -78,6 +78,7 @@ export default function ArticleDetail() {
         articleTitle,
         content,
         pictureUrl: imageUrl,
+        author: "Elisabeth Strain",
       });
 
       alert("Upload complete!");
@@ -92,7 +93,7 @@ export default function ArticleDetail() {
   // Register image field
   useEffect(() => {
     register("image", { required: "Image is required" });
-  }, []);
+  }, [register]);
 
   return (
     <>
