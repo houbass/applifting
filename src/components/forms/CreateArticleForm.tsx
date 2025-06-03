@@ -39,13 +39,13 @@ export default function CreateArticleForm({
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setValue("image", file);
+      setValue("image", file, { shouldDirty: true });
       setImagePreview(URL.createObjectURL(file));
     }
   };
 
   function handleDeleteImage() {
-    setValue("image", null);
+    setValue("image", null, { shouldDirty: true });
     setImagePreview(null);
   }
 

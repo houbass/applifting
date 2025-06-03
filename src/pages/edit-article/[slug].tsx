@@ -55,7 +55,7 @@ export default function ArticleDetail() {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isDirty },
     setValue,
     reset,
   } = useForm<NewArticleFormData>();
@@ -67,6 +67,9 @@ export default function ArticleDetail() {
     const { articleTitle, content, image } = data;
 
     console.log("TODO UPDATE", data);
+
+    // if image is string, do not upload image (it means its an original URL)
+
     /*
     if (!image) return;
 
@@ -126,6 +129,7 @@ export default function ArticleDetail() {
         title="Edit article"
         button={
           <Button
+            disabled={!isDirty}
             type="submit"
             variant="contained"
             onClick={handleSubmit(onSubmit)}
