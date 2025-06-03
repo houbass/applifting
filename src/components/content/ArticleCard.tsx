@@ -25,7 +25,7 @@ export default function ArticleCard({ data }: Props) {
         <Box
           sx={{
             position: "relative",
-            width: "100%",
+            width: { xs: "100%", sm: "100%", md: 244 },
             minWidth: { xs: "100%", sm: "100%", md: 244 },
             aspectRatio: "1 / 1",
             overflow: "hidden",

@@ -2,7 +2,7 @@ import { Button } from "@mui/material";
 
 // Types
 import { UseFormRegister } from "react-hook-form";
-import { NewArticleFormData } from "@/pages/create-article";
+import { NewArticleFormData } from "@/types/types";
 import { useRef } from "react";
 
 interface Props {
@@ -16,15 +16,12 @@ interface Props {
     | "error"
     | "info"
     | "warning";
-  register: UseFormRegister<NewArticleFormData>;
 }
 
-// TODO make input logic better
 export default function ImgUploadBtn({
   onChange,
   variant = "text",
   color = "primary",
-  register,
 }: Props) {
   const inputRef = useRef<HTMLInputElement | null>(null);
 

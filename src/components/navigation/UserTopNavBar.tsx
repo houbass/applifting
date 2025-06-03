@@ -3,15 +3,26 @@ import Image from "next/image";
 import {
   AppBar,
   Avatar,
+  Box,
   Stack,
   Tooltip,
   Typography,
   Button,
+  IconButton,
+  Drawer,
+  useMediaQuery,
 } from "@mui/material";
-import { ArrowForward, ArrowDropDown } from "@mui/icons-material";
+import {
+  ArrowForward,
+  ArrowDropDown,
+  Menu as MenuIcon,
+  Close,
+} from "@mui/icons-material";
 import { selectUser } from "@/redux/slices/userSlice";
 import Link from "next/link";
 import logo from "../../../public/logo.png";
+
+// Firebase
 import { ref, getDownloadURL } from "firebase/storage";
 import { storage } from "@/config/firebase";
 
@@ -25,36 +36,45 @@ import {
 // Hooks
 import { useSelector } from "react-redux";
 import { useRouter } from "next/router";
+import { useTheme } from "@mui/material/styles";
 
 // Components
 import UserSettingsPanel from "./UserSettingsPanel";
+import Logout from "../auth/Logout";
 
 export default function UserTopNavBar() {
   // Hooks
   const router = useRouter();
   const user = useSelector(selectUser);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const path = router.asPath;
 
   // States
   const [settingsView, setSettingsView] = useState(false);
   const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Utils
-  function toggleDrawer() {
+  function toggleSettingsDrawer() {
     setSettingsView(!settingsView);
   }
 
-  const handleRedirect = () => {
-    router.push({
-      pathname: "/",
-    });
-  };
+  function handleRedirect() {
+    router.push({ pathname: "/" });
+  }
 
   function linkOpacity(target: string) {
     return path === target ? "initial" : "secondary";
   }
+  function handleDrawerToggle() {
+    setDrawerOpen(!drawerOpen);
+  }
 
-  // Get avatar image from Firebase Storage
+  function closeDrawer() {
+    setDrawerOpen(false);
+  }
+
   useEffect(() => {
     const fetchImage = async () => {
       try {
@@ -72,6 +92,65 @@ export default function UserTopNavBar() {
 
     fetchImage();
   }, [user]);
+
+  const linksBlock = (
+    <>
+      <Link href="/" className="unsetLink" onClick={closeDrawer}>
+        <Typography color={linkOpacity("/")}>Recent Articles</Typography>
+      </Link>
+      <Link href="/about" className="unsetLink" onClick={closeDrawer}>
+        <Typography color={linkOpacity("/about")}>About</Typography>
+      </Link>
+    </>
+  );
+
+  const userLinksBlock = (
+    <>
+      <Link href="/my-articles" className="unsetLink" onClick={closeDrawer}>
+        <Typography color="primary">My Articles</Typography>
+      </Link>
+
+      <Link href="/create-article" className="unsetLink" onClick={closeDrawer}>
+        <Typography color="primary">Create Article</Typography>
+      </Link>
+    </>
+  );
+
+  const logIn = (
+    <Link href="/signin" passHref legacyBehavior>
+      <Button endIcon={<ArrowForward />} onClick={closeDrawer}>
+        Log in
+      </Button>
+    </Link>
+  );
+
+  const mobileLinks = (
+    <Stack sx={{ height: "100%" }}>
+      <Stack sx={{ flexDirection: "row", justifyContent: "flex-end", p: 2 }}>
+        <IconButton onClick={closeDrawer} color="inherit">
+          <Close />
+        </IconButton>
+      </Stack>
+      <Stack
+        sx={{
+          px: 3,
+          py: 3,
+          gap: 3,
+          height: "100%",
+          justifyContent: "space-between",
+        }}
+      >
+        <Stack sx={{ gap: 3 }}>
+          {linksBlock}
+
+          {user && userLinksBlock}
+        </Stack>
+
+        {!user && <Box>{logIn}</Box>}
+        {user && <Logout toggleDrawer={closeDrawer} />}
+      </Stack>
+    </Stack>
+  );
 
   return (
     <>
@@ -108,15 +187,7 @@ export default function UserTopNavBar() {
                 />
               </button>
 
-              <Link href="/" className="unsetLink">
-                <Typography color={linkOpacity("/")}>
-                  Recent Articles
-                </Typography>
-              </Link>
-
-              <Link href="/about" className="unsetLink">
-                <Typography color={linkOpacity("/about")}>About</Typography>
-              </Link>
+              {!isMobile && linksBlock}
             </Stack>
 
             <Stack
@@ -126,21 +197,15 @@ export default function UserTopNavBar() {
                 gap: NAV_LINKS_GAP,
               }}
             >
-              {!user && (
+              {!isMobile && !user && (
                 <Link href="/signin" passHref legacyBehavior>
                   <Button endIcon={<ArrowForward />}>Log in</Button>
                 </Link>
               )}
 
-              {user && (
+              {!isMobile && user && (
                 <>
-                  <Link href="/my-articles" className="unsetLink">
-                    <Typography color="primary">My Articles</Typography>
-                  </Link>
-
-                  <Link href="/create-article" className="unsetLink">
-                    <Typography color="primary">Create Article</Typography>
-                  </Link>
+                  {userLinksBlock}
 
                   {avatarUrl && (
                     <Tooltip title="Settings" disableInteractive>
@@ -149,7 +214,7 @@ export default function UserTopNavBar() {
                       >
                         <Button
                           size="small"
-                          onClick={toggleDrawer}
+                          onClick={toggleSettingsDrawer}
                           color="inherit"
                           aria-label="Settings"
                         >
@@ -161,14 +226,28 @@ export default function UserTopNavBar() {
                   )}
                 </>
               )}
+
+              {isMobile && (
+                <IconButton
+                  edge="end"
+                  color="inherit"
+                  onClick={handleDrawerToggle}
+                >
+                  <MenuIcon />
+                </IconButton>
+              )}
             </Stack>
           </Stack>
         </Stack>
       </AppBar>
 
+      <Drawer anchor="right" open={drawerOpen} onClose={closeDrawer}>
+        <Stack sx={{ width: 250, height: "100%" }}>{mobileLinks}</Stack>
+      </Drawer>
+
       <UserSettingsPanel
         settingsView={settingsView}
-        toggleDrawer={toggleDrawer}
+        toggleDrawer={toggleSettingsDrawer}
       />
     </>
   );

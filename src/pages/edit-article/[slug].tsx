@@ -1,6 +1,9 @@
 import { useEffect } from "react";
-import { Button } from "@mui/material";
 import dynamic from "next/dynamic";
+import { useRouter } from "next/router";
+import { useQuery } from "@tanstack/react-query";
+import { Button, Skeleton, Stack } from "@mui/material";
+import { MAX_CREATE_ARTICLE_WIDTH } from "@/constants/globalConstants";
 
 // Hooks
 import useHomeRedirectOnLogOut from "@/hooks/redirects/useHomeRedirectOnLogOut";
@@ -11,11 +14,12 @@ import { storage, db } from "@/config/firebase";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { setDoc, doc } from "firebase/firestore";
 
-// Utils
-import { toKebabCase } from "@/utils/utils";
-
 // Types
 import { NewArticleFormData } from "@/types/types";
+
+// Utils
+import { toKebabCase } from "@/utils/utils";
+import { fetchArticleById } from "../article-detail/utils";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
@@ -29,8 +33,23 @@ const CreateArticleForm = dynamic(
 );
 
 export default function ArticleDetail() {
+  const router = useRouter();
+  const { slug } = router.query;
+
   // Redirect when log out
   const { redirectHome } = useHomeRedirectOnLogOut();
+
+  // Fetch related articles based on the current article's slug
+  const { data } = useQuery({
+    queryKey: ["editArticle", slug],
+    queryFn: () => fetchArticleById(String(slug)),
+  });
+
+  const initialData = {
+    articleTitle: data?.articleTitle || "",
+    content: data?.content || "",
+    image: data?.pictureUrl || "",
+  };
 
   // Form hook
   const {
@@ -38,6 +57,7 @@ export default function ArticleDetail() {
     handleSubmit,
     formState: { errors },
     setValue,
+    reset,
   } = useForm<NewArticleFormData>();
 
   // TODO add progress bar and setAlert
@@ -46,6 +66,8 @@ export default function ArticleDetail() {
   async function onSubmit(data: NewArticleFormData) {
     const { articleTitle, content, image } = data;
 
+    console.log("TODO UPDATE", data);
+    /*
     if (!image) return;
 
     const timeStamp = Date.now();
@@ -54,7 +76,7 @@ export default function ArticleDetail() {
 
     try {
       // Upload the image
-      await uploadBytes(storageRef, image as File);
+      await uploadBytes(storageRef, image);
 
       // Get download URL
       const imageUrl = await getDownloadURL(storageRef);
@@ -77,6 +99,7 @@ export default function ArticleDetail() {
       console.error("Upload error:", err);
       alert("Something went wrong.");
     }
+    */
   }
 
   // Register image field
@@ -84,12 +107,23 @@ export default function ArticleDetail() {
     register("image", { required: "Image is required" });
   }, [register]);
 
+  // Reset form when data arrives
+  useEffect(() => {
+    if (data) {
+      reset({
+        articleTitle: data.articleTitle,
+        content: data.content,
+        image: data.pictureUrl,
+      });
+    }
+  }, [data, reset]);
+
   return (
     <>
-      <BasicHead title="Create Article" />
+      <BasicHead title="Edit Article" />
 
       <PageLayout
-        title="Create new article"
+        title="Edit article"
         button={
           <Button
             type="submit"
@@ -101,11 +135,22 @@ export default function ArticleDetail() {
         }
       >
         <section>
-          <CreateArticleForm
-            register={register}
-            formState={{ errors }}
-            setValue={setValue}
-          />
+          {!data && (
+            <Stack sx={{ gap: 4, maxWidth: MAX_CREATE_ARTICLE_WIDTH }}>
+              <Skeleton variant="rectangular" height={60} />
+              <Skeleton variant="rectangular" width={150} height={150} />
+              <Skeleton variant="rectangular" height={700} />
+            </Stack>
+          )}
+
+          {data && (
+            <CreateArticleForm
+              register={register}
+              formState={{ errors }}
+              setValue={setValue}
+              initialImageUrl={data.pictureUrl}
+            />
+          )}
         </section>
       </PageLayout>
     </>

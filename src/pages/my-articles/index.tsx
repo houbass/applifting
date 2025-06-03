@@ -1,8 +1,12 @@
 import Link from "next/link";
-import { Button } from "@mui/material";
+import { Button, Skeleton, Stack } from "@mui/material";
 
 // Hooks
 import useHomeRedirectOnLogOut from "@/hooks/redirects/useHomeRedirectOnLogOut";
+import { useQuery } from "@tanstack/react-query";
+
+// Utils
+import { fetchArticles } from "@/utils/utils";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
@@ -14,9 +18,11 @@ const TITLE = "My articles";
 export default function MyArticles() {
   // Redirect when log out
   useHomeRedirectOnLogOut();
-
-  // TODO use tanstack query for fetching data
-  // Fetch articles data
+  // Fetch articles
+  const { data } = useQuery({
+    queryKey: ["articles"],
+    queryFn: fetchArticles,
+  });
 
   return (
     <>
@@ -31,8 +37,13 @@ export default function MyArticles() {
         }
       >
         <section>
-          {/* TODO use skeletons */}
-          <ArticlesList />
+          {data && <ArticlesList data={data} />}
+          {!data && (
+            <Stack gap={1}>
+              <Skeleton variant="rectangular" height={40} />
+              <Skeleton variant="rectangular" width="100%" height={400} />
+            </Stack>
+          )}
         </section>
       </PageLayout>
     </>

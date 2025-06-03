@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from "react";
+import Link from "next/link";
 import {
   IconButton,
   Stack,
@@ -22,6 +23,7 @@ import {
 
 // Types
 import { Order, Data, HeadCell, EnhancedTableProps } from "./types";
+import { Article } from "@/types/types";
 
 // Utils
 import { getComparator, createArticleListData } from "./utils";
@@ -31,23 +33,6 @@ const tableTitleStyle = {
   fontWeight: 700,
   textWrap: "nowrap",
 };
-
-const rows = [
-  createArticleListData(
-    1,
-    "Cupcake as ad ",
-    "long long s f s sd s fsdfsdfsdfsdf  sd desc",
-    "Elisabeth Strain",
-    21
-  ),
-  createArticleListData(
-    2,
-    "Frozen yoghurt fdgdfgdg  d fgd gfd df d df gdfg df d df ",
-    "another loonighs prere x asd masda ff yoooo moree to byla prdel hahahaah as aa  hash hadh dsh h hdsah ",
-    "Elisabeth Strain",
-    3
-  ),
-];
 
 const headCells: readonly HeadCell[] = [
   {
@@ -68,6 +53,7 @@ const headCells: readonly HeadCell[] = [
   },
 ];
 
+// TODO přesunout do separo componenty + učesat zbytek
 function EnhancedTableHead(props: EnhancedTableProps) {
   const {
     onSelectAllClick,
@@ -129,10 +115,26 @@ function EnhancedTableHead(props: EnhancedTableProps) {
   );
 }
 
-export default function ArticlesList() {
+interface Props {
+  data: Article[];
+}
+
+export default function ArticlesList({ data }: Props) {
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof Data>("id");
   const [selected, setSelected] = useState<readonly number[]>([]);
+
+  const rows = useMemo(() => {
+    return data.map((article, index) =>
+      createArticleListData(
+        index + 1,
+        article.articleTitle,
+        article.content,
+        article.author,
+        article.comments
+      )
+    );
+  }, [data]);
 
   const handleRequestSort = (
     event: React.MouseEvent<unknown>,
@@ -162,7 +164,7 @@ export default function ArticlesList() {
 
   const visibleRows = useMemo(
     () => [...rows].sort(getComparator(order, orderBy)),
-    [order, orderBy]
+    [order, orderBy, rows]
   );
 
   return (
@@ -184,6 +186,10 @@ export default function ArticlesList() {
               const rowValuesArray = Object.values(row).filter(
                 (_, i) => i !== 0
               );
+
+              const thisId = data.find(
+                (item) => item.articleTitle === row.title
+              )?.id;
 
               return (
                 <TableRow
@@ -215,11 +221,24 @@ export default function ArticlesList() {
                     const thisStyle: React.CSSProperties =
                       index !== 2 ? eclipsed : { textWrap: "nowrap" };
 
+                    const text = (
+                      <Typography title={row.title} style={thisStyle}>
+                        {rowItem}
+                      </Typography>
+                    );
+
                     return (
                       <TableCell key={index} scope="row">
-                        <Typography title={row.title} style={thisStyle}>
-                          {rowItem}
-                        </Typography>
+                        {index === 0 ? (
+                          <Link
+                            className="unsetLink"
+                            href={`/article-detail/${thisId}`}
+                          >
+                            {text}
+                          </Link>
+                        ) : (
+                          text
+                        )}
                       </TableCell>
                     );
                   })}
@@ -232,9 +251,15 @@ export default function ArticlesList() {
                         gap: 1,
                       }}
                     >
-                      <IconButton onClick={() => console.log(row)}>
-                        <EditOutlined fontSize="large" />
-                      </IconButton>
+                      <Link
+                        className="unsetLink"
+                        href={`/edit-article/${thisId}`}
+                      >
+                        <IconButton>
+                          <EditOutlined fontSize="large" />
+                        </IconButton>
+                      </Link>
+                      {/* TODO delete article functionality + progression */}
                       <IconButton onClick={() => console.log(row)}>
                         <DeleteOutlined fontSize="large" />
                       </IconButton>

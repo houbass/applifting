@@ -8,36 +8,37 @@ import {
   Button,
   Divider,
 } from "@mui/material";
+import { MAX_CREATE_ARTICLE_WIDTH } from "@/constants/globalConstants";
 
 // Types
 import { FieldValues, UseFormRegister, FieldErrors } from "react-hook-form";
-import { NewArticleFormData } from "@/pages/create-article";
+import { NewArticleFormData } from "@/types/types";
 import { UseFormSetValue } from "react-hook-form";
+
 // Components
 import ImgUploadBtn from "../input/ImgUploadBtn";
 
 interface Props {
   register: UseFormRegister<NewArticleFormData>;
   formState: { errors: FieldErrors<FieldValues> };
-  defaultImageUrl: string | null;
   setValue: UseFormSetValue<NewArticleFormData>;
+  initialImageUrl?: string;
 }
 
 export default function CreateArticleForm({
   register,
   formState: { errors },
-  defaultImageUrl,
   setValue,
+  initialImageUrl,
 }: Props) {
   const [imagePreview, setImagePreview] = useState<string | null>(
-    defaultImageUrl
+    initialImageUrl || null
   );
 
   // Handle file selection
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      console.log(file);
       setValue("image", file);
       setImagePreview(URL.createObjectURL(file));
     }
@@ -50,7 +51,7 @@ export default function CreateArticleForm({
 
   return (
     <form>
-      <Stack sx={{ maxWidth: 760, gap: 4 }}>
+      <Stack sx={{ maxWidth: MAX_CREATE_ARTICLE_WIDTH, gap: 4 }}>
         <Stack sx={{ gap: 1 }}>
           <Typography id="articletitle-label">Article Title</Typography>
           <TextField
@@ -74,7 +75,6 @@ export default function CreateArticleForm({
             <Box>
               <ImgUploadBtn
                 onChange={handleFileChange}
-                register={register}
                 variant="contained"
                 color="secondary"
               />
@@ -98,7 +98,7 @@ export default function CreateArticleForm({
             />
 
             <Stack sx={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
-              <ImgUploadBtn onChange={handleFileChange} register={register} />
+              <ImgUploadBtn onChange={handleFileChange} />
               <Divider
                 orientation="vertical"
                 sx={{ height: 16, background: "orange" }}

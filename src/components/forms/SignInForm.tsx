@@ -18,6 +18,7 @@ interface LoginData {
   password: string;
 }
 
+// TODO progress on loging
 export default function SignInForm() {
   // Redux
   const dispatch = useDispatch();
@@ -85,11 +86,7 @@ export default function SignInForm() {
         </Stack>
 
         <Stack sx={{ flexDirection: "row", justifyContent: "flex-end" }}>
-          <Button
-            //startIcon={<CircularProgress color="inherit" size={16} />}
-            variant="contained"
-            onClick={handleSubmit(handleSignIn)}
-          >
+          <Button variant="contained" onClick={handleSubmit(handleSignIn)}>
             Log In
           </Button>
         </Stack>
