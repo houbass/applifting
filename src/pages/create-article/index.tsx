@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { Button } from "@mui/material";
 import dynamic from "next/dynamic";
 
@@ -16,7 +17,6 @@ import { toKebabCase } from "@/utils/utils";
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
-import { use, useEffect } from "react";
 
 const CreateArticleForm = dynamic(
   () => import("@/components/forms/CreateArticleForm"),
@@ -97,7 +97,6 @@ export default function ArticleDetail() {
 
   return (
     <>
-      {/* TODO detail name from title */}
       <BasicHead title="Create Article" />
 
       <PageLayout
@@ -113,7 +112,6 @@ export default function ArticleDetail() {
         }
       >
         <section>
-          {/* TODO use skeletons */}
           <CreateArticleForm
             register={register}
             formState={{ errors }}

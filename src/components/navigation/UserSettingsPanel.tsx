@@ -1,4 +1,3 @@
-import React, { useContext } from "react";
 import {
   Box,
   Drawer,
@@ -6,12 +5,8 @@ import {
   IconButton,
   Stack,
   Typography,
-  ToggleButton,
-  ToggleButtonGroup,
-  PaletteMode,
 } from "@mui/material";
-import { Close, DarkMode, LightMode } from "@mui/icons-material";
-import { ThemeContext } from "@/contexts/ThemeContext";
+import { Close } from "@mui/icons-material";
 import Logout from "../auth/Logout";
 
 interface Props {
@@ -23,21 +18,6 @@ export default function UserSettingsPanel({
   settingsView,
   toggleDrawer,
 }: Props) {
-  // Contexts
-  const themeContext = useContext(ThemeContext);
-  if (!themeContext) return null;
-  const { toggleColorMode, mode } = themeContext;
-
-  // Utils
-  const handleChange = (
-    event: React.MouseEvent<HTMLElement>,
-    newAlignment: string
-  ) => {
-    if (newAlignment) {
-      toggleColorMode(newAlignment as PaletteMode);
-    }
-  };
-
   return (
     <Drawer anchor="right" open={settingsView} onClose={toggleDrawer}>
       <Stack height="100%">

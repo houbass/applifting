@@ -1,87 +1,38 @@
 import { GetServerSidePropsContext } from "next";
-import Image from "next/image";
-import { Stack, Box, Typography } from "@mui/material";
-
-// Firebase
-import { db } from "@/config/firebase";
-import { doc, getDoc } from "firebase/firestore";
+import { Stack } from "@mui/material";
 
 // Types
 import { Article } from "@/types/types";
 
 // Utils
-import { formatTimestamp } from "@/utils/utils";
+import { fetchArticleById } from "./utils";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
-
-const fetchArticleById = async (id: string): Promise<Article> => {
-  const docRef = doc(db, "posts", id);
-  const docSnap = await getDoc(docRef);
-
-  if (!docSnap.exists()) {
-    throw new Error("Document not found");
-  }
-
-  return { id: docSnap.id, ...docSnap.data() } as Article;
-};
+import ArticleDetail from "@/pages/article-detail/components/ArticleDetail";
+import RelatedArticles from "./components/RelatedArticles";
 
 interface Props {
   article: Article;
 }
 
-export default function ArticleDetail({ article }: Props) {
-  const { articleTitle, content, pictureUrl, author, timeStamp } = article;
-  console.log("article", article);
+export default function ArticleDetailPage({ article }: Props) {
+  const { articleTitle } = article;
 
-  const formatedDate = formatTimestamp(timeStamp);
   return (
     <>
       <BasicHead title={articleTitle} />
-      <PageLayout title={articleTitle}>
+      <PageLayout>
         <section>
           <Stack
             sx={{
-              gap: 3,
-              maxWidth: 760,
+              flexDirection: { xs: "column", md: "column", lg: "row" },
+              gap: 2,
             }}
           >
-            <Typography color="secondary">
-              {author + " - " + formatedDate}
-            </Typography>
-            <Box
-              sx={{
-                position: "relative",
-                width: "100%",
-                aspectRatio: "760/504",
-                overflow: "hidden",
-                borderRadius: "2px",
-              }}
-            >
-              <Image
-                src={pictureUrl}
-                alt="Cover"
-                priority
-                width={600}
-                height={600}
-                style={{
-                  position: "absolute",
-                  width: "100%",
-                  height: "100%",
-                  objectFit: "cover",
-                }}
-              />
-            </Box>
-
-            <Typography
-              component="pre"
-              sx={{
-                whiteSpace: "pre-wrap",
-              }}
-            >
-              {content}
-            </Typography>
+            <ArticleDetail data={article} />
+            <RelatedArticles />
           </Stack>
         </section>
       </PageLayout>
