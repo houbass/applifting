@@ -24,8 +24,6 @@ export default function SignInForm() {
   const dispatch = useDispatch();
   const user = useSelector(selectUser);
 
-  console.log("Current user:", user);
-
   // Form hook
   const {
     register,
@@ -34,7 +32,6 @@ export default function SignInForm() {
   } = useForm<LoginData>();
 
   async function handleSignIn(data: LoginData) {
-    console.log(data);
     const { email, password } = data;
     try {
       await signInWithEmailAndPassword(auth, email, password);
