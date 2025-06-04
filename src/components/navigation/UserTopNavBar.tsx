@@ -167,7 +167,7 @@ export default function UserTopNavBar() {
       <AppBar
         position="fixed"
         sx={{
-          backgroundColor: "#F8F9FA",
+          backgroundColor: "var(--navBarColor)",
           color: "text.primary",
           boxShadow: "none",
         }}
