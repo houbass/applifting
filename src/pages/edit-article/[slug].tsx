@@ -1,13 +1,17 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Skeleton, Stack } from "@mui/material";
-import { MAX_CREATE_ARTICLE_WIDTH } from "@/constants/globalConstants";
+import { Button, Skeleton, Stack, CircularProgress } from "@mui/material";
+import { setAlert, setSucces } from "@/redux/slices/userSlice";
 
 // Hooks
 import useHomeRedirectOnLogOut from "@/hooks/redirects/useHomeRedirectOnLogOut";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
+
+// Constatnes
+import { MAX_CREATE_ARTICLE_WIDTH } from "@/constants/globalConstants";
 
 // Types
 import { NewArticleFormData } from "@/types/types";
@@ -28,8 +32,12 @@ const CreateArticleForm = dynamic(
 );
 
 export default function ArticleDetail() {
+  const dispatch = useDispatch();
   const router = useRouter();
   const { slug } = router.query;
+
+  // States
+  const [isUpdating, setIsUpdating] = useState(false);
 
   // Redirect when log out
   useHomeRedirectOnLogOut();
@@ -40,12 +48,6 @@ export default function ArticleDetail() {
     queryFn: () => fetchArticleById(String(slug)),
   });
 
-  const initialData = {
-    articleTitle: data?.articleTitle || "",
-    content: data?.content || "",
-    image: data?.pictureUrl || "",
-  };
-
   // Form hook
   const {
     register,
@@ -55,20 +57,22 @@ export default function ArticleDetail() {
     reset,
   } = useForm<NewArticleFormData>();
 
-  console.log(dirtyFields);
-
-  // TODO add progress bar and setAlert
   // Utils
   async function onSubmit(formData: NewArticleFormData) {
     if (!data || !formData?.image) return;
     const thisId = data.id;
+    if (isUpdating) return;
+    setIsUpdating(true);
 
     try {
       await handleArticleAction("update", formData, thisId);
+      dispatch(setSucces("Article updated successfully"));
       router.push("/my-articles");
     } catch (err) {
       console.error("Upload error:", err);
-      alert("Something went wrong.");
+      dispatch(setAlert("Something went wrong, Please try again"));
+      console.error("Upload error:", err);
+      setIsUpdating(false);
     }
   }
 
@@ -100,6 +104,9 @@ export default function ArticleDetail() {
             type="submit"
             variant="contained"
             onClick={handleSubmit(onSubmit)}
+            startIcon={
+              isUpdating && <CircularProgress size={20} color="inherit" />
+            }
           >
             Publish Article
           </Button>

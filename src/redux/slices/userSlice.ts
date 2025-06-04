@@ -37,11 +37,18 @@ const userSlice = createSlice({
         type: "error",
       };
     },
+    setSucces: (state, action: PayloadAction<string>) => {
+      const text = action.payload;
+      state.alert = {
+        text: text.toUpperCase(),
+        type: "success",
+      };
+    },
   },
 });
 
 // Export reducers functions
-export const { setUser, setUserCheck, setAlert } = userSlice.actions;
+export const { setUser, setUserCheck, setAlert, setSucces } = userSlice.actions;
 
 export default userSlice.reducer;
 

@@ -1,10 +1,12 @@
-import { useEffect } from "react";
-import { Button } from "@mui/material";
+import { useEffect, useState } from "react";
+import { Button, CircularProgress } from "@mui/material";
 import dynamic from "next/dynamic";
+import { setAlert, setSucces } from "@/redux/slices/userSlice";
 
 // Hooks
 import useHomeRedirectOnLogOut from "@/hooks/redirects/useHomeRedirectOnLogOut";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 // Utils
 import { handleArticleAction } from "@/utils/utils";
@@ -24,8 +26,13 @@ const CreateArticleForm = dynamic(
 );
 
 export default function ArticleDetail() {
+  const dispatch = useDispatch();
+
   // Redirect when log out
   const { redirectHome } = useHomeRedirectOnLogOut();
+
+  // States
+  const [isUploading, setIsUploading] = useState(false);
 
   // Form hook
   const {
@@ -35,18 +42,21 @@ export default function ArticleDetail() {
     setValue,
   } = useForm<NewArticleFormData>();
 
-  // TODO add progress bar and setAlert
   // Utils
   // Upload data to storage and database
   async function onSubmit(data: NewArticleFormData) {
+    if (isUploading) return;
+    setIsUploading(true);
     try {
       await handleArticleAction("create", data);
-      alert("Upload complete!");
+      dispatch(setSucces("article created Successfully"));
+      setIsUploading(false);
 
       redirectHome();
     } catch (err) {
+      dispatch(setAlert("Something went wrong, Please try again"));
       console.error("Upload error:", err);
-      alert("Something went wrong.");
+      setIsUploading(false);
     }
   }
 
@@ -66,6 +76,9 @@ export default function ArticleDetail() {
             type="submit"
             variant="contained"
             onClick={handleSubmit(onSubmit)}
+            startIcon={
+              isUploading && <CircularProgress size={20} color="inherit" />
+            }
           >
             Publish Article
           </Button>

@@ -7,6 +7,7 @@ import {
   Stack,
   Button,
   Divider,
+  Skeleton,
 } from "@mui/material";
 import { MAX_CREATE_ARTICLE_WIDTH } from "@/constants/globalConstants";
 
@@ -25,17 +26,21 @@ interface Props {
   initialImageUrl?: string;
 }
 
+const PREVIEW_SIZE = 112;
+
 export default function CreateArticleForm({
   register,
   formState: { errors },
   setValue,
   initialImageUrl,
 }: Props) {
+  // States
   const [imagePreview, setImagePreview] = useState<string | null>(
     initialImageUrl || null
   );
+  const [imageLoaded, setImageLoaded] = useState(false);
 
-  // Handle file selection
+  // Utils
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -47,6 +52,7 @@ export default function CreateArticleForm({
   function handleDeleteImage() {
     setValue("image", null, { shouldDirty: true });
     setImagePreview(null);
+    setImageLoaded(false);
   }
 
   return (
@@ -85,17 +91,27 @@ export default function CreateArticleForm({
         {imagePreview && (
           <Stack sx={{ gap: 1 }}>
             <Typography>Featured image</Typography>
-
-            <Image
-              src={imagePreview}
-              alt="featured image"
-              width={100}
-              height={100}
-              style={{
-                width: "112px",
-                height: "auto",
-              }}
-            />
+            <Box sx={{ position: "relative" }}>
+              {!imageLoaded && (
+                <Skeleton
+                  variant="rectangular"
+                  width={PREVIEW_SIZE}
+                  height={PREVIEW_SIZE}
+                  sx={{ position: "absolute" }}
+                />
+              )}
+              <Image
+                src={imagePreview}
+                onLoad={() => setImageLoaded(true)}
+                alt="featured image"
+                width={PREVIEW_SIZE}
+                height={PREVIEW_SIZE}
+                style={{
+                  width: PREVIEW_SIZE,
+                  height: "auto",
+                }}
+              />{" "}
+            </Box>
 
             <Stack sx={{ flexDirection: "row", alignItems: "center", gap: 1 }}>
               <ImgUploadBtn onChange={handleFileChange} />
