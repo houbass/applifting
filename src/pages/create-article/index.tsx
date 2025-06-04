@@ -6,13 +6,8 @@ import dynamic from "next/dynamic";
 import useHomeRedirectOnLogOut from "@/hooks/redirects/useHomeRedirectOnLogOut";
 import { useForm } from "react-hook-form";
 
-// Firebase
-import { storage, db } from "@/config/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { setDoc, doc } from "firebase/firestore";
-
 // Utils
-import { toKebabCase } from "@/utils/utils";
+import { handleArticleAction } from "@/utils/utils";
 
 // Types
 import { NewArticleFormData } from "@/types/types";
@@ -44,32 +39,8 @@ export default function ArticleDetail() {
   // Utils
   // Upload data to storage and database
   async function onSubmit(data: NewArticleFormData) {
-    const { articleTitle, content, image } = data;
-
-    if (!image) return;
-
-    const timeStamp = Date.now();
-    const customId = toKebabCase(articleTitle) + "-" + timeStamp;
-    const storageRef = ref(storage, `posts/${customId}.jpg`);
-
     try {
-      // Upload the image
-      await uploadBytes(storageRef, image as File);
-
-      // Get download URL
-      const imageUrl = await getDownloadURL(storageRef);
-
-      // Save to Firestore
-      await setDoc(doc(db, "posts", customId), {
-        id: customId,
-        timeStamp,
-        articleTitle,
-        content,
-        pictureUrl: imageUrl,
-        author: "Elisabeth Strain",
-        comments: 0,
-      });
-
+      await handleArticleAction("create", data);
       alert("Upload complete!");
 
       redirectHome();

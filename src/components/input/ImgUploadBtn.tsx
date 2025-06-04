@@ -1,9 +1,5 @@
-import { Button } from "@mui/material";
-
-// Types
-import { UseFormRegister } from "react-hook-form";
-import { NewArticleFormData } from "@/types/types";
 import { useRef } from "react";
+import { Button } from "@mui/material";
 
 interface Props {
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -30,7 +26,7 @@ export default function ImgUploadBtn({
       <input
         ref={inputRef}
         type="file"
-        accept="image/*"
+        accept=".jpg,.jpeg,.png"
         style={{ display: "none" }}
         onChange={onChange}
       />

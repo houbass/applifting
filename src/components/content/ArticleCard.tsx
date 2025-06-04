@@ -1,5 +1,6 @@
+import { useState } from "react";
 import Link from "next/link";
-import { Stack, Box, Typography } from "@mui/material";
+import { Stack, Box, Typography, Skeleton } from "@mui/material";
 import Image from "next/image";
 
 // Types
@@ -16,6 +17,8 @@ interface Props {
 export default function ArticleCard({ data }: Props) {
   const { id, timeStamp, articleTitle, content, pictureUrl, author } = data;
   const formatedDate = formatTimestamp(timeStamp);
+  const [isImgLoaded, setIsImgLoaded] = useState(false);
+
   return (
     <article>
       <Stack
@@ -32,8 +35,11 @@ export default function ArticleCard({ data }: Props) {
             borderRadius: "2px",
           }}
         >
+          {!isImgLoaded && <Skeleton variant="rectangular" height="100%" />}
+
           <Image
             src={pictureUrl}
+            onLoad={() => setIsImgLoaded(true)}
             alt="Cover"
             priority
             width={400}

@@ -9,16 +9,11 @@ import { MAX_CREATE_ARTICLE_WIDTH } from "@/constants/globalConstants";
 import useHomeRedirectOnLogOut from "@/hooks/redirects/useHomeRedirectOnLogOut";
 import { useForm } from "react-hook-form";
 
-// Firebase
-import { storage, db } from "@/config/firebase";
-import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
-import { setDoc, doc } from "firebase/firestore";
-
 // Types
 import { NewArticleFormData } from "@/types/types";
 
 // Utils
-import { toKebabCase } from "@/utils/utils";
+import { handleArticleAction } from "@/utils/utils";
 import { fetchArticleById } from "../article-detail/utils";
 
 // Components
@@ -37,7 +32,7 @@ export default function ArticleDetail() {
   const { slug } = router.query;
 
   // Redirect when log out
-  const { redirectHome } = useHomeRedirectOnLogOut();
+  useHomeRedirectOnLogOut();
 
   // Fetch related articles based on the current article's slug
   const { data } = useQuery({
@@ -55,54 +50,26 @@ export default function ArticleDetail() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty },
+    formState: { errors, isDirty, dirtyFields },
     setValue,
     reset,
   } = useForm<NewArticleFormData>();
 
+  console.log(dirtyFields);
+
   // TODO add progress bar and setAlert
   // Utils
-  // Upload data to storage and database
-  async function onSubmit(data: NewArticleFormData) {
-    const { articleTitle, content, image } = data;
-
-    console.log("TODO UPDATE", data);
-
-    // if image is string, do not upload image (it means its an original URL)
-
-    /*
-    if (!image) return;
-
-    const timeStamp = Date.now();
-    const customId = toKebabCase(articleTitle) + "-" + timeStamp;
-    const storageRef = ref(storage, `posts/${customId}.jpg`);
+  async function onSubmit(formData: NewArticleFormData) {
+    if (!data || !formData?.image) return;
+    const thisId = data.id;
 
     try {
-      // Upload the image
-      await uploadBytes(storageRef, image);
-
-      // Get download URL
-      const imageUrl = await getDownloadURL(storageRef);
-
-      // Save to Firestore
-      await setDoc(doc(db, "posts", customId), {
-        id: customId,
-        timeStamp,
-        articleTitle,
-        content,
-        pictureUrl: imageUrl,
-        author: "Elisabeth Strain",
-        comments: 0,
-      });
-
-      alert("Upload complete!");
-
-      redirectHome();
+      await handleArticleAction("update", formData, thisId);
+      router.push("/my-articles");
     } catch (err) {
       console.error("Upload error:", err);
       alert("Something went wrong.");
     }
-    */
   }
 
   // Register image field

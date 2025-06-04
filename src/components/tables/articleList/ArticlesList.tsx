@@ -20,6 +20,7 @@ import {
   EditOutlined,
   DeleteOutlined,
 } from "@mui/icons-material";
+import { useQueryClient } from "@tanstack/react-query";
 
 // Types
 import { Order, Data, HeadCell, EnhancedTableProps } from "./types";
@@ -27,6 +28,7 @@ import { Article } from "@/types/types";
 
 // Utils
 import { getComparator, createArticleListData } from "./utils";
+import { handleArticleAction } from "@/utils/utils";
 
 const tableTitleStyle = {
   fontZise: "16px",
@@ -120,6 +122,10 @@ interface Props {
 }
 
 export default function ArticlesList({ data }: Props) {
+  // Hooks
+  const queryClient = useQueryClient();
+
+  // States
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof Data>("id");
   const [selected, setSelected] = useState<readonly number[]>([]);
@@ -136,23 +142,28 @@ export default function ArticlesList({ data }: Props) {
     );
   }, [data]);
 
-  const handleRequestSort = (
+  const visibleRows = useMemo(
+    () => [...rows].sort(getComparator(order, orderBy)),
+    [order, orderBy, rows]
+  );
+
+  function handleRequestSort(
     event: React.MouseEvent<unknown>,
     property: keyof Data
-  ) => {
+  ) {
     const isAsc = orderBy === property && order === "asc";
     setOrder(isAsc ? "desc" : "asc");
     setOrderBy(property);
-  };
+  }
 
-  const handleSelectAllClick = (event: React.ChangeEvent<HTMLInputElement>) => {
+  function handleSelectAllClick(event: React.ChangeEvent<HTMLInputElement>) {
     if (event.target.checked) {
       const newSelected = rows.map((n) => n.id);
       setSelected(newSelected);
       return;
     }
     setSelected([]);
-  };
+  }
 
   function handleCheck(rowId: number) {
     if (selected.includes(rowId)) {
@@ -162,10 +173,15 @@ export default function ArticlesList({ data }: Props) {
     }
   }
 
-  const visibleRows = useMemo(
-    () => [...rows].sort(getComparator(order, orderBy)),
-    [order, orderBy, rows]
-  );
+  // TODO progress and message
+  async function handleDelete(thisId: string) {
+    try {
+      await handleArticleAction("delete", undefined, thisId);
+      queryClient.invalidateQueries({ queryKey: ["articles"] });
+    } catch (error) {
+      console.error("Error deleting article:", error);
+    }
+  }
 
   return (
     <Box sx={{ width: "100%" }}>
@@ -187,9 +203,8 @@ export default function ArticlesList({ data }: Props) {
                 (_, i) => i !== 0
               );
 
-              const thisId = data.find(
-                (item) => item.articleTitle === row.title
-              )?.id;
+              const thisId: string =
+                data.find((item) => item.articleTitle === row.title)?.id || "";
 
               return (
                 <TableRow
@@ -259,8 +274,7 @@ export default function ArticlesList({ data }: Props) {
                           <EditOutlined fontSize="large" />
                         </IconButton>
                       </Link>
-                      {/* TODO delete article functionality + progression */}
-                      <IconButton onClick={() => console.log(row)}>
+                      <IconButton onClick={() => handleDelete(thisId)}>
                         <DeleteOutlined fontSize="large" />
                       </IconButton>
                     </Stack>
