@@ -5,14 +5,14 @@ import { Stack, Divider } from "@mui/material";
 import { Article } from "@/types/types";
 
 // Utils
-import { fetchArticleById } from "./utils";
+import { fetchArticleById } from "@/utils/articleDetailUtils";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
-import ArticleDetail from "@/pages/article-detail/components/ArticleDetail";
-import RelatedArticles from "./components/RelatedArticles";
-import Comments from "./components/Comments";
+import ArticleDetail from "@/components/content/ArticleDetail";
+import RelatedArticles from "../../components/content/RelatedArticles";
+import Comments from "../../components/content/Comments";
 
 interface Props {
   article: Article;

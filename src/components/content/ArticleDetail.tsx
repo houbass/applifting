@@ -11,7 +11,6 @@ interface Props {
   data: Article;
 }
 
-// TODO comments
 export default function ArticleDetail({ data }: Props) {
   const { timeStamp, content, pictureUrl, author, articleTitle } = data;
   const formatedDate = formatTimestamp(timeStamp);

@@ -70,7 +70,7 @@ export default function Comments() {
         </Stack>
       )}
 
-      {thisPostComments.map((comment, index) => {
+      {thisPostComments?.map((comment, index) => {
         return <CommentCard key={comment.timeStamp + index} data={comment} />;
       })}
     </Stack>

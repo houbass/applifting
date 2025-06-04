@@ -18,7 +18,6 @@ interface LoginData {
   password: string;
 }
 
-// TODO progress on loging
 export default function LoginForm() {
   const dispatch = useDispatch();
 

@@ -4,7 +4,7 @@ import { Stack, Typography, Divider, Skeleton } from "@mui/material";
 import { useQuery } from "@tanstack/react-query";
 
 // Utils
-import { fetchRelatedArticles } from "../utils";
+import { fetchRelatedArticles } from "@/utils/articleDetailUtils";
 
 export default function RelatedArticles() {
   const router = useRouter();

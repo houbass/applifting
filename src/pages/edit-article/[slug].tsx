@@ -18,7 +18,7 @@ import { NewArticleFormData } from "@/types/types";
 
 // Utils
 import { handleArticleAction } from "@/utils/utils";
-import { fetchArticleById } from "../article-detail/utils";
+import { fetchArticleById } from "@/utils/articleDetailUtils";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";

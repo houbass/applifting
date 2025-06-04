@@ -1,7 +1,7 @@
 import { useMemo } from "react";
 import { Stack, Avatar, Typography, ButtonGroup, Button } from "@mui/material";
 import { KeyboardArrowUp, KeyboardArrowDown } from "@mui/icons-material";
-import { timeAgo } from "../utils";
+import { timeAgo } from "@/utils/articleDetailUtils";
 
 interface Props {
   data: {

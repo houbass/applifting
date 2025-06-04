@@ -13,7 +13,6 @@ interface Props {
   data: Article;
 }
 
-// TODO comments
 export default function ArticleCard({ data }: Props) {
   const { id, timeStamp, articleTitle, content, pictureUrl, author } = data;
   const formatedDate = formatTimestamp(timeStamp);
@@ -72,7 +71,6 @@ export default function ArticleCard({ data }: Props) {
           </Typography>
 
           <Stack sx={{ flexDirection: "row", gap: 1, pl: 1 }}>
-            {/*TODO */}
             <Link href={"/article-detail/" + id} className="unsetLink">
               <Typography color="primary">Read whole article</Typography>
             </Link>
