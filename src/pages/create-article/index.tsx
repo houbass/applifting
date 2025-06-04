@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Button, CircularProgress } from "@mui/material";
-import dynamic from "next/dynamic";
 import { setAlert, setSucces } from "@/redux/slices/userSlice";
 
 // Hooks
@@ -17,13 +16,7 @@ import { NewArticleFormData } from "@/types/types";
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
-
-const CreateArticleForm = dynamic(
-  () => import("@/components/forms/CreateArticleForm"),
-  {
-    ssr: false,
-  }
-);
+import CreateArticleForm from "@/components/forms/CreateArticleForm";
 
 export default function ArticleDetail() {
   const dispatch = useDispatch();

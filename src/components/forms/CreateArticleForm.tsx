@@ -109,6 +109,8 @@ export default function CreateArticleForm({
                 style={{
                   width: PREVIEW_SIZE,
                   height: "auto",
+                  opacity: imageLoaded ? 1 : 0,
+                  transition: "0.3s ease-in-out",
                 }}
               />{" "}
             </Box>

@@ -48,6 +48,8 @@ export default function ArticleCard({ data }: Props) {
               width: "100%",
               height: "100%",
               objectFit: "cover",
+              opacity: isImgLoaded ? 1 : 0,
+              transition: "0.3s ease-in-out",
             }}
           />
         </Box>

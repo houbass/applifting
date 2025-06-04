@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Skeleton, Stack, CircularProgress } from "@mui/material";
@@ -23,13 +22,7 @@ import { fetchArticleById } from "@/utils/articleDetailUtils";
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
-
-const CreateArticleForm = dynamic(
-  () => import("@/components/forms/CreateArticleForm"),
-  {
-    ssr: false,
-  }
-);
+import CreateArticleForm from "@/components/forms/CreateArticleForm";
 
 export default function ArticleDetail() {
   const dispatch = useDispatch();
@@ -52,7 +45,7 @@ export default function ArticleDetail() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isDirty, dirtyFields },
+    formState: { errors, isDirty },
     setValue,
     reset,
   } = useForm<NewArticleFormData>();
