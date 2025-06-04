@@ -119,7 +119,11 @@ export default function CreateArticleForm({
                 orientation="vertical"
                 sx={{ height: 16, background: "orange" }}
               />
-              <Button color="error" onClick={handleDeleteImage}>
+              <Button
+                aria-label="delete image"
+                color="error"
+                onClick={handleDeleteImage}
+              >
                 Delete
               </Button>
             </Stack>

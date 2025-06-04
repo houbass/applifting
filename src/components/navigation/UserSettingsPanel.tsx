@@ -33,7 +33,7 @@ export default function UserSettingsPanel({
             Settings
           </Typography>
 
-          <IconButton onClick={toggleDrawer}>
+          <IconButton aria-label="close" onClick={toggleDrawer}>
             <Close />
           </IconButton>
         </Stack>

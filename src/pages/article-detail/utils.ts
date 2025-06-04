@@ -30,3 +30,37 @@ export async function fetchRelatedArticles(slug: string) {
 
   return data;
 }
+
+export function timeAgo(timestamp: number): string {
+  const now = Date.now();
+  const diffMs = now - timestamp;
+
+  const minute = 60 * 1000;
+  const hour = 60 * minute;
+  const day = 24 * hour;
+  const week = 7 * day;
+  const month = 30 * day;
+  const year = 365 * day;
+
+  if (diffMs < hour) {
+    const minutes = Math.floor(diffMs / minute);
+    return `${minutes} minute${minutes !== 1 ? "s" : ""} ago`;
+  } else if (diffMs < day) {
+    const hours = Math.floor(diffMs / hour);
+    return `${hours} hour${hours !== 1 ? "s" : ""} ago`;
+  } else if (diffMs < 2 * day) {
+    return `yesterday`;
+  } else if (diffMs < week) {
+    const days = Math.floor(diffMs / day);
+    return `${days} day${days !== 1 ? "s" : ""} ago`;
+  } else if (diffMs < month) {
+    const weeks = Math.floor(diffMs / week);
+    return `${weeks} week${weeks !== 1 ? "s" : ""} ago`;
+  } else if (diffMs < year) {
+    const months = Math.floor(diffMs / month);
+    return `${months} month${months !== 1 ? "s" : ""} ago`;
+  } else {
+    const years = Math.floor(diffMs / year);
+    return `${years} year${years !== 1 ? "s" : ""} ago`;
+  }
+}

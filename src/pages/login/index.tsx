@@ -5,7 +5,7 @@ import { PAGE_PADDING_X } from "@/constants/globalConstants";
 // Components
 import PageLayout from "@/components/containers/PageLayout";
 import BasicHead from "@/components/containers/BasicHead";
-import SignInForm from "@/components/forms/SignInForm";
+import LoginForm from "@/pages/login/components/LoginForm";
 
 export default function Signin() {
   // Redirect when log in
@@ -23,7 +23,7 @@ export default function Signin() {
             alignItems: "center",
           }}
         >
-          <SignInForm />
+          <LoginForm />
         </Stack>
       </main>
     </PageLayout>

@@ -16,7 +16,7 @@ export default function ArticleDetail({ data }: Props) {
   const { timeStamp, content, pictureUrl, author, articleTitle } = data;
   const formatedDate = formatTimestamp(timeStamp);
   return (
-    <article style={{ flex: 2 }}>
+    <article>
       <Stack>
         <Typography variant="h1">{articleTitle}</Typography>
         <Stack

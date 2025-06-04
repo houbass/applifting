@@ -1,4 +1,4 @@
-import React from "react";
+import Reac, { useState } from "react";
 import {
   Button,
   Stack,
@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { useDispatch, useSelector } from "react-redux";
-import { setAlert, selectUser } from "@/redux/slices/userSlice";
+import { useDispatch } from "react-redux";
+import { setAlert, setSucces } from "@/redux/slices/userSlice";
 import { auth } from "@/config/firebase";
 
 interface LoginData {
@@ -19,27 +19,39 @@ interface LoginData {
 }
 
 // TODO progress on loging
-export default function SignInForm() {
-  // Redux
+export default function LoginForm() {
   const dispatch = useDispatch();
-  const user = useSelector(selectUser);
+
+  // States
+  const [isLoading, setIsLoading] = useState(false);
 
   // Form hook
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setValue,
   } = useForm<LoginData>();
 
   async function handleSignIn(data: LoginData) {
     const { email, password } = data;
+    if (isLoading) return;
+    setIsLoading(true);
+
     try {
       await signInWithEmailAndPassword(auth, email, password);
+
+      setIsLoading(false);
+      dispatch(setSucces("Successfully logged in"));
     } catch (err) {
       if (err instanceof Error) {
-        dispatch(setAlert(err.message));
+        dispatch(setAlert("invalid-credentials"));
+        setValue("password", "");
+        setIsLoading(false);
       } else {
         console.error("Unexpected error", err);
+        dispatch(setAlert("Unexpected error please try again later"));
+        setIsLoading(false);
       }
     }
   }
@@ -83,7 +95,14 @@ export default function SignInForm() {
         </Stack>
 
         <Stack sx={{ flexDirection: "row", justifyContent: "flex-end" }}>
-          <Button variant="contained" onClick={handleSubmit(handleSignIn)}>
+          <Button
+            aria-label="login"
+            variant="contained"
+            onClick={handleSubmit(handleSignIn)}
+            startIcon={
+              isLoading && <CircularProgress size={20} color="inherit" />
+            }
+          >
             Log In
           </Button>
         </Stack>

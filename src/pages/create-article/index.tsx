@@ -73,6 +73,7 @@ export default function ArticleDetail() {
         title="Create new article"
         button={
           <Button
+            aria-label="publish article"
             type="submit"
             variant="contained"
             onClick={handleSubmit(onSubmit)}

@@ -10,112 +10,26 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
-  TableSortLabel,
+  CircularProgress,
 } from "@mui/material";
-import {
-  ArrowDropUp,
-  ArrowDropDown,
-  EditOutlined,
-  DeleteOutlined,
-} from "@mui/icons-material";
+import { EditOutlined, DeleteOutlined } from "@mui/icons-material";
+import { setAlert, setSucces } from "@/redux/slices/userSlice";
+
+// Hooks
 import { useQueryClient } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
 
 // Types
-import { Order, Data, HeadCell, EnhancedTableProps } from "./types";
+import { Order, Data } from "./types";
 import { Article } from "@/types/types";
 
 // Utils
 import { getComparator, createArticleListData } from "./utils";
 import { handleArticleAction } from "@/utils/utils";
 
-const tableTitleStyle = {
-  fontZise: "16px",
-  fontWeight: 700,
-  textWrap: "nowrap",
-};
-
-const headCells: readonly HeadCell[] = [
-  {
-    id: "title",
-    label: "Article Title",
-  },
-  {
-    id: "perex",
-    label: "Perex",
-  },
-  {
-    id: "author",
-    label: "Author",
-  },
-  {
-    id: "comments",
-    label: "# of comments",
-  },
-];
-
-// TODO přesunout do separo componenty + učesat zbytek
-function EnhancedTableHead(props: EnhancedTableProps) {
-  const {
-    onSelectAllClick,
-    order,
-    orderBy,
-    numSelected,
-    rowCount,
-    onRequestSort,
-  } = props;
-  const createSortHandler =
-    (property: keyof Data) => (event: React.MouseEvent<unknown>) => {
-      onRequestSort(event, property);
-    };
-
-  return (
-    <TableHead>
-      <TableRow>
-        <TableCell padding="checkbox">
-          <Checkbox
-            size="small"
-            indeterminate={numSelected > 0 && numSelected < rowCount}
-            checked={rowCount > 0 && numSelected === rowCount}
-            onChange={onSelectAllClick}
-            inputProps={{
-              "aria-label": "select all desserts",
-            }}
-          />
-        </TableCell>
-        {headCells.map((headCell, index) => (
-          <TableCell
-            sx={{
-              minWidth: index < 2 ? "220px" : "auto",
-              width: index === 1 ? "100%" : "auto",
-            }}
-            key={headCell.id}
-            sortDirection={orderBy === headCell.id ? order : false}
-          >
-            <TableSortLabel
-              active={orderBy === headCell.id}
-              direction={orderBy === headCell.id ? order : "asc"}
-              onClick={createSortHandler(headCell.id)}
-              sx={tableTitleStyle}
-              IconComponent={() => (
-                <Stack>
-                  <ArrowDropUp fontSize="small" sx={{ opacity: 1, mb: -0.7 }} />
-                  <ArrowDropDown fontSize="small" sx={{ mt: -0.7 }} />
-                </Stack>
-              )}
-            >
-              {headCell.label}
-            </TableSortLabel>
-          </TableCell>
-        ))}
-        <TableCell key="Actions" sx={tableTitleStyle}>
-          Actions
-        </TableCell>
-      </TableRow>
-    </TableHead>
-  );
-}
+// Components
+import EnhancedTableHead from "./EnhancedTableHead";
 
 interface Props {
   data: Article[];
@@ -123,12 +37,14 @@ interface Props {
 
 export default function ArticlesList({ data }: Props) {
   // Hooks
+  const dispatch = useDispatch();
   const queryClient = useQueryClient();
 
   // States
   const [order, setOrder] = useState<Order>("asc");
   const [orderBy, setOrderBy] = useState<keyof Data>("id");
-  const [selected, setSelected] = useState<readonly number[]>([]);
+  const [selected, setSelected] = useState<number[]>([]);
+  const [updatingArticle, setUpdatingArticle] = useState<string | null>(null);
 
   const rows = useMemo(() => {
     return data.map((article, index) =>
@@ -147,6 +63,7 @@ export default function ArticlesList({ data }: Props) {
     [order, orderBy, rows]
   );
 
+  // Utils
   function handleRequestSort(
     event: React.MouseEvent<unknown>,
     property: keyof Data
@@ -173,13 +90,19 @@ export default function ArticlesList({ data }: Props) {
     }
   }
 
-  // TODO progress and message
   async function handleDelete(thisId: string) {
+    if (updatingArticle) return;
     try {
+      setUpdatingArticle(thisId);
+      // Call the delete action
       await handleArticleAction("delete", undefined, thisId);
       queryClient.invalidateQueries({ queryKey: ["articles"] });
+      setUpdatingArticle(null);
+      dispatch(setSucces("Article deleted successfully"));
     } catch (error) {
       console.error("Error deleting article:", error);
+      setUpdatingArticle(null);
+      dispatch(setAlert("Something went wrong, Please try again"));
     }
   }
 
@@ -205,6 +128,13 @@ export default function ArticlesList({ data }: Props) {
 
               const thisId: string =
                 data.find((item) => item.articleTitle === row.title)?.id || "";
+
+              const thisDeleteIcon =
+                updatingArticle === thisId ? (
+                  <CircularProgress size={25} color="inherit" />
+                ) : (
+                  <DeleteOutlined fontSize="large" />
+                );
 
               return (
                 <TableRow
@@ -270,12 +200,15 @@ export default function ArticlesList({ data }: Props) {
                         className="unsetLink"
                         href={`/edit-article/${thisId}`}
                       >
-                        <IconButton>
+                        <IconButton aria-label="edit">
                           <EditOutlined fontSize="large" />
                         </IconButton>
                       </Link>
-                      <IconButton onClick={() => handleDelete(thisId)}>
-                        <DeleteOutlined fontSize="large" />
+                      <IconButton
+                        aria-label="delete"
+                        onClick={() => handleDelete(thisId)}
+                      >
+                        {thisDeleteIcon}
                       </IconButton>
                     </Stack>
                   </TableCell>

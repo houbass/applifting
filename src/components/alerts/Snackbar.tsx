@@ -1,9 +1,11 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Snackbar as Snack, Alert } from "@mui/material";
 import { useSelector } from "react-redux";
-import { selectAlert } from "@/redux/slices/userSlice";
+import { selectAlert, setClear } from "@/redux/slices/userSlice";
+import { useDispatch } from "react-redux";
 
 export default function Snackbar() {
+  const dispatch = useDispatch();
   // States
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { text, type } = useSelector(selectAlert);
@@ -23,6 +25,7 @@ export default function Snackbar() {
 
       timerRef.current = setTimeout(() => {
         setOpen(false);
+        dispatch(setClear());
       }, 3000);
 
       // Cleanup function to clear the timer when component unmounts

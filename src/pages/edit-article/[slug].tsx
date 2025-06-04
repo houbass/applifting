@@ -100,6 +100,7 @@ export default function ArticleDetail() {
         title="Edit article"
         button={
           <Button
+            aria-label="publish article"
             disabled={!isDirty}
             type="submit"
             variant="contained"

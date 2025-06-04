@@ -18,7 +18,11 @@ import {
   Menu as MenuIcon,
   Close,
 } from "@mui/icons-material";
-import { selectUser } from "@/redux/slices/userSlice";
+import {
+  selectUser,
+  setUserAvatarUrl,
+  selectUserAvatarUrl,
+} from "@/redux/slices/userSlice";
 import Link from "next/link";
 import logo from "../../../public/logo.png";
 
@@ -34,7 +38,7 @@ import {
 } from "@/constants/globalConstants";
 
 // Hooks
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import { useTheme } from "@mui/material/styles";
 
@@ -44,15 +48,17 @@ import Logout from "../auth/Logout";
 
 export default function UserTopNavBar() {
   // Hooks
+  const dispatch = useDispatch();
   const router = useRouter();
-  const user = useSelector(selectUser);
+
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const path = router.asPath;
 
   // States
+  const user = useSelector(selectUser);
+  const userAvatarUrl = useSelector(selectUserAvatarUrl);
   const [settingsView, setSettingsView] = useState(false);
-  const [avatarUrl, setAvatarUrl] = useState<string | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   // Utils
@@ -79,12 +85,12 @@ export default function UserTopNavBar() {
     const fetchImage = async () => {
       try {
         if (!user) {
-          setAvatarUrl(null);
+          dispatch(setUserAvatarUrl(null));
           return;
         }
         const imageRef = ref(storage, "profile/avatar.jpg");
         const downloadUrl = await getDownloadURL(imageRef);
-        setAvatarUrl(downloadUrl);
+        dispatch(setUserAvatarUrl(downloadUrl));
       } catch (error) {
         console.error("Error fetching image:", error);
       }
@@ -117,8 +123,12 @@ export default function UserTopNavBar() {
   );
 
   const logIn = (
-    <Link href="/signin" passHref legacyBehavior>
-      <Button endIcon={<ArrowForward />} onClick={closeDrawer}>
+    <Link href="/login" passHref legacyBehavior>
+      <Button
+        aria-label="login"
+        endIcon={<ArrowForward />}
+        onClick={closeDrawer}
+      >
         Log in
       </Button>
     </Link>
@@ -127,7 +137,7 @@ export default function UserTopNavBar() {
   const mobileLinks = (
     <Stack sx={{ height: "100%" }}>
       <Stack sx={{ flexDirection: "row", justifyContent: "flex-end", p: 2 }}>
-        <IconButton onClick={closeDrawer} color="inherit">
+        <IconButton aria-label="close" onClick={closeDrawer} color="inherit">
           <Close />
         </IconButton>
       </Stack>
@@ -179,7 +189,11 @@ export default function UserTopNavBar() {
                 gap: NAV_LINKS_GAP,
               }}
             >
-              <button className="unsetLink" onClick={handleRedirect}>
+              <button
+                aria-label="go home"
+                className="unsetLink"
+                onClick={handleRedirect}
+              >
                 <Image
                   alt="logo"
                   src={logo}
@@ -197,17 +211,13 @@ export default function UserTopNavBar() {
                 gap: NAV_LINKS_GAP,
               }}
             >
-              {!isMobile && !user && (
-                <Link href="/signin" passHref legacyBehavior>
-                  <Button endIcon={<ArrowForward />}>Log in</Button>
-                </Link>
-              )}
+              {!isMobile && !user && logIn}
 
               {!isMobile && user && (
                 <>
                   {userLinksBlock}
 
-                  {avatarUrl && (
+                  {userAvatarUrl && (
                     <Tooltip title="Settings" disableInteractive>
                       <Stack
                         sx={{ flexDirection: "row", alignItems: "center" }}
@@ -219,7 +229,7 @@ export default function UserTopNavBar() {
                           aria-label="Settings"
                         >
                           <ArrowDropDown />
-                          <Avatar alt="avatar" src={avatarUrl} />
+                          <Avatar alt="avatar" src={userAvatarUrl} />
                         </Button>
                       </Stack>
                     </Tooltip>
@@ -229,6 +239,7 @@ export default function UserTopNavBar() {
 
               {isMobile && (
                 <IconButton
+                  aria-label="open menu"
                   edge="end"
                   color="inherit"
                   onClick={handleDrawerToggle}

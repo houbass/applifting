@@ -35,6 +35,7 @@ export default function ImgUploadBtn({
         variant={variant}
         color={color}
         onClick={() => inputRef.current?.click()}
+        aria-label="select image"
       >
         Select File
       </Button>

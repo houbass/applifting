@@ -1,5 +1,5 @@
 import { GetServerSidePropsContext } from "next";
-import { Stack } from "@mui/material";
+import { Stack, Divider } from "@mui/material";
 
 // Types
 import { Article } from "@/types/types";
@@ -12,6 +12,7 @@ import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
 import ArticleDetail from "@/pages/article-detail/components/ArticleDetail";
 import RelatedArticles from "./components/RelatedArticles";
+import Comments from "./components/Comments";
 
 interface Props {
   article: Article;
@@ -31,7 +32,12 @@ export default function ArticleDetailPage({ article }: Props) {
               gap: 2,
             }}
           >
-            <ArticleDetail data={article} />
+            <Stack sx={{ flex: 2, gap: 4 }}>
+              <ArticleDetail data={article} />
+              <Divider />
+              <Comments />
+            </Stack>
+
             <RelatedArticles />
           </Stack>
         </section>
