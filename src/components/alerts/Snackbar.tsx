@@ -35,7 +35,7 @@ export default function Snackbar() {
         }
       };
     }
-  }, [firstRun, text]);
+  }, [firstRun, text, dispatch]);
 
   return (
     <>

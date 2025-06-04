@@ -97,7 +97,7 @@ export default function UserTopNavBar() {
     };
 
     fetchImage();
-  }, [user]);
+  }, [user, dispatch]);
 
   const linksBlock = (
     <>
