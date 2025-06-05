@@ -138,7 +138,7 @@ export default function UserTopNavBar() {
   );
 
   const logIn = (
-    <Link href="/login" passHref legacyBehavior>
+    <Link href="/login">
       <Button
         aria-label="login"
         endIcon={<ArrowForward />}

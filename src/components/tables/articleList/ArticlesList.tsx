@@ -187,7 +187,6 @@ export default function ArticlesList({ data }: Props) {
                       </TableCell>
                     );
                   })}
-
                   <TableCell>
                     <Stack
                       sx={{

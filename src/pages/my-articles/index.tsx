@@ -32,7 +32,7 @@ export default function MyArticles() {
       <PageLayout
         title={TITLE}
         button={
-          <Link href="/create-article" passHref legacyBehavior>
+          <Link href="/create-article">
             <Button aria-label="create article" variant="contained">
               Create new article
             </Button>
