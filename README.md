@@ -39,6 +39,7 @@ Due to time constraints, the following features are not implemented but would be
 - Comments section – Would require multi-user support, user registration, and profile images.
 - Like system – Also dependent on having multiple user accounts.
 - Pagination or virtualized lists – For better performance with many posts/comments.
+- CAPTCHA – Should be added to login form to prevent automated abuse.
 - Mobile responsiveness – Needs improvements for a better mobile experience.
 - Extended test coverage – Including logic, edge cases, and validation.
 - Improved SEO – Add meta tags, structured data, sitemap, canonical URLs.
