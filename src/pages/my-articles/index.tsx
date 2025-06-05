@@ -6,7 +6,7 @@ import useHomeRedirectOnLogOut from "@/hooks/redirects/useHomeRedirectOnLogOut";
 import { useQuery } from "@tanstack/react-query";
 
 // Utils
-import { fetchArticles } from "@/utils/utils";
+import { fetchArticles } from "@/utils/firebase";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
@@ -18,6 +18,7 @@ const TITLE = "My articles";
 export default function MyArticles() {
   // Redirect when log out
   useHomeRedirectOnLogOut();
+
   // Fetch articles
   const { data } = useQuery({
     queryKey: ["articles"],

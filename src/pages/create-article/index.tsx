@@ -8,7 +8,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 
 // Utils
-import { handleArticleAction } from "@/utils/utils";
+import { handleArticleAction } from "@/utils/firebase";
 
 // Types
 import { NewArticleFormData } from "@/types/types";

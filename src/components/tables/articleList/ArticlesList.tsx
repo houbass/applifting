@@ -26,7 +26,7 @@ import { Article } from "@/types/types";
 
 // Utils
 import { getComparator, createArticleListData } from "./utils";
-import { handleArticleAction } from "@/utils/utils";
+import { handleArticleAction } from "@/utils/firebase";
 
 // Components
 import EnhancedTableHead from "./EnhancedTableHead";

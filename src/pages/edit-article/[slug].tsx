@@ -16,7 +16,7 @@ import { MAX_CREATE_ARTICLE_WIDTH } from "@/constants/globalConstants";
 import { NewArticleFormData } from "@/types/types";
 
 // Utils
-import { handleArticleAction } from "@/utils/utils";
+import { handleArticleAction } from "@/utils/firebase";
 import { fetchArticleById } from "@/utils/articleDetailUtils";
 
 // Components

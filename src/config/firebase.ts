@@ -1,15 +1,7 @@
 import { initializeApp } from "firebase/app";
-
-//funkce na login
-import { getAuth, GoogleAuthProvider } from "firebase/auth";
-
-//funkce pro databazi
+import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-
-//funkce pro storage
 import { getStorage } from "firebase/storage";
-
-// API KEYS
 import { apiKeys } from "./apiKeys";
 
 const firebaseConfig = {
@@ -22,15 +14,9 @@ const firebaseConfig = {
   measurementId: apiKeys.googleId,
 };
 
-//firebase init
+// Firebase init
 const app = initializeApp(firebaseConfig);
 
-//login var
 export const auth = getAuth(app);
-export const googleProvider = new GoogleAuthProvider();
-
-//var pro databazi
 export const db = getFirestore(app);
-
-//var pro storage
 export const storage = getStorage(app);

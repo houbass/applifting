@@ -2,7 +2,7 @@
 import { Article } from "@/types/types";
 
 // Utils
-import { fetchArticles } from "@/utils/utils";
+import { fetchArticles } from "@/utils/firebase";
 
 // Components
 import BasicHead from "@/components/containers/BasicHead";
