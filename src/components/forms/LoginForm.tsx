@@ -1,4 +1,4 @@
-import Reac, { useState } from "react";
+import { useState } from "react";
 import {
   Button,
   Stack,
@@ -30,7 +30,12 @@ export default function LoginForm() {
     handleSubmit,
     formState: { errors },
     setValue,
-  } = useForm<LoginData>();
+  } = useForm<LoginData>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
   async function handleSignIn(data: LoginData) {
     const { email, password } = data;
@@ -65,7 +70,11 @@ export default function LoginForm() {
         borderRadius: 2,
       }}
     >
-      <Stack sx={{ gap: 3, p: 4 }}>
+      <Stack
+        component="form"
+        onSubmit={handleSubmit(handleSignIn)}
+        sx={{ gap: 3, p: 4 }}
+      >
         <Typography variant="h3">Log In</Typography>
         <Stack sx={{ gap: 1 }}>
           <Typography id="email-label">Email</Typography>
@@ -97,7 +106,7 @@ export default function LoginForm() {
           <Button
             aria-label="login"
             variant="contained"
-            onClick={handleSubmit(handleSignIn)}
+            type="submit"
             startIcon={
               isLoading && <CircularProgress size={20} color="inherit" />
             }

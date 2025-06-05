@@ -22,7 +22,7 @@ import { fetchArticleById } from "@/utils/articleDetailUtils";
 // Components
 import BasicHead from "@/components/containers/BasicHead";
 import PageLayout from "@/components/containers/PageLayout";
-import CreateArticleForm from "@/components/forms/CreateArticleForm";
+import ArticleForm from "@/components/forms/ArticleForm";
 
 export default function ArticleDetail() {
   const dispatch = useDispatch();
@@ -116,7 +116,7 @@ export default function ArticleDetail() {
           )}
 
           {data && (
-            <CreateArticleForm
+            <ArticleForm
               register={register}
               formState={{ errors }}
               setValue={setValue}

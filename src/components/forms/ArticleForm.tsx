@@ -28,7 +28,7 @@ interface Props {
 
 const PREVIEW_SIZE = 112;
 
-export default function CreateArticleForm({
+export default function ArticleForm({
   register,
   formState: { errors },
   setValue,
@@ -91,7 +91,7 @@ export default function CreateArticleForm({
         {imagePreview && (
           <Stack sx={{ gap: 1 }}>
             <Typography>Featured image</Typography>
-            <Box sx={{ position: "relative" }}>
+            <Box sx={{ position: "relative", width: PREVIEW_SIZE }}>
               {!imageLoaded && (
                 <Skeleton
                   variant="rectangular"
