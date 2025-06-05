@@ -101,10 +101,20 @@ export default function UserTopNavBar() {
 
   const linksBlock = (
     <>
-      <Link href="/" className="unsetLink" onClick={closeDrawer}>
+      <Link
+        href="/"
+        className="unsetLink"
+        onClick={closeDrawer}
+        data-testid="recent-articles-link"
+      >
         <Typography color={linkOpacity("/")}>Recent Articles</Typography>
       </Link>
-      <Link href="/about" className="unsetLink" onClick={closeDrawer}>
+      <Link
+        href="/about"
+        className="unsetLink"
+        onClick={closeDrawer}
+        data-testid="about-link"
+      >
         <Typography color={linkOpacity("/about")}>About</Typography>
       </Link>
     </>
@@ -112,7 +122,12 @@ export default function UserTopNavBar() {
 
   const userLinksBlock = (
     <>
-      <Link href="/my-articles" className="unsetLink" onClick={closeDrawer}>
+      <Link
+        href="/my-articles"
+        className="unsetLink"
+        onClick={closeDrawer}
+        data-testid="my-articles-link"
+      >
         <Typography color="primary">My Articles</Typography>
       </Link>
 
